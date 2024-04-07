@@ -1,0 +1,8 @@
+data:
+  base: /home/felferrari/projects/thesis2
+  data: "${.base}/data" 
+  opt: "${.data}/opt"
+  sar: "${.data}/sar"
+  prodes: "${.data}/prodes"
+  general: "${.data}/general"
+  prepared: "${.base}/general"

@@ -1,0 +1,10 @@
+name: thesis2
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.11
+  - console_shortcut
+  - notebook
+  - jupyterlab
+  - gdal=3.6.4

@@ -1,0 +1,3 @@
+model: test1
+opt_mode: diverse_cloud
+sar_mode: combined
