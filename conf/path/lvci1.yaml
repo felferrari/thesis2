@@ -1,8 +1,13 @@
-data:
-  base: /home/felferrari/projects/thesis2
-  data: "${.base}/data" 
-  opt: "${.data}/opt"
-  sar: "${.data}/sar"
-  prodes: "${.data}/prodes"
-  general: "${.data}/general"
-  prepared: "${.base}/general"
+base: /home/felferrari/projects/thesis2
+
+original_data: "${.base}/data/original" 
+
+opt: "${.original_data}/opt"
+sar: "${.original_data}/sar"
+prodes: "${.original_data}/prodes"
+general: "${.original_data}/general"
+
+prepared: "${.base}/data/prepared"
+
+label:
+  train: "${..general}/label_train.tif"

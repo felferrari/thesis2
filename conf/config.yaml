@@ -1,5 +1,7 @@
 defaults:
   - path: lvci1
+  - default/preparation@preparation
+  - default/general@general
   - _self_
 prepare_params:
   test: a
