@@ -9,6 +9,8 @@ from typing import Union
 import yaml 
 from multiprocessing import Pool
 
+gdal.UseExceptions()
+
 def remove_outliers(img, signficance = 0.01):
     outliers = np.quantile(img, [signficance, 1-signficance], axis = (0,1))
     for channel in range(img.shape[-1]):

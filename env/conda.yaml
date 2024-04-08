@@ -7,4 +7,4 @@ dependencies:
   - console_shortcut
   - notebook
   - jupyterlab
-  - gdal=3.6.4
+  - gdal

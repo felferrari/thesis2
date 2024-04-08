@@ -1,3 +1,7 @@
 significance: 0.01
+generate:
+  tiles: True
+  labels: True
+  prev_map: True
 calculate:
   statistics: True

@@ -1,6 +1,5 @@
 matplotlib
 fiona
-gdal
 shapely
 pyarrow 
 pandas
@@ -12,7 +11,7 @@ tqdm
 pyyaml
 plotly
 scikit-learn
-scikit-image
+scikit-image==0.21
 tensorboard
 lightning
 pip
@@ -21,11 +20,11 @@ segmentation-models-pytorch
 h5py
 einops
 scipy
-albumentations 
 numpy
-torchmetrics
 mlflow
 fire
 torch
 torchvision
+torchmetrics
+albumentations 
 hydra-core
