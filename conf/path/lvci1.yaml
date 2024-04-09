@@ -16,6 +16,8 @@ prepared:
   base: "${..base}/data/prepared"
   train: "${.base}/train"
   validation: "${.base}/validation"
+  opt_statistics: "${.base}/opt_stats.csv"
+  sar_statistics: "${.base}/sar_stats.csv"
 
 general: "${.base}/data/general"
 label:

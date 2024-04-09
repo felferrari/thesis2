@@ -1,6 +1,6 @@
 *.pyc
 .vscode
 lightning_logs
-
+mlruns
 data
 outputs

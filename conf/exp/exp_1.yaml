@@ -1,5 +1,6 @@
 defaults:
   - /model/resunet@model
   - /default/train_params@train_params
+name: resunet_opt_diverse
 opt_condition: diverse_cloud
 sar_condition: combined

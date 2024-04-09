@@ -38,8 +38,8 @@ def prepare(cfg):
             else:
                 sar_df = pd.concat((sar_df, pd.DataFrame(stats)))
 
-        opt_df.to_csv(prepared_path / 'opt_stats.csv')
-        sar_df.to_csv(prepared_path / 'sar_stats.csv')
+        opt_df.to_csv(cfg.path.prepared.opt_statistics)
+        sar_df.to_csv(cfg.path.prepared.sar_statistics)
         
     if cfg.preparation.generate.tiles:
         print('Generating tiles...')
@@ -147,7 +147,7 @@ def prepare(cfg):
             sar_patch = np.stack([full_img[patch] for full_img in sar_imgs], axis=0)
             cloud_patch = np.expand_dims(np.stack([full_img[patch] for full_img in cloud_imgs], axis=0), axis= -1)
             prev_map_patch = np.expand_dims(previous_map[patch], axis = 0)
-            label_patch = np.expand_dims(train_label[patch], axis = 0)
+            label_patch = train_label[patch]
             
             with h5py.File(patch_file, "w") as f:
                 f.create_dataset('opt', data=opt_patch, compression='lzf', chunks=opt_patch.shape)

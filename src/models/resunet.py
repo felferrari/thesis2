@@ -29,7 +29,7 @@ class GenericResunet(GenericModel):
         pass
     
     def forward(self, x):
-        x = self.prepare_input(x)
+        #x = self.prepare_input(x)
         x = self.encoder(x)
         x = self.decoder(x)
         x = self.classifier(x)

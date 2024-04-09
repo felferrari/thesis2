@@ -10,6 +10,6 @@ train_overlap: 0.7
 min_def_prop: 0.02
 train: 
   batch_size: 32
-  num_workers: 8
+  num_workers: 12
 n_classes: 4
 n_models: 10

@@ -19,6 +19,23 @@ class ModelModule(L.LightningModule):
     def training_step(self, batch, batch_idx):
         x, label = batch
         x = self.model.prepare(x)
+        y_hat = self.model(x)
+        
+        loss = self.criterion(y_hat, label)
+        
+        self.log('train_loss', loss.detach().item(), prog_bar=True, on_epoch=True)
+        
+        return loss
+        
+    def validation_step(self, batch, batch_idx):
+        x, label = batch
+        x = self.model.prepare(x)
+        y_hat = self.model(x)
+        loss = self.criterion(y_hat, label)
+        
+        self.log('val_loss', loss.detach().item(), prog_bar=True, on_epoch=True)
+        
+        return loss
         
         
     def configure_optimizers(self):
