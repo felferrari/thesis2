@@ -1,0 +1,17 @@
+optimizer:
+  target: torch.optim.Adam
+  params:
+    lr: 2.0e-5
+
+criterion:
+  target: segmentation_models_pytorch.losses.FocalLoss
+  params:
+    mode: multiclass
+    ignore_index: 3
+    gamma: 3
+
+early_stop:
+  patience: 10
+  min_delta: 1.0e-5
+
+

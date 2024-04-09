@@ -1,5 +1,6 @@
 *.pyc
 .vscode
+lightning_logs
 
 data
 outputs

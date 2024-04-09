@@ -25,7 +25,7 @@ opt_images_dates:
 tiles_params:
   lines: 4
   columns: 4
-  train_tiles: [1, 2, 4, 7, 8, 9, 13, 15]
+  train_tiles: [1, 2, 4, 7, 8, 9, 12, 14]
 original_data:
   opt:
     train:

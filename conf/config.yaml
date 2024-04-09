@@ -3,11 +3,11 @@ defaults:
   - default/preparation@preparation
   - default/general@general
   - _self_
-general:
-  year:
-    train: 2020
-    test: 2021
-  buffer:
-    inner: 3
-    outer: 3
-  area_min: 625
+# general:
+#   year:
+#     train: 2020
+#     test: 2021
+#   buffer:
+#     inner: 3
+#     outer: 3
+#   area_min: 625

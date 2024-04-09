@@ -4,6 +4,7 @@ import numpy as np
 from tqdm import tqdm
 from osgeo import gdal, ogr, gdalconst
 from skimage.morphology import disk, dilation, erosion, area_opening
+from einops import rearrange
 
 gdal.UseExceptions()
 
@@ -228,10 +229,7 @@ def generate_prev_map(cfg):
     crs = base_data.GetSpatialRef()
     proj = base_data.GetProjection()
 
-    #train previous deforestation
 
-
-    #base_year = 2007 #! CHANGE 2001 2007
     delta_years = 10
     vals = np.linspace(0.1,1, delta_years)
 
@@ -295,3 +293,21 @@ def generate_prev_map(cfg):
         gdal.RasterizeLayer(target_test, [1], l_yearly_def, burn_values=[v])
 
     target_test = None
+    
+def read_imgs(folder, imgs, read_fn, dtype, significance = 0, factor = 1.0, prefix_name = ''):
+    pbar = tqdm(imgs, desc='Reading data')
+    data = []
+    for img_file in pbar:
+        pbar.set_description(f'Reading {prefix_name}{img_file}')
+        img_path = Path(folder) / f'{prefix_name}{img_file}'
+        img = read_fn(img_path).astype(dtype)
+        clip_values = np.percentile(img, (significance, 100-significance), axis=(0,1))
+        img = np.clip(img, clip_values[0], clip_values[1])
+        img = factor * img
+        if len(img.shape) == 3:
+            data.append(rearrange(img, 'h w c -> (h w) c'))
+        elif len(img.shape) == 2:
+            data.append(rearrange(img, 'h w -> (h w)'))
+        
+    return data
+    

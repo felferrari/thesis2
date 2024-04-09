@@ -55,7 +55,7 @@ def load_yaml(file_path: Union[str, Path]) -> None:
     with open(file_path, 'r') as f:
         return yaml.safe_load(f)
     
-def load_opt_image(img_file):
+def load_opt_image(img_file) -> np.ndarray:
     """load optical data.
 
     Args:
@@ -70,7 +70,7 @@ def load_opt_image(img_file):
         img = np.expand_dims(img, axis=0)
     return np.moveaxis(img, 0, -1) / 10000
 
-def load_sb_image(img_file):
+def load_sb_image(img_file) -> np.ndarray:
     """load a single band geotiff image.
 
     Args:
@@ -82,7 +82,7 @@ def load_sb_image(img_file):
     img = gdal_array.LoadFile(str(img_file))
     return img
 
-def load_ml_image(img_file):
+def load_ml_image(img_file) -> np.ndarray:
     """load a single band geotiff image.
 
     Args:
@@ -98,7 +98,7 @@ def load_ml_image(img_file):
     return np.moveaxis(img, 0, -1)
 
 
-def load_SAR_image(img_file):
+def load_SAR_image(img_file) -> np.ndarray:
     """load SAR image, converting from Db to DN.
 
     Args:

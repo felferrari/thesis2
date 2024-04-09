@@ -1,7 +1,8 @@
 significance: 0.01
 generate:
-  tiles: True
-  labels: True
-  prev_map: True
+  tiles: False
+  labels: False
+  prev_map: False
+  patches: False
 calculate:
-  statistics: True
+  statistics: False
