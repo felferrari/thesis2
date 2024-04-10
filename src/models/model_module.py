@@ -36,7 +36,12 @@ class ModelModule(L.LightningModule):
         self.log('val_loss', loss.detach().item(), prog_bar=True, on_epoch=True)
         
         return loss
-        
+    
+    def predict_step(self, batch, batch_idx):
+        x, idx = batch
+        x = self.model.prepare(x)
+        y_hat = self.model(x)
+        return y_hat
         
     def configure_optimizers(self):
         return self.optimizer(self.model.parameters(), **self.optimizer_params)

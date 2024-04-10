@@ -11,11 +11,10 @@ from multiprocessing import Pool
 
 gdal.UseExceptions()
 
-def remove_outliers(img, signficance = 0.01):
-    outliers = np.quantile(img, [signficance, 1-signficance], axis = (0,1))
-    for channel in range(img.shape[-1]):
-        img[:,:,channel] = np.clip(img[:,:,channel], outliers[0, channel],  outliers[1, channel])
-    return img
+def remove_outliers(data, significance = 0.01):
+    clip_values = np.percentile(data, (significance, 100-significance), axis=(0,1))
+    data = np.clip(data, clip_values[0], clip_values[1])
+    return data
 
 
 def load_json(fp):

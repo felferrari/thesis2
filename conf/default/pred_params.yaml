@@ -1,0 +1,3 @@
+overlap_patches: 0.3
+discard_border: 8
+batch_size: 64

@@ -17,8 +17,8 @@ def prepare(cfg):
     prepared_path.mkdir(exist_ok=True)
     
     if cfg.preparation.calculate.statistics:
-        opt_stats = generate_images_statistics(cfg.site.original_data.opt.train, cfg.path.opt, load_opt_image, cfg.preparation.significance)
-        sar_stats = generate_images_statistics(cfg.site.original_data.sar.train, cfg.path.sar, load_SAR_image, cfg.preparation.significance)
+        opt_stats = generate_images_statistics(cfg.site.original_data.opt.train, cfg.path.opt, load_opt_image, cfg.general.outlier_significance)
+        sar_stats = generate_images_statistics(cfg.site.original_data.sar.train, cfg.path.sar, load_SAR_image, cfg.general.outlier_significance)
         
         opt_df = None
         for cond in opt_stats:
@@ -108,7 +108,7 @@ def prepare(cfg):
             imgs=cfg.site.original_data.opt.train.imgs, 
             read_fn=load_opt_image, 
             dtype=np.float16, 
-            significance=cfg.preparation.significance, 
+            significance=cfg.general.outlier_significance, 
             factor=1.0
             )
         
@@ -117,7 +117,7 @@ def prepare(cfg):
             imgs=cfg.site.original_data.opt.train.imgs, 
             read_fn=load_sb_image, 
             dtype=np.float16, 
-            significance=cfg.preparation.significance, 
+            significance=cfg.general.outlier_significance, 
             factor=1.0/100,
             prefix_name='cloud_'
             )
@@ -127,7 +127,7 @@ def prepare(cfg):
             imgs=cfg.site.original_data.sar.train.imgs, 
             read_fn=load_SAR_image, 
             dtype=np.float16, 
-            significance=cfg.preparation.significance, 
+            significance=cfg.general.outlier_significance, 
             factor=1.0
             )
         

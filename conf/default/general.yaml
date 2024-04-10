@@ -13,3 +13,4 @@ train:
   num_workers: 12
 n_classes: 4
 n_models: 10
+outlier_significance: 0.01

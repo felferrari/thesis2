@@ -1,0 +1,450 @@
+2024/04/09 13:42:17 WARNING mlflow.utils.autologging_utils: You are using an unsupported version of pytorch. If you encounter errors during autologging, try upgrading / downgrading pytorch to a supported version, or try upgrading MLflow.
+/home/felferrari/anaconda3/envs/thesis2/lib/python3.11/site-packages/torch/nn/modules/lazy.py:181: UserWarning: Lazy modules are a new feature under heavy development so changes to the API or functionality can happen at any moment.
+  warnings.warn('Lazy modules are a new feature under heavy development '
+[2024-04-09 13:42:18,123][pytorch_lightning.utilities.rank_zero][INFO] - GPU available: True (cuda), used: True
+[2024-04-09 13:42:18,128][pytorch_lightning.utilities.rank_zero][INFO] - TPU available: False, using: 0 TPU cores
+[2024-04-09 13:42:18,128][pytorch_lightning.utilities.rank_zero][INFO] - IPU available: False, using: 0 IPUs
+[2024-04-09 13:42:18,128][pytorch_lightning.utilities.rank_zero][INFO] - HPU available: False, using: 0 HPUs
+2024/04/09 13:42:18 WARNING mlflow.utils.autologging_utils: MLflow autologging encountered a warning: "/home/felferrari/anaconda3/envs/thesis2/lib/python3.11/site-packages/mlflow/pytorch/_lightning_autolog.py:463: UserWarning: Autologging is known to be compatible with pytorch-lightning versions between 1.4.9 and 2.2.0.post0 and may not succeed with packages outside this range."
+[2024-04-09 13:42:18,142][pytorch_lightning.utilities.rank_zero][INFO] - You are using a CUDA device ('NVIDIA GeForce RTX 4090') that has Tensor Cores. To properly utilize them, you should set `torch.set_float32_matmul_precision('medium' | 'high')` which will trade-off precision for performance. For more details, read https://pytorch.org/docs/stable/generated/torch.set_float32_matmul_precision.html#torch.set_float32_matmul_precision
+LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
+/home/felferrari/anaconda3/envs/thesis2/lib/python3.11/site-packages/lightning/pytorch/utilities/model_summary/model_summary.py:454: A layer with UninitializedParameter was found. Thus, the total number of parameters detected may be inaccurate.
+
+  | Name      | Type       | Params
+-----------------------------------------
+0 | model     | ResUnetOpt | 0     
+1 | criterion | FocalLoss  | 0     
+-----------------------------------------
+0         Trainable params
+0         Non-trainable params
+0         Total params
+0.000     Total estimated model params size (MB)
+Metric val_loss improved. New best score: 0.151
+[2024-04-09 13:44:54,435][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 0, global step 270: 'val_loss' reached 0.15078 (best 0.15078), saving model to '/tmp/tmpsxjzqelg/model_0.ckpt' as top 1
+[2024-04-09 13:47:24,640][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 1, global step 540: 'val_loss' was not in top 1
+[2024-04-09 13:49:54,926][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 2, global step 810: 'val_loss' was not in top 1
+[2024-04-09 13:52:25,578][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 3, global step 1080: 'val_loss' was not in top 1
+Metric val_loss improved by 0.011 >= min_delta = 1e-05. New best score: 0.140
+[2024-04-09 13:54:55,048][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 4, global step 1350: 'val_loss' reached 0.14021 (best 0.14021), saving model to '/tmp/tmpsxjzqelg/model_0.ckpt' as top 1
+[2024-04-09 13:57:24,183][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 5, global step 1620: 'val_loss' was not in top 1
+Metric val_loss improved by 0.001 >= min_delta = 1e-05. New best score: 0.139
+[2024-04-09 13:59:54,040][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 6, global step 1890: 'val_loss' reached 0.13942 (best 0.13942), saving model to '/tmp/tmpsxjzqelg/model_0.ckpt' as top 1
+[2024-04-09 14:02:24,487][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 7, global step 2160: 'val_loss' was not in top 1
+[2024-04-09 14:04:54,459][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 8, global step 2430: 'val_loss' was not in top 1
+Metric val_loss improved by 0.013 >= min_delta = 1e-05. New best score: 0.126
+[2024-04-09 14:07:24,645][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 9, global step 2700: 'val_loss' reached 0.12617 (best 0.12617), saving model to '/tmp/tmpsxjzqelg/model_0.ckpt' as top 1
+Metric val_loss improved by 0.026 >= min_delta = 1e-05. New best score: 0.100
+[2024-04-09 14:09:55,012][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 10, global step 2970: 'val_loss' reached 0.09975 (best 0.09975), saving model to '/tmp/tmpsxjzqelg/model_0.ckpt' as top 1
+[2024-04-09 14:12:25,549][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 11, global step 3240: 'val_loss' was not in top 1
+[2024-04-09 14:14:55,288][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 12, global step 3510: 'val_loss' was not in top 1
+[2024-04-09 14:17:25,819][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 13, global step 3780: 'val_loss' was not in top 1
+[2024-04-09 14:19:56,090][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 14, global step 4050: 'val_loss' was not in top 1
+[2024-04-09 14:22:26,214][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 15, global step 4320: 'val_loss' was not in top 1
+[2024-04-09 14:24:56,015][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 16, global step 4590: 'val_loss' was not in top 1
+[2024-04-09 14:27:26,412][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 17, global step 4860: 'val_loss' was not in top 1
+Metric val_loss improved by 0.005 >= min_delta = 1e-05. New best score: 0.095
+[2024-04-09 14:29:57,051][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 18, global step 5130: 'val_loss' reached 0.09501 (best 0.09501), saving model to '/tmp/tmpsxjzqelg/model_0.ckpt' as top 1
+[2024-04-09 14:32:27,447][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 19, global step 5400: 'val_loss' was not in top 1
+Metric val_loss improved by 0.009 >= min_delta = 1e-05. New best score: 0.086
+[2024-04-09 14:34:57,517][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 20, global step 5670: 'val_loss' reached 0.08602 (best 0.08602), saving model to '/tmp/tmpsxjzqelg/model_0.ckpt' as top 1
+[2024-04-09 14:37:27,928][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 21, global step 5940: 'val_loss' was not in top 1
+[2024-04-09 14:39:57,896][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 22, global step 6210: 'val_loss' was not in top 1
+[2024-04-09 14:42:27,801][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 23, global step 6480: 'val_loss' was not in top 1
+[2024-04-09 14:44:58,614][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 24, global step 6750: 'val_loss' was not in top 1
+[2024-04-09 14:47:28,726][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 25, global step 7020: 'val_loss' was not in top 1
+[2024-04-09 14:49:59,092][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 26, global step 7290: 'val_loss' was not in top 1
+[2024-04-09 14:52:29,382][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 27, global step 7560: 'val_loss' was not in top 1
+[2024-04-09 14:54:58,903][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 28, global step 7830: 'val_loss' was not in top 1
+[2024-04-09 14:57:28,978][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 29, global step 8100: 'val_loss' was not in top 1
+Monitored metric val_loss did not improve in the last 10 records. Best score: 0.086. Signaling Trainer to stop.
+[2024-04-09 14:59:59,240][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 30, global step 8370: 'val_loss' was not in top 1
+/home/felferrari/anaconda3/envs/thesis2/lib/python3.11/site-packages/torch/nn/modules/lazy.py:181: UserWarning: Lazy modules are a new feature under heavy development so changes to the API or functionality can happen at any moment.
+  warnings.warn('Lazy modules are a new feature under heavy development '
+2024/04/09 15:00:02 WARNING mlflow.utils.autologging_utils: You are using an unsupported version of pytorch. If you encounter errors during autologging, try upgrading / downgrading pytorch to a supported version, or try upgrading MLflow.
+[2024-04-09 15:00:02,267][pytorch_lightning.utilities.rank_zero][INFO] - GPU available: True (cuda), used: True
+[2024-04-09 15:00:02,267][pytorch_lightning.utilities.rank_zero][INFO] - TPU available: False, using: 0 TPU cores
+[2024-04-09 15:00:02,267][pytorch_lightning.utilities.rank_zero][INFO] - IPU available: False, using: 0 IPUs
+[2024-04-09 15:00:02,268][pytorch_lightning.utilities.rank_zero][INFO] - HPU available: False, using: 0 HPUs
+2024/04/09 15:00:02 WARNING mlflow.utils.autologging_utils: MLflow autologging encountered a warning: "/home/felferrari/anaconda3/envs/thesis2/lib/python3.11/site-packages/mlflow/pytorch/_lightning_autolog.py:463: UserWarning: Autologging is known to be compatible with pytorch-lightning versions between 1.4.9 and 2.2.0.post0 and may not succeed with packages outside this range."
+/home/felferrari/anaconda3/envs/thesis2/lib/python3.11/site-packages/lightning/pytorch/callbacks/model_checkpoint.py:653: Checkpoint directory /tmp/tmpsxjzqelg exists and is not empty.
+LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
+
+  | Name      | Type       | Params
+-----------------------------------------
+0 | model     | ResUnetOpt | 0     
+1 | criterion | FocalLoss  | 0     
+-----------------------------------------
+0         Trainable params
+0         Non-trainable params
+0         Total params
+0.000     Total estimated model params size (MB)
+Metric val_loss improved. New best score: 0.235
+[2024-04-09 15:02:38,807][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 0, global step 270: 'val_loss' reached 0.23501 (best 0.23501), saving model to '/tmp/tmpsxjzqelg/model_1.ckpt' as top 1
+Metric val_loss improved by 0.161 >= min_delta = 1e-05. New best score: 0.074
+[2024-04-09 15:05:08,596][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 1, global step 540: 'val_loss' reached 0.07358 (best 0.07358), saving model to '/tmp/tmpsxjzqelg/model_1.ckpt' as top 1
+[2024-04-09 15:07:38,757][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 2, global step 810: 'val_loss' was not in top 1
+[2024-04-09 15:10:08,469][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 3, global step 1080: 'val_loss' was not in top 1
+[2024-04-09 15:12:38,714][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 4, global step 1350: 'val_loss' was not in top 1
+[2024-04-09 15:15:08,654][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 5, global step 1620: 'val_loss' was not in top 1
+[2024-04-09 15:17:38,578][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 6, global step 1890: 'val_loss' was not in top 1
+[2024-04-09 15:20:08,493][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 7, global step 2160: 'val_loss' was not in top 1
+[2024-04-09 15:22:39,162][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 8, global step 2430: 'val_loss' was not in top 1
+[2024-04-09 15:25:08,875][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 9, global step 2700: 'val_loss' was not in top 1
+[2024-04-09 15:27:39,072][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 10, global step 2970: 'val_loss' was not in top 1
+Monitored metric val_loss did not improve in the last 10 records. Best score: 0.074. Signaling Trainer to stop.
+[2024-04-09 15:30:08,820][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 11, global step 3240: 'val_loss' was not in top 1
+/home/felferrari/anaconda3/envs/thesis2/lib/python3.11/site-packages/torch/nn/modules/lazy.py:181: UserWarning: Lazy modules are a new feature under heavy development so changes to the API or functionality can happen at any moment.
+  warnings.warn('Lazy modules are a new feature under heavy development '
+/home/felferrari/anaconda3/envs/thesis2/lib/python3.11/site-packages/_distutils_hack/__init__.py:11: UserWarning: Distutils was imported before Setuptools, but importing Setuptools also replaces the `distutils` module in `sys.modules`. This may lead to undesirable behaviors or errors. To avoid these issues, avoid using distutils directly, ensure that setuptools is installed in the traditional way (e.g. not an editable install), and/or make sure that setuptools is always imported before distutils.
+  warnings.warn(
+/home/felferrari/anaconda3/envs/thesis2/lib/python3.11/site-packages/_distutils_hack/__init__.py:26: UserWarning: Setuptools is replacing distutils.
+  warnings.warn("Setuptools is replacing distutils.")
+2024/04/09 15:30:11 WARNING mlflow.utils.autologging_utils: You are using an unsupported version of pytorch. If you encounter errors during autologging, try upgrading / downgrading pytorch to a supported version, or try upgrading MLflow.
+[2024-04-09 15:30:11,493][pytorch_lightning.utilities.rank_zero][INFO] - GPU available: True (cuda), used: True
+[2024-04-09 15:30:11,493][pytorch_lightning.utilities.rank_zero][INFO] - TPU available: False, using: 0 TPU cores
+[2024-04-09 15:30:11,493][pytorch_lightning.utilities.rank_zero][INFO] - IPU available: False, using: 0 IPUs
+[2024-04-09 15:30:11,493][pytorch_lightning.utilities.rank_zero][INFO] - HPU available: False, using: 0 HPUs
+2024/04/09 15:30:11 WARNING mlflow.utils.autologging_utils: MLflow autologging encountered a warning: "/home/felferrari/anaconda3/envs/thesis2/lib/python3.11/site-packages/mlflow/pytorch/_lightning_autolog.py:463: UserWarning: Autologging is known to be compatible with pytorch-lightning versions between 1.4.9 and 2.2.0.post0 and may not succeed with packages outside this range."
+/home/felferrari/anaconda3/envs/thesis2/lib/python3.11/site-packages/lightning/pytorch/callbacks/model_checkpoint.py:653: Checkpoint directory /tmp/tmpsxjzqelg exists and is not empty.
+LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
+
+  | Name      | Type       | Params
+-----------------------------------------
+0 | model     | ResUnetOpt | 0     
+1 | criterion | FocalLoss  | 0     
+-----------------------------------------
+0         Trainable params
+0         Non-trainable params
+0         Total params
+0.000     Total estimated model params size (MB)
+Metric val_loss improved. New best score: 0.129
+[2024-04-09 15:32:48,151][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 0, global step 270: 'val_loss' reached 0.12877 (best 0.12877), saving model to '/tmp/tmpsxjzqelg/model_2.ckpt' as top 1
+[2024-04-09 15:35:18,902][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 1, global step 540: 'val_loss' was not in top 1
+Metric val_loss improved by 0.025 >= min_delta = 1e-05. New best score: 0.104
+[2024-04-09 15:37:49,153][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 2, global step 810: 'val_loss' reached 0.10377 (best 0.10377), saving model to '/tmp/tmpsxjzqelg/model_2.ckpt' as top 1
+[2024-04-09 15:40:18,220][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 3, global step 1080: 'val_loss' was not in top 1
+Metric val_loss improved by 0.024 >= min_delta = 1e-05. New best score: 0.080
+[2024-04-09 15:42:48,450][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 4, global step 1350: 'val_loss' reached 0.07992 (best 0.07992), saving model to '/tmp/tmpsxjzqelg/model_2.ckpt' as top 1
+[2024-04-09 15:45:18,391][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 5, global step 1620: 'val_loss' was not in top 1
+[2024-04-09 15:47:48,350][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 6, global step 1890: 'val_loss' was not in top 1
+[2024-04-09 15:50:19,042][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 7, global step 2160: 'val_loss' was not in top 1
+[2024-04-09 15:52:49,378][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 8, global step 2430: 'val_loss' was not in top 1
+[2024-04-09 15:55:18,941][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 9, global step 2700: 'val_loss' was not in top 1
+[2024-04-09 15:57:48,806][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 10, global step 2970: 'val_loss' was not in top 1
+[2024-04-09 16:00:18,044][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 11, global step 3240: 'val_loss' was not in top 1
+[2024-04-09 16:02:48,614][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 12, global step 3510: 'val_loss' was not in top 1
+[2024-04-09 16:05:19,493][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 13, global step 3780: 'val_loss' was not in top 1
+Monitored metric val_loss did not improve in the last 10 records. Best score: 0.080. Signaling Trainer to stop.
+[2024-04-09 16:07:48,977][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 14, global step 4050: 'val_loss' was not in top 1
+/home/felferrari/anaconda3/envs/thesis2/lib/python3.11/site-packages/torch/nn/modules/lazy.py:181: UserWarning: Lazy modules are a new feature under heavy development so changes to the API or functionality can happen at any moment.
+  warnings.warn('Lazy modules are a new feature under heavy development '
+/home/felferrari/anaconda3/envs/thesis2/lib/python3.11/site-packages/_distutils_hack/__init__.py:11: UserWarning: Distutils was imported before Setuptools, but importing Setuptools also replaces the `distutils` module in `sys.modules`. This may lead to undesirable behaviors or errors. To avoid these issues, avoid using distutils directly, ensure that setuptools is installed in the traditional way (e.g. not an editable install), and/or make sure that setuptools is always imported before distutils.
+  warnings.warn(
+/home/felferrari/anaconda3/envs/thesis2/lib/python3.11/site-packages/_distutils_hack/__init__.py:26: UserWarning: Setuptools is replacing distutils.
+  warnings.warn("Setuptools is replacing distutils.")
+2024/04/09 16:07:51 WARNING mlflow.utils.autologging_utils: You are using an unsupported version of pytorch. If you encounter errors during autologging, try upgrading / downgrading pytorch to a supported version, or try upgrading MLflow.
+[2024-04-09 16:07:51,674][pytorch_lightning.utilities.rank_zero][INFO] - GPU available: True (cuda), used: True
+[2024-04-09 16:07:51,674][pytorch_lightning.utilities.rank_zero][INFO] - TPU available: False, using: 0 TPU cores
+[2024-04-09 16:07:51,674][pytorch_lightning.utilities.rank_zero][INFO] - IPU available: False, using: 0 IPUs
+[2024-04-09 16:07:51,674][pytorch_lightning.utilities.rank_zero][INFO] - HPU available: False, using: 0 HPUs
+2024/04/09 16:07:51 WARNING mlflow.utils.autologging_utils: MLflow autologging encountered a warning: "/home/felferrari/anaconda3/envs/thesis2/lib/python3.11/site-packages/mlflow/pytorch/_lightning_autolog.py:463: UserWarning: Autologging is known to be compatible with pytorch-lightning versions between 1.4.9 and 2.2.0.post0 and may not succeed with packages outside this range."
+/home/felferrari/anaconda3/envs/thesis2/lib/python3.11/site-packages/lightning/pytorch/callbacks/model_checkpoint.py:653: Checkpoint directory /tmp/tmpsxjzqelg exists and is not empty.
+LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
+
+  | Name      | Type       | Params
+-----------------------------------------
+0 | model     | ResUnetOpt | 0     
+1 | criterion | FocalLoss  | 0     
+-----------------------------------------
+0         Trainable params
+0         Non-trainable params
+0         Total params
+0.000     Total estimated model params size (MB)
+Metric val_loss improved. New best score: 0.185
+[2024-04-09 16:10:29,108][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 0, global step 270: 'val_loss' reached 0.18487 (best 0.18487), saving model to '/tmp/tmpsxjzqelg/model_3.ckpt' as top 1
+Metric val_loss improved by 0.099 >= min_delta = 1e-05. New best score: 0.086
+[2024-04-09 16:12:59,348][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 1, global step 540: 'val_loss' reached 0.08605 (best 0.08605), saving model to '/tmp/tmpsxjzqelg/model_3.ckpt' as top 1
+[2024-04-09 16:15:37,023][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 2, global step 810: 'val_loss' was not in top 1
+[2024-04-09 16:18:07,284][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 3, global step 1080: 'val_loss' was not in top 1
+[2024-04-09 16:20:37,222][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 4, global step 1350: 'val_loss' was not in top 1
+[2024-04-09 16:23:07,322][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 5, global step 1620: 'val_loss' was not in top 1
+Metric val_loss improved by 0.020 >= min_delta = 1e-05. New best score: 0.066
+[2024-04-09 16:25:36,693][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 6, global step 1890: 'val_loss' reached 0.06584 (best 0.06584), saving model to '/tmp/tmpsxjzqelg/model_3.ckpt' as top 1
+[2024-04-09 16:28:06,618][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 7, global step 2160: 'val_loss' was not in top 1
+[2024-04-09 16:30:36,832][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 8, global step 2430: 'val_loss' was not in top 1
+[2024-04-09 16:33:07,561][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 9, global step 2700: 'val_loss' was not in top 1
+[2024-04-09 16:35:36,946][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 10, global step 2970: 'val_loss' was not in top 1
+[2024-04-09 16:38:06,719][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 11, global step 3240: 'val_loss' was not in top 1
+[2024-04-09 16:40:36,958][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 12, global step 3510: 'val_loss' was not in top 1
+[2024-04-09 16:43:07,803][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 13, global step 3780: 'val_loss' was not in top 1
+[2024-04-09 16:45:37,661][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 14, global step 4050: 'val_loss' was not in top 1
+[2024-04-09 16:48:08,322][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 15, global step 4320: 'val_loss' was not in top 1
+Monitored metric val_loss did not improve in the last 10 records. Best score: 0.066. Signaling Trainer to stop.
+[2024-04-09 16:50:39,285][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 16, global step 4590: 'val_loss' was not in top 1
+/home/felferrari/anaconda3/envs/thesis2/lib/python3.11/site-packages/torch/nn/modules/lazy.py:181: UserWarning: Lazy modules are a new feature under heavy development so changes to the API or functionality can happen at any moment.
+  warnings.warn('Lazy modules are a new feature under heavy development '
+/home/felferrari/anaconda3/envs/thesis2/lib/python3.11/site-packages/_distutils_hack/__init__.py:11: UserWarning: Distutils was imported before Setuptools, but importing Setuptools also replaces the `distutils` module in `sys.modules`. This may lead to undesirable behaviors or errors. To avoid these issues, avoid using distutils directly, ensure that setuptools is installed in the traditional way (e.g. not an editable install), and/or make sure that setuptools is always imported before distutils.
+  warnings.warn(
+/home/felferrari/anaconda3/envs/thesis2/lib/python3.11/site-packages/_distutils_hack/__init__.py:26: UserWarning: Setuptools is replacing distutils.
+  warnings.warn("Setuptools is replacing distutils.")
+2024/04/09 16:50:41 WARNING mlflow.utils.autologging_utils: You are using an unsupported version of pytorch. If you encounter errors during autologging, try upgrading / downgrading pytorch to a supported version, or try upgrading MLflow.
+[2024-04-09 16:50:41,969][pytorch_lightning.utilities.rank_zero][INFO] - GPU available: True (cuda), used: True
+[2024-04-09 16:50:41,969][pytorch_lightning.utilities.rank_zero][INFO] - TPU available: False, using: 0 TPU cores
+[2024-04-09 16:50:41,969][pytorch_lightning.utilities.rank_zero][INFO] - IPU available: False, using: 0 IPUs
+[2024-04-09 16:50:41,969][pytorch_lightning.utilities.rank_zero][INFO] - HPU available: False, using: 0 HPUs
+2024/04/09 16:50:41 WARNING mlflow.utils.autologging_utils: MLflow autologging encountered a warning: "/home/felferrari/anaconda3/envs/thesis2/lib/python3.11/site-packages/mlflow/pytorch/_lightning_autolog.py:463: UserWarning: Autologging is known to be compatible with pytorch-lightning versions between 1.4.9 and 2.2.0.post0 and may not succeed with packages outside this range."
+/home/felferrari/anaconda3/envs/thesis2/lib/python3.11/site-packages/lightning/pytorch/callbacks/model_checkpoint.py:653: Checkpoint directory /tmp/tmpsxjzqelg exists and is not empty.
+LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
+
+  | Name      | Type       | Params
+-----------------------------------------
+0 | model     | ResUnetOpt | 0     
+1 | criterion | FocalLoss  | 0     
+-----------------------------------------
+0         Trainable params
+0         Non-trainable params
+0         Total params
+0.000     Total estimated model params size (MB)
+Metric val_loss improved. New best score: 0.168
+[2024-04-09 16:53:18,566][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 0, global step 270: 'val_loss' reached 0.16800 (best 0.16800), saving model to '/tmp/tmpsxjzqelg/model_4.ckpt' as top 1
+Metric val_loss improved by 0.024 >= min_delta = 1e-05. New best score: 0.144
+[2024-04-09 16:55:48,725][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 1, global step 540: 'val_loss' reached 0.14416 (best 0.14416), saving model to '/tmp/tmpsxjzqelg/model_4.ckpt' as top 1
+Metric val_loss improved by 0.065 >= min_delta = 1e-05. New best score: 0.080
+[2024-04-09 16:58:18,716][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 2, global step 810: 'val_loss' reached 0.07964 (best 0.07964), saving model to '/tmp/tmpsxjzqelg/model_4.ckpt' as top 1
+[2024-04-09 17:00:49,932][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 3, global step 1080: 'val_loss' was not in top 1
+[2024-04-09 17:03:20,061][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 4, global step 1350: 'val_loss' was not in top 1
+[2024-04-09 17:05:50,022][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 5, global step 1620: 'val_loss' was not in top 1
+[2024-04-09 17:08:20,304][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 6, global step 1890: 'val_loss' was not in top 1
+[2024-04-09 17:10:49,874][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 7, global step 2160: 'val_loss' was not in top 1
+[2024-04-09 17:13:20,228][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 8, global step 2430: 'val_loss' was not in top 1
+[2024-04-09 17:15:50,930][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 9, global step 2700: 'val_loss' was not in top 1
+[2024-04-09 17:18:21,623][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 10, global step 2970: 'val_loss' was not in top 1
+[2024-04-09 17:20:51,788][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 11, global step 3240: 'val_loss' was not in top 1
+Monitored metric val_loss did not improve in the last 10 records. Best score: 0.080. Signaling Trainer to stop.
+[2024-04-09 17:23:22,027][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 12, global step 3510: 'val_loss' was not in top 1
+/home/felferrari/anaconda3/envs/thesis2/lib/python3.11/site-packages/torch/nn/modules/lazy.py:181: UserWarning: Lazy modules are a new feature under heavy development so changes to the API or functionality can happen at any moment.
+  warnings.warn('Lazy modules are a new feature under heavy development '
+/home/felferrari/anaconda3/envs/thesis2/lib/python3.11/site-packages/_distutils_hack/__init__.py:11: UserWarning: Distutils was imported before Setuptools, but importing Setuptools also replaces the `distutils` module in `sys.modules`. This may lead to undesirable behaviors or errors. To avoid these issues, avoid using distutils directly, ensure that setuptools is installed in the traditional way (e.g. not an editable install), and/or make sure that setuptools is always imported before distutils.
+  warnings.warn(
+/home/felferrari/anaconda3/envs/thesis2/lib/python3.11/site-packages/_distutils_hack/__init__.py:26: UserWarning: Setuptools is replacing distutils.
+  warnings.warn("Setuptools is replacing distutils.")
+2024/04/09 17:23:24 WARNING mlflow.utils.autologging_utils: You are using an unsupported version of pytorch. If you encounter errors during autologging, try upgrading / downgrading pytorch to a supported version, or try upgrading MLflow.
+[2024-04-09 17:23:24,742][pytorch_lightning.utilities.rank_zero][INFO] - GPU available: True (cuda), used: True
+[2024-04-09 17:23:24,742][pytorch_lightning.utilities.rank_zero][INFO] - TPU available: False, using: 0 TPU cores
+[2024-04-09 17:23:24,742][pytorch_lightning.utilities.rank_zero][INFO] - IPU available: False, using: 0 IPUs
+[2024-04-09 17:23:24,742][pytorch_lightning.utilities.rank_zero][INFO] - HPU available: False, using: 0 HPUs
+2024/04/09 17:23:24 WARNING mlflow.utils.autologging_utils: MLflow autologging encountered a warning: "/home/felferrari/anaconda3/envs/thesis2/lib/python3.11/site-packages/mlflow/pytorch/_lightning_autolog.py:463: UserWarning: Autologging is known to be compatible with pytorch-lightning versions between 1.4.9 and 2.2.0.post0 and may not succeed with packages outside this range."
+/home/felferrari/anaconda3/envs/thesis2/lib/python3.11/site-packages/lightning/pytorch/callbacks/model_checkpoint.py:653: Checkpoint directory /tmp/tmpsxjzqelg exists and is not empty.
+LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
+
+  | Name      | Type       | Params
+-----------------------------------------
+0 | model     | ResUnetOpt | 0     
+1 | criterion | FocalLoss  | 0     
+-----------------------------------------
+0         Trainable params
+0         Non-trainable params
+0         Total params
+0.000     Total estimated model params size (MB)
+Metric val_loss improved. New best score: 0.254
+[2024-04-09 17:26:01,955][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 0, global step 270: 'val_loss' reached 0.25440 (best 0.25440), saving model to '/tmp/tmpsxjzqelg/model_5.ckpt' as top 1
+Metric val_loss improved by 0.195 >= min_delta = 1e-05. New best score: 0.060
+[2024-04-09 17:28:33,020][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 1, global step 540: 'val_loss' reached 0.05964 (best 0.05964), saving model to '/tmp/tmpsxjzqelg/model_5.ckpt' as top 1
+[2024-04-09 17:31:04,122][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 2, global step 810: 'val_loss' was not in top 1
+[2024-04-09 17:33:34,208][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 3, global step 1080: 'val_loss' was not in top 1
+[2024-04-09 17:36:04,091][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 4, global step 1350: 'val_loss' was not in top 1
+[2024-04-09 17:38:35,026][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 5, global step 1620: 'val_loss' was not in top 1
+[2024-04-09 17:41:05,665][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 6, global step 1890: 'val_loss' was not in top 1
+[2024-04-09 17:43:35,550][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 7, global step 2160: 'val_loss' was not in top 1
+[2024-04-09 17:46:05,475][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 8, global step 2430: 'val_loss' was not in top 1
+[2024-04-09 17:48:36,235][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 9, global step 2700: 'val_loss' was not in top 1
+[2024-04-09 17:51:06,019][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 10, global step 2970: 'val_loss' was not in top 1
+Monitored metric val_loss did not improve in the last 10 records. Best score: 0.060. Signaling Trainer to stop.
+[2024-04-09 17:53:35,541][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 11, global step 3240: 'val_loss' was not in top 1
+/home/felferrari/anaconda3/envs/thesis2/lib/python3.11/site-packages/torch/nn/modules/lazy.py:181: UserWarning: Lazy modules are a new feature under heavy development so changes to the API or functionality can happen at any moment.
+  warnings.warn('Lazy modules are a new feature under heavy development '
+/home/felferrari/anaconda3/envs/thesis2/lib/python3.11/site-packages/_distutils_hack/__init__.py:11: UserWarning: Distutils was imported before Setuptools, but importing Setuptools also replaces the `distutils` module in `sys.modules`. This may lead to undesirable behaviors or errors. To avoid these issues, avoid using distutils directly, ensure that setuptools is installed in the traditional way (e.g. not an editable install), and/or make sure that setuptools is always imported before distutils.
+  warnings.warn(
+/home/felferrari/anaconda3/envs/thesis2/lib/python3.11/site-packages/_distutils_hack/__init__.py:26: UserWarning: Setuptools is replacing distutils.
+  warnings.warn("Setuptools is replacing distutils.")
+2024/04/09 17:53:38 WARNING mlflow.utils.autologging_utils: You are using an unsupported version of pytorch. If you encounter errors during autologging, try upgrading / downgrading pytorch to a supported version, or try upgrading MLflow.
+[2024-04-09 17:53:38,221][pytorch_lightning.utilities.rank_zero][INFO] - GPU available: True (cuda), used: True
+[2024-04-09 17:53:38,221][pytorch_lightning.utilities.rank_zero][INFO] - TPU available: False, using: 0 TPU cores
+[2024-04-09 17:53:38,221][pytorch_lightning.utilities.rank_zero][INFO] - IPU available: False, using: 0 IPUs
+[2024-04-09 17:53:38,221][pytorch_lightning.utilities.rank_zero][INFO] - HPU available: False, using: 0 HPUs
+2024/04/09 17:53:38 WARNING mlflow.utils.autologging_utils: MLflow autologging encountered a warning: "/home/felferrari/anaconda3/envs/thesis2/lib/python3.11/site-packages/mlflow/pytorch/_lightning_autolog.py:463: UserWarning: Autologging is known to be compatible with pytorch-lightning versions between 1.4.9 and 2.2.0.post0 and may not succeed with packages outside this range."
+/home/felferrari/anaconda3/envs/thesis2/lib/python3.11/site-packages/lightning/pytorch/callbacks/model_checkpoint.py:653: Checkpoint directory /tmp/tmpsxjzqelg exists and is not empty.
+LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
+
+  | Name      | Type       | Params
+-----------------------------------------
+0 | model     | ResUnetOpt | 0     
+1 | criterion | FocalLoss  | 0     
+-----------------------------------------
+0         Trainable params
+0         Non-trainable params
+0         Total params
+0.000     Total estimated model params size (MB)
+Metric val_loss improved. New best score: 0.153
+[2024-04-09 17:56:15,947][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 0, global step 270: 'val_loss' reached 0.15278 (best 0.15278), saving model to '/tmp/tmpsxjzqelg/model_6.ckpt' as top 1
+Metric val_loss improved by 0.052 >= min_delta = 1e-05. New best score: 0.101
+[2024-04-09 17:58:45,789][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 1, global step 540: 'val_loss' reached 0.10117 (best 0.10117), saving model to '/tmp/tmpsxjzqelg/model_6.ckpt' as top 1
+[2024-04-09 18:01:16,119][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 2, global step 810: 'val_loss' was not in top 1
+[2024-04-09 18:03:45,957][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 3, global step 1080: 'val_loss' was not in top 1
+[2024-04-09 18:06:16,803][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 4, global step 1350: 'val_loss' was not in top 1
+[2024-04-09 18:08:47,543][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 5, global step 1620: 'val_loss' was not in top 1
+[2024-04-09 18:11:18,958][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 6, global step 1890: 'val_loss' was not in top 1
+Metric val_loss improved by 0.016 >= min_delta = 1e-05. New best score: 0.085
+[2024-04-09 18:13:49,822][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 7, global step 2160: 'val_loss' reached 0.08525 (best 0.08525), saving model to '/tmp/tmpsxjzqelg/model_6.ckpt' as top 1
+[2024-04-09 18:16:19,707][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 8, global step 2430: 'val_loss' was not in top 1
+[2024-04-09 18:18:50,588][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 9, global step 2700: 'val_loss' was not in top 1
+[2024-04-09 18:21:20,932][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 10, global step 2970: 'val_loss' was not in top 1
+[2024-04-09 18:23:51,073][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 11, global step 3240: 'val_loss' was not in top 1
+[2024-04-09 18:26:21,260][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 12, global step 3510: 'val_loss' was not in top 1
+Metric val_loss improved by 0.013 >= min_delta = 1e-05. New best score: 0.072
+[2024-04-09 18:28:51,040][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 13, global step 3780: 'val_loss' reached 0.07249 (best 0.07249), saving model to '/tmp/tmpsxjzqelg/model_6.ckpt' as top 1
+[2024-04-09 18:31:22,015][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 14, global step 4050: 'val_loss' was not in top 1
+[2024-04-09 18:33:52,236][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 15, global step 4320: 'val_loss' was not in top 1
+[2024-04-09 18:36:22,973][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 16, global step 4590: 'val_loss' was not in top 1
+[2024-04-09 18:38:53,136][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 17, global step 4860: 'val_loss' was not in top 1
+[2024-04-09 18:41:23,716][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 18, global step 5130: 'val_loss' was not in top 1
+[2024-04-09 18:43:53,539][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 19, global step 5400: 'val_loss' was not in top 1
+[2024-04-09 18:46:24,038][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 20, global step 5670: 'val_loss' was not in top 1
+[2024-04-09 18:48:53,737][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 21, global step 5940: 'val_loss' was not in top 1
+[2024-04-09 18:51:23,277][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 22, global step 6210: 'val_loss' was not in top 1
+Monitored metric val_loss did not improve in the last 10 records. Best score: 0.072. Signaling Trainer to stop.
+[2024-04-09 18:53:53,472][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 23, global step 6480: 'val_loss' was not in top 1
+/home/felferrari/anaconda3/envs/thesis2/lib/python3.11/site-packages/torch/nn/modules/lazy.py:181: UserWarning: Lazy modules are a new feature under heavy development so changes to the API or functionality can happen at any moment.
+  warnings.warn('Lazy modules are a new feature under heavy development '
+/home/felferrari/anaconda3/envs/thesis2/lib/python3.11/site-packages/_distutils_hack/__init__.py:11: UserWarning: Distutils was imported before Setuptools, but importing Setuptools also replaces the `distutils` module in `sys.modules`. This may lead to undesirable behaviors or errors. To avoid these issues, avoid using distutils directly, ensure that setuptools is installed in the traditional way (e.g. not an editable install), and/or make sure that setuptools is always imported before distutils.
+  warnings.warn(
+/home/felferrari/anaconda3/envs/thesis2/lib/python3.11/site-packages/_distutils_hack/__init__.py:26: UserWarning: Setuptools is replacing distutils.
+  warnings.warn("Setuptools is replacing distutils.")
+2024/04/09 18:53:56 WARNING mlflow.utils.autologging_utils: You are using an unsupported version of pytorch. If you encounter errors during autologging, try upgrading / downgrading pytorch to a supported version, or try upgrading MLflow.
+[2024-04-09 18:53:56,150][pytorch_lightning.utilities.rank_zero][INFO] - GPU available: True (cuda), used: True
+[2024-04-09 18:53:56,150][pytorch_lightning.utilities.rank_zero][INFO] - TPU available: False, using: 0 TPU cores
+[2024-04-09 18:53:56,150][pytorch_lightning.utilities.rank_zero][INFO] - IPU available: False, using: 0 IPUs
+[2024-04-09 18:53:56,150][pytorch_lightning.utilities.rank_zero][INFO] - HPU available: False, using: 0 HPUs
+2024/04/09 18:53:56 WARNING mlflow.utils.autologging_utils: MLflow autologging encountered a warning: "/home/felferrari/anaconda3/envs/thesis2/lib/python3.11/site-packages/mlflow/pytorch/_lightning_autolog.py:463: UserWarning: Autologging is known to be compatible with pytorch-lightning versions between 1.4.9 and 2.2.0.post0 and may not succeed with packages outside this range."
+/home/felferrari/anaconda3/envs/thesis2/lib/python3.11/site-packages/lightning/pytorch/callbacks/model_checkpoint.py:653: Checkpoint directory /tmp/tmpsxjzqelg exists and is not empty.
+LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
+
+  | Name      | Type       | Params
+-----------------------------------------
+0 | model     | ResUnetOpt | 0     
+1 | criterion | FocalLoss  | 0     
+-----------------------------------------
+0         Trainable params
+0         Non-trainable params
+0         Total params
+0.000     Total estimated model params size (MB)
+Metric val_loss improved. New best score: 0.110
+[2024-04-09 18:56:30,566][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 0, global step 270: 'val_loss' reached 0.10985 (best 0.10985), saving model to '/tmp/tmpsxjzqelg/model_7.ckpt' as top 1
+Metric val_loss improved by 0.044 >= min_delta = 1e-05. New best score: 0.066
+[2024-04-09 18:58:58,044][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 1, global step 540: 'val_loss' reached 0.06590 (best 0.06590), saving model to '/tmp/tmpsxjzqelg/model_7.ckpt' as top 1
+[2024-04-09 19:01:25,620][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 2, global step 810: 'val_loss' was not in top 1
+[2024-04-09 19:03:52,684][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 3, global step 1080: 'val_loss' was not in top 1
+[2024-04-09 19:06:20,531][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 4, global step 1350: 'val_loss' was not in top 1
+[2024-04-09 19:08:48,561][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 5, global step 1620: 'val_loss' was not in top 1
+[2024-04-09 19:11:16,132][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 6, global step 1890: 'val_loss' was not in top 1
+[2024-04-09 19:13:43,299][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 7, global step 2160: 'val_loss' was not in top 1
+[2024-04-09 19:16:10,306][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 8, global step 2430: 'val_loss' was not in top 1
+[2024-04-09 19:18:38,005][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 9, global step 2700: 'val_loss' was not in top 1
+[2024-04-09 19:21:05,346][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 10, global step 2970: 'val_loss' was not in top 1
+Monitored metric val_loss did not improve in the last 10 records. Best score: 0.066. Signaling Trainer to stop.
+[2024-04-09 19:23:32,370][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 11, global step 3240: 'val_loss' was not in top 1
+/home/felferrari/anaconda3/envs/thesis2/lib/python3.11/site-packages/torch/nn/modules/lazy.py:181: UserWarning: Lazy modules are a new feature under heavy development so changes to the API or functionality can happen at any moment.
+  warnings.warn('Lazy modules are a new feature under heavy development '
+/home/felferrari/anaconda3/envs/thesis2/lib/python3.11/site-packages/_distutils_hack/__init__.py:11: UserWarning: Distutils was imported before Setuptools, but importing Setuptools also replaces the `distutils` module in `sys.modules`. This may lead to undesirable behaviors or errors. To avoid these issues, avoid using distutils directly, ensure that setuptools is installed in the traditional way (e.g. not an editable install), and/or make sure that setuptools is always imported before distutils.
+  warnings.warn(
+/home/felferrari/anaconda3/envs/thesis2/lib/python3.11/site-packages/_distutils_hack/__init__.py:26: UserWarning: Setuptools is replacing distutils.
+  warnings.warn("Setuptools is replacing distutils.")
+2024/04/09 19:23:35 WARNING mlflow.utils.autologging_utils: You are using an unsupported version of pytorch. If you encounter errors during autologging, try upgrading / downgrading pytorch to a supported version, or try upgrading MLflow.
+[2024-04-09 19:23:35,086][pytorch_lightning.utilities.rank_zero][INFO] - GPU available: True (cuda), used: True
+[2024-04-09 19:23:35,086][pytorch_lightning.utilities.rank_zero][INFO] - TPU available: False, using: 0 TPU cores
+[2024-04-09 19:23:35,086][pytorch_lightning.utilities.rank_zero][INFO] - IPU available: False, using: 0 IPUs
+[2024-04-09 19:23:35,086][pytorch_lightning.utilities.rank_zero][INFO] - HPU available: False, using: 0 HPUs
+2024/04/09 19:23:35 WARNING mlflow.utils.autologging_utils: MLflow autologging encountered a warning: "/home/felferrari/anaconda3/envs/thesis2/lib/python3.11/site-packages/mlflow/pytorch/_lightning_autolog.py:463: UserWarning: Autologging is known to be compatible with pytorch-lightning versions between 1.4.9 and 2.2.0.post0 and may not succeed with packages outside this range."
+/home/felferrari/anaconda3/envs/thesis2/lib/python3.11/site-packages/lightning/pytorch/callbacks/model_checkpoint.py:653: Checkpoint directory /tmp/tmpsxjzqelg exists and is not empty.
+LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
+
+  | Name      | Type       | Params
+-----------------------------------------
+0 | model     | ResUnetOpt | 0     
+1 | criterion | FocalLoss  | 0     
+-----------------------------------------
+0         Trainable params
+0         Non-trainable params
+0         Total params
+0.000     Total estimated model params size (MB)
+Metric val_loss improved. New best score: 0.082
+[2024-04-09 19:26:08,917][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 0, global step 270: 'val_loss' reached 0.08245 (best 0.08245), saving model to '/tmp/tmpsxjzqelg/model_8.ckpt' as top 1
+[2024-04-09 19:28:36,683][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 1, global step 540: 'val_loss' was not in top 1
+[2024-04-09 19:31:04,637][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 2, global step 810: 'val_loss' was not in top 1
+[2024-04-09 19:33:33,011][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 3, global step 1080: 'val_loss' was not in top 1
+[2024-04-09 19:36:00,913][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 4, global step 1350: 'val_loss' was not in top 1
+[2024-04-09 19:38:29,070][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 5, global step 1620: 'val_loss' was not in top 1
+[2024-04-09 19:40:56,416][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 6, global step 1890: 'val_loss' was not in top 1
+[2024-04-09 19:43:23,436][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 7, global step 2160: 'val_loss' was not in top 1
+[2024-04-09 19:45:52,026][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 8, global step 2430: 'val_loss' was not in top 1
+[2024-04-09 19:48:19,956][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 9, global step 2700: 'val_loss' was not in top 1
+Monitored metric val_loss did not improve in the last 10 records. Best score: 0.082. Signaling Trainer to stop.
+[2024-04-09 19:50:47,367][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 10, global step 2970: 'val_loss' was not in top 1
+/home/felferrari/anaconda3/envs/thesis2/lib/python3.11/site-packages/torch/nn/modules/lazy.py:181: UserWarning: Lazy modules are a new feature under heavy development so changes to the API or functionality can happen at any moment.
+  warnings.warn('Lazy modules are a new feature under heavy development '
+/home/felferrari/anaconda3/envs/thesis2/lib/python3.11/site-packages/_distutils_hack/__init__.py:11: UserWarning: Distutils was imported before Setuptools, but importing Setuptools also replaces the `distutils` module in `sys.modules`. This may lead to undesirable behaviors or errors. To avoid these issues, avoid using distutils directly, ensure that setuptools is installed in the traditional way (e.g. not an editable install), and/or make sure that setuptools is always imported before distutils.
+  warnings.warn(
+/home/felferrari/anaconda3/envs/thesis2/lib/python3.11/site-packages/_distutils_hack/__init__.py:26: UserWarning: Setuptools is replacing distutils.
+  warnings.warn("Setuptools is replacing distutils.")
+2024/04/09 19:50:50 WARNING mlflow.utils.autologging_utils: You are using an unsupported version of pytorch. If you encounter errors during autologging, try upgrading / downgrading pytorch to a supported version, or try upgrading MLflow.
+[2024-04-09 19:50:50,095][pytorch_lightning.utilities.rank_zero][INFO] - GPU available: True (cuda), used: True
+[2024-04-09 19:50:50,095][pytorch_lightning.utilities.rank_zero][INFO] - TPU available: False, using: 0 TPU cores
+[2024-04-09 19:50:50,095][pytorch_lightning.utilities.rank_zero][INFO] - IPU available: False, using: 0 IPUs
+[2024-04-09 19:50:50,095][pytorch_lightning.utilities.rank_zero][INFO] - HPU available: False, using: 0 HPUs
+2024/04/09 19:50:50 WARNING mlflow.utils.autologging_utils: MLflow autologging encountered a warning: "/home/felferrari/anaconda3/envs/thesis2/lib/python3.11/site-packages/mlflow/pytorch/_lightning_autolog.py:463: UserWarning: Autologging is known to be compatible with pytorch-lightning versions between 1.4.9 and 2.2.0.post0 and may not succeed with packages outside this range."
+/home/felferrari/anaconda3/envs/thesis2/lib/python3.11/site-packages/lightning/pytorch/callbacks/model_checkpoint.py:653: Checkpoint directory /tmp/tmpsxjzqelg exists and is not empty.
+LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
+
+  | Name      | Type       | Params
+-----------------------------------------
+0 | model     | ResUnetOpt | 0     
+1 | criterion | FocalLoss  | 0     
+-----------------------------------------
+0         Trainable params
+0         Non-trainable params
+0         Total params
+0.000     Total estimated model params size (MB)
+Metric val_loss improved. New best score: 0.212
+[2024-04-09 19:53:24,932][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 0, global step 270: 'val_loss' reached 0.21211 (best 0.21211), saving model to '/tmp/tmpsxjzqelg/model_9.ckpt' as top 1
+Metric val_loss improved by 0.100 >= min_delta = 1e-05. New best score: 0.112
+[2024-04-09 19:55:53,030][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 1, global step 540: 'val_loss' reached 0.11237 (best 0.11237), saving model to '/tmp/tmpsxjzqelg/model_9.ckpt' as top 1
+[2024-04-09 19:58:21,512][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 2, global step 810: 'val_loss' was not in top 1
+Metric val_loss improved by 0.045 >= min_delta = 1e-05. New best score: 0.068
+[2024-04-09 20:00:49,815][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 3, global step 1080: 'val_loss' reached 0.06774 (best 0.06774), saving model to '/tmp/tmpsxjzqelg/model_9.ckpt' as top 1
+[2024-04-09 20:03:17,460][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 4, global step 1350: 'val_loss' was not in top 1
+[2024-04-09 20:05:45,951][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 5, global step 1620: 'val_loss' was not in top 1
+[2024-04-09 20:08:14,709][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 6, global step 1890: 'val_loss' was not in top 1
+[2024-04-09 20:10:43,114][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 7, global step 2160: 'val_loss' was not in top 1
+[2024-04-09 20:13:11,305][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 8, global step 2430: 'val_loss' was not in top 1
+[2024-04-09 20:15:39,821][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 9, global step 2700: 'val_loss' was not in top 1
+[2024-04-09 20:18:08,055][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 10, global step 2970: 'val_loss' was not in top 1
+[2024-04-09 20:20:36,103][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 11, global step 3240: 'val_loss' was not in top 1
+Metric val_loss improved by 0.007 >= min_delta = 1e-05. New best score: 0.061
+[2024-04-09 20:23:04,908][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 12, global step 3510: 'val_loss' reached 0.06064 (best 0.06064), saving model to '/tmp/tmpsxjzqelg/model_9.ckpt' as top 1
+[2024-04-09 20:25:33,525][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 13, global step 3780: 'val_loss' was not in top 1
+[2024-04-09 20:28:01,907][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 14, global step 4050: 'val_loss' was not in top 1
+[2024-04-09 20:30:30,017][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 15, global step 4320: 'val_loss' was not in top 1
+[2024-04-09 20:32:58,911][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 16, global step 4590: 'val_loss' was not in top 1
+[2024-04-09 20:35:27,129][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 17, global step 4860: 'val_loss' was not in top 1
+[2024-04-09 20:37:55,139][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 18, global step 5130: 'val_loss' was not in top 1
+[2024-04-09 20:40:23,607][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 19, global step 5400: 'val_loss' was not in top 1
+[2024-04-09 20:42:51,230][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 20, global step 5670: 'val_loss' was not in top 1
+[2024-04-09 20:45:19,411][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 21, global step 5940: 'val_loss' was not in top 1
+Monitored metric val_loss did not improve in the last 10 records. Best score: 0.061. Signaling Trainer to stop.
+[2024-04-09 20:47:47,466][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 22, global step 6210: 'val_loss' was not in top 1
+/home/felferrari/anaconda3/envs/thesis2/lib/python3.11/site-packages/torch/nn/modules/lazy.py:181: UserWarning: Lazy modules are a new feature under heavy development so changes to the API or functionality can happen at any moment.
+  warnings.warn('Lazy modules are a new feature under heavy development '
+/home/felferrari/anaconda3/envs/thesis2/lib/python3.11/site-packages/_distutils_hack/__init__.py:11: UserWarning: Distutils was imported before Setuptools, but importing Setuptools also replaces the `distutils` module in `sys.modules`. This may lead to undesirable behaviors or errors. To avoid these issues, avoid using distutils directly, ensure that setuptools is installed in the traditional way (e.g. not an editable install), and/or make sure that setuptools is always imported before distutils.
+  warnings.warn(
+/home/felferrari/anaconda3/envs/thesis2/lib/python3.11/site-packages/_distutils_hack/__init__.py:26: UserWarning: Setuptools is replacing distutils.
+  warnings.warn("Setuptools is replacing distutils.")

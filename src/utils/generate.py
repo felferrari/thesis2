@@ -1,5 +1,5 @@
 from pathlib import Path
-from src.utils.ops import load_opt_image, save_geotiff
+from src.utils.ops import load_opt_image, save_geotiff, remove_outliers
 import numpy as np
 from tqdm import tqdm
 from osgeo import gdal, ogr, gdalconst
@@ -17,8 +17,7 @@ def generate_images_statistics(cfg_data, data_path, load_image, significance = 0
         for img_i in pbar:
             img_file = data_path / cfg_data.imgs[img_i]
             data = load_image(img_file)
-            clip_values = np.percentile(data, (significance, 100-significance), axis=(0,1))
-            data = np.clip(data, clip_values[0], clip_values[1])
+            data = remove_outliers(data, significance)
             if stats is None:
                 stats = {
                     'means': [data.mean(axis = (0,1))],
@@ -301,8 +300,7 @@ def read_imgs(folder, imgs, read_fn, dtype, significance = 0, factor = 1.0, pref
         pbar.set_description(f'Reading {prefix_name}{img_file}')
         img_path = Path(folder) / f'{prefix_name}{img_file}'
         img = read_fn(img_path).astype(dtype)
-        clip_values = np.percentile(img, (significance, 100-significance), axis=(0,1))
-        img = np.clip(img, clip_values[0], clip_values[1])
+        img = remove_outliers(img, significance)
         img = factor * img
         if len(img.shape) == 3:
             data.append(rearrange(img, 'h w c -> (h w) c'))
