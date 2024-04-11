@@ -158,7 +158,7 @@ def load_exp(exp_n = None):
         return load_json(os.path.join('conf', 'exps', f'exp_{exp_n}.json'))
     
 
-def save_geotiff(base_image_path, dest_path, data, dtype):
+def save_geotiff(base_image_path, dest_path, data, dtype, gdal_options = {}):
     """Save data array as geotiff.
     Args:
         base_image_path (str): Path to base geotiff image to recovery the projection parameters
@@ -175,26 +175,32 @@ def save_geotiff(base_image_path, dest_path, data, dtype):
     crs = base_data.GetSpatialRef()
     proj = base_data.GetProjection()
     dest_path = str(dest_path)
-
+    
+    if len(gdal_options) == 0:
+        if dtype == 'byte':
+            gdal_options = {'COMPRESS': 'JPEG'}
+        elif dtype == 'float':
+            gdal_options = {'COMPRESS': 'DEFLATE'}
+    
     if len(data.shape) == 2:
         if dtype == 'byte':
-            target_ds = gdal.GetDriverByName('GTiff').Create(dest_path, x_res, y_res, 1, gdal.GDT_Byte)
+            target_ds = gdal.GetDriverByName('GTiff').Create(dest_path, x_res, y_res, 1, gdal.GDT_Byte, options = gdal_options)
             data = data.astype(np.uint8)
         elif dtype == 'float':
-            target_ds = gdal.GetDriverByName('GTiff').Create(dest_path, x_res, y_res, 1, gdal.GDT_Float32)
+            target_ds = gdal.GetDriverByName('GTiff').Create(dest_path, x_res, y_res, 1, gdal.GDT_Float32, options = gdal_options)
             data = data.astype(np.float32)
         elif dtype == 'uint16':
-            target_ds = gdal.GetDriverByName('GTiff').Create(dest_path, x_res, y_res, 1, gdal.GDT_UInt16)
+            target_ds = gdal.GetDriverByName('GTiff').Create(dest_path, x_res, y_res, 1, gdal.GDT_UInt16, options = gdal_options)
             data = data.astype(np.uint16)
     elif len(data.shape) == 3:
         if dtype == 'byte':
-            target_ds = gdal.GetDriverByName('GTiff').Create(dest_path, x_res, y_res, data.shape[-1], gdal.GDT_Byte)
+            target_ds = gdal.GetDriverByName('GTiff').Create(dest_path, x_res, y_res, data.shape[-1], gdal.GDT_Byte, options = gdal_options)
             data = data.astype(np.uint8)
         elif dtype == 'float':
-            target_ds = gdal.GetDriverByName('GTiff').Create(dest_path, x_res, y_res, data.shape[-1], gdal.GDT_Float32)
+            target_ds = gdal.GetDriverByName('GTiff').Create(dest_path, x_res, y_res, data.shape[-1], gdal.GDT_Float32, options = gdal_options)
             data = data.astype(np.float32)
-        elif dtype == 'float':
-            target_ds = gdal.GetDriverByName('GTiff').Create(dest_path, x_res, y_res, data.shape[-1], gdal.GDT_UInt16)
+        elif dtype == 'uint16':
+            target_ds = gdal.GetDriverByName('GTiff').Create(dest_path, x_res, y_res, data.shape[-1], gdal.GDT_UInt16, options = gdal_options)
             data = data.astype(np.uint16)
     target_ds.SetGeoTransform(geo_transform)
     target_ds.SetSpatialRef(crs)

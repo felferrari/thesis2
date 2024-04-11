@@ -1,3 +1,4 @@
-overlap_patches: 0.3
-discard_border: 8
-batch_size: 64
+#overlaps: [0.2]
+strides: [152]
+discard_border: 36
+batch_size: 128

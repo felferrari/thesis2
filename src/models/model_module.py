@@ -1,7 +1,7 @@
 from typing import Any
 import lightning as L
 from pydoc import locate
-
+from torch.nn import Softmax
 class ModelModule(L.LightningModule):
     def __init__(self, cfg, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
@@ -15,6 +15,8 @@ class ModelModule(L.LightningModule):
         self.optimizer_params = train_params ['optimizer']['params']
         
         self.criterion = locate(train_params['criterion']['target'])(**train_params['criterion']['params'])
+        
+        self.pred_softmax = Softmax(dim=1)
         
     def training_step(self, batch, batch_idx):
         x, label = batch
@@ -41,7 +43,7 @@ class ModelModule(L.LightningModule):
         x, idx = batch
         x = self.model.prepare(x)
         y_hat = self.model(x)
-        return y_hat
+        return self.pred_softmax(y_hat)
         
     def configure_optimizers(self):
         return self.optimizer(self.model.parameters(), **self.optimizer_params)
