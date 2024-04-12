@@ -6,4 +6,7 @@ train:
 	python train.py +exp=$(EXP) +site=$(SITE)
 nohuptrain:
 	nohup python train.py +exp=$(EXP) +site=$(SITE) >output.log &
+nohupmultitrain:
+	nohup python train.py -m +exp=$(EXPS) +site=$(SITE) >output.log &
+copyfiles:
 	
