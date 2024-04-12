@@ -114,7 +114,7 @@ def save_feature_map(path_to_file, tensor, index = None):
         fm = tensor[index]
 
 
-def save_geotiff(base_image_path, dest_path, data, dtype, gdal_options = {}):
+def save_geotiff(base_image_path, dest_path, data, dtype, gdal_options = []):
     """Save data array as geotiff.
     Args:
         base_image_path (str): Path to base geotiff image to recovery the projection parameters
@@ -134,9 +134,9 @@ def save_geotiff(base_image_path, dest_path, data, dtype, gdal_options = {}):
     
     if len(gdal_options) == 0:
         if dtype == 'byte':
-            gdal_options = {'COMPRESS': 'JPEG'}
+            gdal_options = ['COMPRESS=JPEG']
         elif dtype == 'float':
-            gdal_options = {'COMPRESS': 'DEFLATE'}
+            gdal_options = ['COMPRESS=DEFLATE']
     
     if len(data.shape) == 2:
         if dtype == 'byte':

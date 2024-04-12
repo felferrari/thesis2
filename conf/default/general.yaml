@@ -14,3 +14,6 @@ train:
 n_classes: 4
 n_models: 10
 outlier_significance: 0.01
+accelerator:
+  name: gpu
+  devices: [0]

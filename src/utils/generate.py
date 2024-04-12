@@ -118,7 +118,7 @@ def generate_labels(cfg):
     #train label
     train_output = cfg.path.label.train
 
-    target_train = gdal.GetDriverByName('GTiff').Create(train_output, x_res, y_res, 1, gdal.GDT_Byte)
+    target_train = gdal.GetDriverByName('GTiff').Create(train_output, x_res, y_res, 1, gdal.GDT_Byte, options = ['COMPRESS=JPEG'])
     target_train.SetGeoTransform(geo_transform)
     target_train.SetSpatialRef(crs)
     target_train.SetProjection(proj)
@@ -166,7 +166,7 @@ def generate_labels(cfg):
     #test label
     test_output = cfg.path.label.test
 
-    target_test = gdal.GetDriverByName('GTiff').Create(test_output, x_res, y_res, 1, gdal.GDT_Byte)
+    target_test = gdal.GetDriverByName('GTiff').Create(test_output, x_res, y_res, 1, gdal.GDT_Byte, options = ['COMPRESS=JPEG'])
     target_test.SetGeoTransform(geo_transform)
     target_test.SetSpatialRef(crs)
     target_test.SetProjection(proj)
@@ -238,7 +238,7 @@ def generate_prev_map(cfg):
 
     train_output = cfg.path.prev_map.train
 
-    target_train = gdal.GetDriverByName('GTiff').Create(train_output, x_res, y_res, 1, gdal.GDT_Float32)
+    target_train = gdal.GetDriverByName('GTiff').Create(train_output, x_res, y_res, 1, gdal.GDT_Float32, options = ['COMPRESS=DEFLATE'])
     target_train.SetGeoTransform(geo_transform)
     target_train.SetSpatialRef(crs)
     target_train.SetProjection(proj)
@@ -269,7 +269,7 @@ def generate_prev_map(cfg):
 
     test_output = cfg.path.prev_map.test
 
-    target_test = gdal.GetDriverByName('GTiff').Create(test_output, x_res, y_res, 1, gdal.GDT_Float32)
+    target_test = gdal.GetDriverByName('GTiff').Create(test_output, x_res, y_res, 1, gdal.GDT_Float32, options = ['COMPRESS=DEFLATE'])
     target_test.SetGeoTransform(geo_transform)
     target_test.SetSpatialRef(crs)
     target_test.SetProjection(proj)

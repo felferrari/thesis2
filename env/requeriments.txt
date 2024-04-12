@@ -21,7 +21,7 @@ h5py
 einops
 scipy
 numpy
-opencv
+opencv-python
 mlflow
 psutil
 pynvml

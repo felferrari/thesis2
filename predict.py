@@ -54,7 +54,8 @@ def predict(cfg):
                         callbacks = [pred_callback]
                         
                         trainer = Trainer(
-                            accelerator='gpu',
+                            accelerator=cfg.general.accelerator.name,
+                            devices=cfg.general.accelerator.devices,
                             logger = False,
                             callbacks=callbacks,
                             enable_progress_bar=False,
