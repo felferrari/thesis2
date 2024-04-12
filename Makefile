@@ -16,6 +16,6 @@ copyfiles:
 	mkdir data/prepared
 	mkdir data/prepared/train
 	mkdir data/prepared/validation
-	cp -r /mnt/storage/ferrari/thesis/$(SITE)/data/opt data/original
-	cp -r /mnt/storage/ferrari/thesis/$(SITE)/data/sar data/original
-	cp -r /mnt/storage/ferrari/thesis/$(SITE)/data/prodes data/original
+	nohup cp -r /mnt/storage/ferrari/thesis/$(SITE)/data/sar data/original > output_opt.log &
+	nohup cp -r /mnt/storage/ferrari/thesis/$(SITE)/data/opt data/original > output_sar.log &
+	nohup cp -r /mnt/storage/ferrari/thesis/$(SITE)/data/prodes data/original > output_proes.log &
