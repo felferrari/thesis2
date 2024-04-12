@@ -18,4 +18,4 @@ copyfiles:
 	mkdir data/prepared/validation
 	nohup cp -rv /mnt/storage/ferrari/thesis/$(SITE)/data/sar data/original > output_opt.log &
 	nohup cp -rv /mnt/storage/ferrari/thesis/$(SITE)/data/opt data/original > output_sar.log &
-	nohup cp -rv /mnt/storage/ferrari/thesis/$(SITE)/data/prodes data/original > output_proes.log &
+	nohup cp -rv /mnt/storage/ferrari/thesis/$(SITE)/data/prodes data/original > output_prodes.log &
