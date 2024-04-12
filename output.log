@@ -680,3 +680,164 @@ Metric val_loss improved by 0.001 >= min_delta = 1e-05. New best score: 0.011
 [2024-04-12 12:12:05,568][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 95, global step 25920: 'val_loss' was not in top 1
 [2024-04-12 12:13:57,153][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 96, global step 26190: 'val_loss' was not in top 1
 [2024-04-12 12:15:48,737][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 97, global step 26460: 'val_loss' was not in top 1
+Metric val_loss improved by 0.001 >= min_delta = 1e-05. New best score: 0.010
+[2024-04-12 12:17:40,639][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 98, global step 26730: 'val_loss' reached 0.01001 (best 0.01001), saving model to '/tmp/tmp0a5tce6a/model_3.ckpt' as top 1
+[2024-04-12 12:19:32,686][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 99, global step 27000: 'val_loss' was not in top 1
+[2024-04-12 12:21:24,742][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 100, global step 27270: 'val_loss' was not in top 1
+[2024-04-12 12:23:16,786][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 101, global step 27540: 'val_loss' was not in top 1
+[2024-04-12 12:25:08,589][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 102, global step 27810: 'val_loss' was not in top 1
+[2024-04-12 12:27:00,555][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 103, global step 28080: 'val_loss' was not in top 1
+[2024-04-12 12:28:52,352][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 104, global step 28350: 'val_loss' was not in top 1
+[2024-04-12 12:30:43,331][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 105, global step 28620: 'val_loss' was not in top 1
+[2024-04-12 12:32:34,592][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 106, global step 28890: 'val_loss' was not in top 1
+[2024-04-12 12:34:26,020][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 107, global step 29160: 'val_loss' was not in top 1
+Monitored metric val_loss did not improve in the last 10 records. Best score: 0.010. Signaling Trainer to stop.
+[2024-04-12 12:36:17,745][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 108, global step 29430: 'val_loss' was not in top 1
+/home/felferrari/anaconda3/envs/thesis2/lib/python3.11/site-packages/torch/nn/modules/lazy.py:181: UserWarning: Lazy modules are a new feature under heavy development so changes to the API or functionality can happen at any moment.
+  warnings.warn('Lazy modules are a new feature under heavy development '
+/home/felferrari/anaconda3/envs/thesis2/lib/python3.11/site-packages/_distutils_hack/__init__.py:11: UserWarning: Distutils was imported before Setuptools, but importing Setuptools also replaces the `distutils` module in `sys.modules`. This may lead to undesirable behaviors or errors. To avoid these issues, avoid using distutils directly, ensure that setuptools is installed in the traditional way (e.g. not an editable install), and/or make sure that setuptools is always imported before distutils.
+  warnings.warn(
+/home/felferrari/anaconda3/envs/thesis2/lib/python3.11/site-packages/_distutils_hack/__init__.py:26: UserWarning: Setuptools is replacing distutils.
+  warnings.warn("Setuptools is replacing distutils.")
+2024/04/12 12:36:20 INFO mlflow.system_metrics.system_metrics_monitor: Stopping system metrics monitoring...
+2024/04/12 12:36:20 INFO mlflow.system_metrics.system_metrics_monitor: Successfully terminated system metrics monitoring!
+2024/04/12 12:36:20 INFO mlflow.system_metrics.system_metrics_monitor: Started monitoring system metrics.
+2024/04/12 12:36:20 WARNING mlflow.utils.autologging_utils: You are using an unsupported version of pytorch. If you encounter errors during autologging, try upgrading / downgrading pytorch to a supported version, or try upgrading MLflow.
+/home/felferrari/anaconda3/envs/thesis2/lib/python3.11/site-packages/torch/nn/modules/lazy.py:181: UserWarning: Lazy modules are a new feature under heavy development so changes to the API or functionality can happen at any moment.
+  warnings.warn('Lazy modules are a new feature under heavy development '
+[2024-04-12 12:36:20,464][pytorch_lightning.utilities.rank_zero][INFO] - GPU available: True (cuda), used: True
+[2024-04-12 12:36:20,464][pytorch_lightning.utilities.rank_zero][INFO] - TPU available: False, using: 0 TPU cores
+[2024-04-12 12:36:20,464][pytorch_lightning.utilities.rank_zero][INFO] - IPU available: False, using: 0 IPUs
+[2024-04-12 12:36:20,464][pytorch_lightning.utilities.rank_zero][INFO] - HPU available: False, using: 0 HPUs
+2024/04/12 12:36:20 WARNING mlflow.utils.autologging_utils: MLflow autologging encountered a warning: "/home/felferrari/anaconda3/envs/thesis2/lib/python3.11/site-packages/mlflow/pytorch/_lightning_autolog.py:463: UserWarning: Autologging is known to be compatible with pytorch-lightning versions between 1.4.9 and 2.2.0.post0 and may not succeed with packages outside this range."
+/home/felferrari/anaconda3/envs/thesis2/lib/python3.11/site-packages/lightning/pytorch/callbacks/model_checkpoint.py:653: Checkpoint directory /tmp/tmp0a5tce6a exists and is not empty.
+LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
+
+  | Name         | Type       | Params
+--------------------------------------------
+0 | model        | ResUnetOpt | 0     
+1 | criterion    | FocalLoss  | 0     
+2 | pred_softmax | Softmax    | 0     
+--------------------------------------------
+0         Trainable params
+0         Non-trainable params
+0         Total params
+0.000     Total estimated model params size (MB)
+Metric val_loss improved. New best score: 0.125
+[2024-04-12 12:38:16,806][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 0, global step 270: 'val_loss' reached 0.12460 (best 0.12460), saving model to '/tmp/tmp0a5tce6a/model_4.ckpt' as top 1
+Metric val_loss improved by 0.029 >= min_delta = 1e-05. New best score: 0.096
+[2024-04-12 12:40:08,799][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 1, global step 540: 'val_loss' reached 0.09564 (best 0.09564), saving model to '/tmp/tmp0a5tce6a/model_4.ckpt' as top 1
+Metric val_loss improved by 0.009 >= min_delta = 1e-05. New best score: 0.087
+[2024-04-12 12:42:00,512][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 2, global step 810: 'val_loss' reached 0.08681 (best 0.08681), saving model to '/tmp/tmp0a5tce6a/model_4.ckpt' as top 1
+Metric val_loss improved by 0.013 >= min_delta = 1e-05. New best score: 0.074
+[2024-04-12 12:43:53,212][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 3, global step 1080: 'val_loss' reached 0.07430 (best 0.07430), saving model to '/tmp/tmp0a5tce6a/model_4.ckpt' as top 1
+Metric val_loss improved by 0.021 >= min_delta = 1e-05. New best score: 0.053
+[2024-04-12 12:45:45,787][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 4, global step 1350: 'val_loss' reached 0.05341 (best 0.05341), saving model to '/tmp/tmp0a5tce6a/model_4.ckpt' as top 1
+[2024-04-12 12:47:37,512][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 5, global step 1620: 'val_loss' was not in top 1
+Metric val_loss improved by 0.005 >= min_delta = 1e-05. New best score: 0.048
+[2024-04-12 12:49:29,909][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 6, global step 1890: 'val_loss' reached 0.04835 (best 0.04835), saving model to '/tmp/tmp0a5tce6a/model_4.ckpt' as top 1
+Metric val_loss improved by 0.000 >= min_delta = 1e-05. New best score: 0.048
+[2024-04-12 12:51:21,829][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 7, global step 2160: 'val_loss' reached 0.04821 (best 0.04821), saving model to '/tmp/tmp0a5tce6a/model_4.ckpt' as top 1
+[2024-04-12 12:53:13,807][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 8, global step 2430: 'val_loss' was not in top 1
+[2024-04-12 12:55:06,753][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 9, global step 2700: 'val_loss' was not in top 1
+Metric val_loss improved by 0.006 >= min_delta = 1e-05. New best score: 0.042
+[2024-04-12 12:56:59,128][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 10, global step 2970: 'val_loss' reached 0.04191 (best 0.04191), saving model to '/tmp/tmp0a5tce6a/model_4.ckpt' as top 1
+Metric val_loss improved by 0.004 >= min_delta = 1e-05. New best score: 0.038
+[2024-04-12 12:58:51,671][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 11, global step 3240: 'val_loss' reached 0.03755 (best 0.03755), saving model to '/tmp/tmp0a5tce6a/model_4.ckpt' as top 1
+[2024-04-12 13:00:44,245][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 12, global step 3510: 'val_loss' was not in top 1
+[2024-04-12 13:02:36,763][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 13, global step 3780: 'val_loss' was not in top 1
+[2024-04-12 13:04:28,820][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 14, global step 4050: 'val_loss' was not in top 1
+[2024-04-12 13:06:21,854][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 15, global step 4320: 'val_loss' was not in top 1
+[2024-04-12 13:08:14,512][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 16, global step 4590: 'val_loss' was not in top 1
+Metric val_loss improved by 0.001 >= min_delta = 1e-05. New best score: 0.036
+[2024-04-12 13:10:06,147][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 17, global step 4860: 'val_loss' reached 0.03628 (best 0.03628), saving model to '/tmp/tmp0a5tce6a/model_4.ckpt' as top 1
+Metric val_loss improved by 0.001 >= min_delta = 1e-05. New best score: 0.035
+[2024-04-12 13:11:58,718][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 18, global step 5130: 'val_loss' reached 0.03537 (best 0.03537), saving model to '/tmp/tmp0a5tce6a/model_4.ckpt' as top 1
+[2024-04-12 13:13:50,122][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 19, global step 5400: 'val_loss' was not in top 1
+[2024-04-12 13:15:42,508][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 20, global step 5670: 'val_loss' was not in top 1
+Metric val_loss improved by 0.001 >= min_delta = 1e-05. New best score: 0.035
+[2024-04-12 13:17:35,173][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 21, global step 5940: 'val_loss' reached 0.03468 (best 0.03468), saving model to '/tmp/tmp0a5tce6a/model_4.ckpt' as top 1
+[2024-04-12 13:19:27,823][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 22, global step 6210: 'val_loss' was not in top 1
+[2024-04-12 13:21:20,018][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 23, global step 6480: 'val_loss' was not in top 1
+Metric val_loss improved by 0.004 >= min_delta = 1e-05. New best score: 0.031
+[2024-04-12 13:23:12,769][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 24, global step 6750: 'val_loss' reached 0.03081 (best 0.03081), saving model to '/tmp/tmp0a5tce6a/model_4.ckpt' as top 1
+[2024-04-12 13:25:05,637][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 25, global step 7020: 'val_loss' was not in top 1
+Metric val_loss improved by 0.001 >= min_delta = 1e-05. New best score: 0.030
+[2024-04-12 13:26:57,847][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 26, global step 7290: 'val_loss' reached 0.02991 (best 0.02991), saving model to '/tmp/tmp0a5tce6a/model_4.ckpt' as top 1
+[2024-04-12 13:28:50,358][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 27, global step 7560: 'val_loss' was not in top 1
+[2024-04-12 13:30:43,322][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 28, global step 7830: 'val_loss' was not in top 1
+[2024-04-12 13:32:35,555][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 29, global step 8100: 'val_loss' was not in top 1
+[2024-04-12 13:34:27,970][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 30, global step 8370: 'val_loss' was not in top 1
+[2024-04-12 13:36:20,320][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 31, global step 8640: 'val_loss' was not in top 1
+Metric val_loss improved by 0.001 >= min_delta = 1e-05. New best score: 0.029
+[2024-04-12 13:38:12,429][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 32, global step 8910: 'val_loss' reached 0.02859 (best 0.02859), saving model to '/tmp/tmp0a5tce6a/model_4.ckpt' as top 1
+[2024-04-12 13:40:04,472][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 33, global step 9180: 'val_loss' was not in top 1
+Metric val_loss improved by 0.002 >= min_delta = 1e-05. New best score: 0.027
+[2024-04-12 13:41:57,150][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 34, global step 9450: 'val_loss' reached 0.02667 (best 0.02667), saving model to '/tmp/tmp0a5tce6a/model_4.ckpt' as top 1
+[2024-04-12 13:43:48,827][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 35, global step 9720: 'val_loss' was not in top 1
+[2024-04-12 13:45:41,729][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 36, global step 9990: 'val_loss' was not in top 1
+[2024-04-12 13:47:34,012][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 37, global step 10260: 'val_loss' was not in top 1
+[2024-04-12 13:49:26,690][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 38, global step 10530: 'val_loss' was not in top 1
+[2024-04-12 13:51:18,831][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 39, global step 10800: 'val_loss' was not in top 1
+Metric val_loss improved by 0.001 >= min_delta = 1e-05. New best score: 0.025
+[2024-04-12 13:53:11,172][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 40, global step 11070: 'val_loss' reached 0.02537 (best 0.02537), saving model to '/tmp/tmp0a5tce6a/model_4.ckpt' as top 1
+[2024-04-12 13:55:04,328][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 41, global step 11340: 'val_loss' was not in top 1
+[2024-04-12 13:56:56,570][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 42, global step 11610: 'val_loss' was not in top 1
+Metric val_loss improved by 0.001 >= min_delta = 1e-05. New best score: 0.024
+[2024-04-12 13:58:48,872][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 43, global step 11880: 'val_loss' reached 0.02390 (best 0.02390), saving model to '/tmp/tmp0a5tce6a/model_4.ckpt' as top 1
+[2024-04-12 14:00:41,479][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 44, global step 12150: 'val_loss' was not in top 1
+Metric val_loss improved by 0.002 >= min_delta = 1e-05. New best score: 0.022
+[2024-04-12 14:02:33,973][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 45, global step 12420: 'val_loss' reached 0.02195 (best 0.02195), saving model to '/tmp/tmp0a5tce6a/model_4.ckpt' as top 1
+[2024-04-12 14:04:26,456][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 46, global step 12690: 'val_loss' was not in top 1
+Metric val_loss improved by 0.001 >= min_delta = 1e-05. New best score: 0.021
+[2024-04-12 14:06:17,981][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 47, global step 12960: 'val_loss' reached 0.02141 (best 0.02141), saving model to '/tmp/tmp0a5tce6a/model_4.ckpt' as top 1
+Metric val_loss improved by 0.001 >= min_delta = 1e-05. New best score: 0.021
+[2024-04-12 14:08:10,026][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 48, global step 13230: 'val_loss' reached 0.02055 (best 0.02055), saving model to '/tmp/tmp0a5tce6a/model_4.ckpt' as top 1
+[2024-04-12 14:10:02,400][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 49, global step 13500: 'val_loss' was not in top 1
+[2024-04-12 14:11:54,610][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 50, global step 13770: 'val_loss' was not in top 1
+Metric val_loss improved by 0.001 >= min_delta = 1e-05. New best score: 0.020
+[2024-04-12 14:13:46,937][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 51, global step 14040: 'val_loss' reached 0.02005 (best 0.02005), saving model to '/tmp/tmp0a5tce6a/model_4.ckpt' as top 1
+[2024-04-12 14:15:39,174][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 52, global step 14310: 'val_loss' was not in top 1
+[2024-04-12 14:17:31,513][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 53, global step 14580: 'val_loss' was not in top 1
+[2024-04-12 14:19:23,407][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 54, global step 14850: 'val_loss' was not in top 1
+Metric val_loss improved by 0.000 >= min_delta = 1e-05. New best score: 0.020
+[2024-04-12 14:21:15,296][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 55, global step 15120: 'val_loss' reached 0.01964 (best 0.01964), saving model to '/tmp/tmp0a5tce6a/model_4.ckpt' as top 1
+[2024-04-12 14:23:07,727][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 56, global step 15390: 'val_loss' was not in top 1
+[2024-04-12 14:25:00,054][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 57, global step 15660: 'val_loss' was not in top 1
+Metric val_loss improved by 0.002 >= min_delta = 1e-05. New best score: 0.018
+[2024-04-12 14:26:52,595][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 58, global step 15930: 'val_loss' reached 0.01762 (best 0.01762), saving model to '/tmp/tmp0a5tce6a/model_4.ckpt' as top 1
+[2024-04-12 14:28:45,489][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 59, global step 16200: 'val_loss' was not in top 1
+[2024-04-12 14:30:37,237][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 60, global step 16470: 'val_loss' was not in top 1
+[2024-04-12 14:32:29,100][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 61, global step 16740: 'val_loss' was not in top 1
+Metric val_loss improved by 0.001 >= min_delta = 1e-05. New best score: 0.016
+[2024-04-12 14:34:21,537][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 62, global step 17010: 'val_loss' reached 0.01620 (best 0.01620), saving model to '/tmp/tmp0a5tce6a/model_4.ckpt' as top 1
+[2024-04-12 14:36:14,371][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 63, global step 17280: 'val_loss' was not in top 1
+Metric val_loss improved by 0.000 >= min_delta = 1e-05. New best score: 0.016
+[2024-04-12 14:38:06,161][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 64, global step 17550: 'val_loss' reached 0.01591 (best 0.01591), saving model to '/tmp/tmp0a5tce6a/model_4.ckpt' as top 1
+[2024-04-12 14:39:58,335][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 65, global step 17820: 'val_loss' was not in top 1
+[2024-04-12 14:41:50,328][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 66, global step 18090: 'val_loss' was not in top 1
+[2024-04-12 14:43:42,093][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 67, global step 18360: 'val_loss' was not in top 1
+[2024-04-12 14:45:34,637][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 68, global step 18630: 'val_loss' was not in top 1
+Metric val_loss improved by 0.001 >= min_delta = 1e-05. New best score: 0.015
+[2024-04-12 14:47:26,925][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 69, global step 18900: 'val_loss' reached 0.01525 (best 0.01525), saving model to '/tmp/tmp0a5tce6a/model_4.ckpt' as top 1
+[2024-04-12 14:49:18,767][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 70, global step 19170: 'val_loss' was not in top 1
+Metric val_loss improved by 0.000 >= min_delta = 1e-05. New best score: 0.015
+[2024-04-12 14:51:10,924][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 71, global step 19440: 'val_loss' reached 0.01490 (best 0.01490), saving model to '/tmp/tmp0a5tce6a/model_4.ckpt' as top 1
+Metric val_loss improved by 0.000 >= min_delta = 1e-05. New best score: 0.015
+[2024-04-12 14:53:03,123][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 72, global step 19710: 'val_loss' reached 0.01456 (best 0.01456), saving model to '/tmp/tmp0a5tce6a/model_4.ckpt' as top 1
+[2024-04-12 14:54:55,921][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 73, global step 19980: 'val_loss' was not in top 1
+Metric val_loss improved by 0.001 >= min_delta = 1e-05. New best score: 0.014
+[2024-04-12 14:56:47,808][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 74, global step 20250: 'val_loss' reached 0.01368 (best 0.01368), saving model to '/tmp/tmp0a5tce6a/model_4.ckpt' as top 1
+[2024-04-12 14:58:40,419][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 75, global step 20520: 'val_loss' was not in top 1
+[2024-04-12 15:00:32,244][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 76, global step 20790: 'val_loss' was not in top 1
+[2024-04-12 15:02:24,610][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 77, global step 21060: 'val_loss' was not in top 1
+Metric val_loss improved by 0.002 >= min_delta = 1e-05. New best score: 0.012
+[2024-04-12 15:04:17,119][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 78, global step 21330: 'val_loss' reached 0.01176 (best 0.01176), saving model to '/tmp/tmp0a5tce6a/model_4.ckpt' as top 1
+[2024-04-12 15:06:09,187][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 79, global step 21600: 'val_loss' was not in top 1
+[2024-04-12 15:08:01,801][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 80, global step 21870: 'val_loss' was not in top 1
+Metric val_loss improved by 0.001 >= min_delta = 1e-05. New best score: 0.011
+[2024-04-12 15:09:53,686][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 81, global step 22140: 'val_loss' reached 0.01107 (best 0.01107), saving model to '/tmp/tmp0a5tce6a/model_4.ckpt' as top 1
+[2024-04-12 15:11:45,852][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 82, global step 22410: 'val_loss' was not in top 1
+[2024-04-12 15:13:38,348][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 83, global step 22680: 'val_loss' was not in top 1
+[2024-04-12 15:15:31,434][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 84, global step 22950: 'val_loss' was not in top 1
+[2024-04-12 15:17:23,607][pytorch_lightning.utilities.rank_zero][INFO] - Epoch 85, global step 23220: 'val_loss' was not in top 1

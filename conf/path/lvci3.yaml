@@ -1,0 +1,31 @@
+base: /home/felferrari/projects/thesis2
+original_data: "${.base}/data/original" 
+
+opt: "${.original_data}/opt"
+sar: "${.original_data}/sar"
+
+prodes: 
+  base: "${..original_data}/prodes"
+  yearly_deforestation: "${.base}/yearly_deforestation.shp"
+  # previous_deforestation: "${.base}/accumulated_deforestation_2007.shp"
+  previous_deforestation: "${.base}/accumulated_deforestation_2000.shp"
+  no_forest: "${.base}/no_forest.shp"
+  residual: "${.base}/residual.shp"
+  hydrography: "${.base}/hydrography.shp"
+
+prepared: 
+  base: "${..base}/data/prepared"
+  train: "${.base}/train"
+  validation: "${.base}/validation"
+  opt_statistics: "${.base}/opt_stats.csv"
+  sar_statistics: "${.base}/sar_stats.csv"
+
+general: "${.base}/data/general"
+label:
+  train: "${..general}/label_train.tif"
+  test: "${..general}/label_test.tif"
+prev_map:
+  train: "${..general}/previous_train.tif"
+  test: "${..general}/previous_test.tif"
+tiles: "${.general}/tiles.tif"
+train_val_map: "${.general}/train_val.tif"
