@@ -1,5 +1,5 @@
 import hydra
-from src.data.data_module import DataModule
+from src.dataset.data_module import DataModule
 from src.models.model_module import ModelModule
 from lightning.pytorch.trainer.trainer import Trainer
 from tempfile import TemporaryDirectory
@@ -16,7 +16,7 @@ def train(cfg):
         )
     for run_id in runs['run_id']:
         nested_runs = mlflow.search_runs(
-            filter_string = f'tag.parent_run_id = "{run_id}"'
+            filter_string = f'params.parent_run_id = "{run_id}"'
             )
         for nested_run_id in nested_runs['run_id']:
             mlflow.delete_run(run_id=nested_run_id)
@@ -35,7 +35,7 @@ def train(cfg):
                 
                 with mlflow.start_run(run_name=f'model_{model_i}', nested=True, log_system_metrics=True):
                     
-                    mlflow.set_tags({
+                    mlflow.log_params({
                         'parent_run_id': parent_run.info.run_id
                     })
                     
@@ -76,7 +76,7 @@ def train(cfg):
                         model=model_module,
                         datamodule=data_module,
                     )
-                    elapsed_time = time() - t0
+                    elapsed_time = (time() - t0) / 60.0
                     
                     mlflow.log_metric('train_time', elapsed_time)
                     

@@ -7,7 +7,7 @@ from einops import rearrange
 from skimage.util import crop
 
 class PredictionCallback(BasePredictionWriter):
-    def __init__(self, cfg, write_interval: Literal['batch'] | Literal['epoch'] | Literal['batch_and_epoch'] = "batch") -> None:
+    def __init__(self, cfg) -> None:
         super().__init__(write_interval = 'batch')
         label = load_sb_image(cfg.path.label.test)
         
@@ -20,23 +20,26 @@ class PredictionCallback(BasePredictionWriter):
         self.shape = np.pad(label, pad_width=pad_width).shape
         
         self.patch_size = patch_size
+        self.cfg = cfg
+        self.reset_image()
+        
+        discard_border = cfg.exp.pred_params.discard_border
         
         self.crop_width_2d = (
-            (cfg.exp.pred_params.discard_border, cfg.exp.pred_params.discard_border),
-            (cfg.exp.pred_params.discard_border, cfg.exp.pred_params.discard_border)
+            (discard_border, discard_border),
+            (discard_border, discard_border)
         )
         
         self.crop_width_3d = (
-            (cfg.exp.pred_params.discard_border, cfg.exp.pred_params.discard_border),
-            (cfg.exp.pred_params.discard_border, cfg.exp.pred_params.discard_border),
+            (discard_border, discard_border),
+            (discard_border, discard_border),
             (0, 0)
         )
         
-        self.ones_img = np.ones(shape=(patch_size, patch_size))
-        self.ones_img = crop(self.ones_img, self.crop_width_2d)
+        ones_img = np.ones(shape=(patch_size, patch_size))
+        self.ones_img = crop(ones_img, self.crop_width_2d)
         
-        self.cfg = cfg
-        self.reset_image()
+        
         
     def reset_image(self):
         self.image_sum = np.zeros(shape = self.shape + (self.cfg.general.n_classes,), dtype=np.float16).reshape(-1, self.cfg.general.n_classes)

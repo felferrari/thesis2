@@ -21,7 +21,10 @@ h5py
 einops
 scipy
 numpy
+opencv
 mlflow
+psutil
+pynvml
 fire
 torch
 torchvision

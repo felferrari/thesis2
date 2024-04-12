@@ -1,13 +1,11 @@
 import json
 import numpy as np
-import os
-import sys
 from osgeo import gdal_array
 from osgeo import gdal, gdalconst
 from pathlib import Path
 from typing import Union
 import yaml 
-from multiprocessing import Pool
+from itertools import chain, product
 
 gdal.UseExceptions()
 
@@ -115,48 +113,6 @@ def save_feature_map(path_to_file, tensor, index = None):
     if index is not None:
         fm = tensor[index]
 
-def create_exps_paths(exp_n):
-    exps_path = 'exps'
-
-    exp_path = os.path.join(exps_path, f'exp_{exp_n}')
-    models_path = os.path.join(exp_path, 'models')
-
-    results_path = os.path.join(exp_path, 'results')
-    predictions_path = os.path.join(results_path, 'predictions')
-    visual_path = os.path.join(results_path, 'visual')
-
-    logs_path = os.path.join(exp_path, 'logs')
-
-    
-    if not os.path.exists(exp_path):
-        os.makedirs(exp_path)
-    
-    if not os.path.exists(models_path):
-        os.makedirs(models_path)
-    
-    if not os.path.exists(results_path):
-        os.makedirs(results_path)
-    
-    if not os.path.exists(logs_path):
-        os.makedirs(logs_path)
-    
-    if not os.path.exists(predictions_path):
-        os.makedirs(predictions_path)
-
-    if not os.path.exists(visual_path):
-        os.makedirs(visual_path)
-
-    return exps_path, exp_path, models_path, results_path, predictions_path, visual_path, logs_path
-
-def load_exp(exp_n = None):
-    if exp_n is None:
-        if len(sys.argv)==1:
-            return None
-        else:
-            return load_json(os.path.join('conf', 'exps', f'exp_{sys.argv[1]}.json'))
-    else:
-        return load_json(os.path.join('conf', 'exps', f'exp_{exp_n}.json'))
-    
 
 def save_geotiff(base_image_path, dest_path, data, dtype, gdal_options = {}):
     """Save data array as geotiff.
@@ -213,24 +169,18 @@ def save_geotiff(base_image_path, dest_path, data, dtype, gdal_options = {}):
             target_ds.GetRasterBand(band_i).WriteArray(data[:,:,band_i-1])
     target_ds = None
 
-def count_parameters_old(model):
-    """Count the number of model parameters
-    Args:
-        model (Module): Model
-    Returns:
-        int: Number of Model's parameters
-    """
-    return sum(p.numel() for p in model.parameters() if p.requires_grad)
-
-def count_parameters(model):
-    total_params = 0
-    text = ''
-    for name, parameter in model.named_parameters():
-        if not parameter.requires_grad: continue
-        params = parameter.numel()
-        total_params+=params
-        text += f'{name}: {params:,}\n'
-    text+=f'Total: {total_params:,}\n'
-    return total_params
-
-
+def set_from_combinations(combinations):
+    if len(combinations) == 1:
+        return set(combinations[0])
+    elif len(combinations) == 2:
+        return set(chain(combinations[0], combinations[1]))
+    
+def possible_combinations(combinations):
+    if len(combinations) == 1:
+        return (tuple(combinations[0]),)
+    elif len(combinations) == 2:
+        comb = tuple(product(combinations[0], combinations[1]))
+        if len(comb) == 0:
+            return (tuple(),)
+        else:
+            return comb

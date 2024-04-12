@@ -2,5 +2,6 @@
 .vscode
 lightning_logs
 mlruns
-data
+
+data/
 outputs

@@ -2,6 +2,6 @@ defaults:
   - /model/resunet_opt@model
   - /default/train_params@train_params
   - /default/pred_params@pred_params
-name: resunet_opt_diverse
-opt_condition: diverse_cloud
+name: resunet_opt_no_cloud
+opt_condition: no_cloud
 sar_condition: no_sar

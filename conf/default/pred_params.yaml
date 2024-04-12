@@ -1,4 +1,4 @@
 #overlaps: [0.2]
-strides: [152]
+#strides: [152] #224 - 2*discard
 discard_border: 36
-batch_size: 128
+batch_size: 64

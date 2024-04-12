@@ -1,45 +1,49 @@
 from pathlib import Path
-from src.utils.ops import load_opt_image, save_geotiff, remove_outliers
+from src.utils.ops import load_opt_image, save_geotiff, remove_outliers, set_from_combinations
 import numpy as np
 from tqdm import tqdm
 from osgeo import gdal, ogr, gdalconst
 from skimage.morphology import disk, dilation, erosion, area_opening
 from einops import rearrange
+import pandas as pd
 
 gdal.UseExceptions()
 
 def generate_images_statistics(cfg_data, data_path, load_image, significance = 0):
-    general_stats = dict()
+    #general_stats = pd.DataFrame(columns=['cond', 'band', 'mean', 'std', 'max', 'min'])
+    general_stats = None
     for k in cfg_data.condition:
         data_path = Path(data_path)
         stats = None
-        pbar = tqdm({ii for i in cfg_data.condition[k] for ii in i }, desc=f'Generating Statistics for {k} condition')
+        pbar = tqdm(set_from_combinations(cfg_data.condition[k]), desc=f'Generating Statistics for {k} condition')
         for img_i in pbar:
             img_file = data_path / cfg_data.imgs[img_i]
             data = load_image(img_file)
             data = remove_outliers(data, significance)
             if stats is None:
                 stats = {
-                    'means': [data.mean(axis = (0,1))],
-                    'stds': [data.std(axis = (0,1))],
-                    'maxs': [data.max(axis = (0,1))],
-                    'mins': [data.min(axis = (0,1))],
+                    'means': np.expand_dims(data.mean(axis = (0,1)), axis=0),
+                    'stds': np.expand_dims(data.std(axis = (0,1)), axis=0),
+                    'maxs': np.expand_dims(data.max(axis = (0,1)), axis=0),
+                    'mins': np.expand_dims(data.min(axis = (0,1)), axis=0),
                 }
             else:
                 stats = {
-                    'means': np.vstack((stats['means'], data.mean(axis=(0,1)))),
-                    'stds': np.vstack((stats['stds'], data.std(axis=(0,1)))),
-                    'maxs': np.vstack((stats['maxs'], data.max(axis=(0,1)))),
-                    'mins': np.vstack((stats['mins'], data.min(axis=(0,1))))
+                    'means': np.concatenate((stats['means'], np.expand_dims(data.mean(axis = (0,1)), axis=0)), axis= 0),
+                    'stds': np.concatenate((stats['stds'], np.expand_dims(data.std(axis = (0,1)), axis=0)), axis= 0),
+                    'maxs': np.concatenate((stats['maxs'], np.expand_dims(data.max(axis = (0,1)), axis=0)), axis= 0),
+                    'mins': np.concatenate((stats['mins'], np.expand_dims(data.min(axis = (0,1)), axis=0)), axis= 0),
                 }
         if stats is not None:
-            general_stats[k] = {
-                'bands': np.arange(stats['means'].shape[1]),
-                'means': stats['means'].mean(axis=0),
-                'stds': stats['stds'].mean(axis=0),
-                'maxs': stats['maxs'].max(axis=0),
-                'mins': stats['mins'].min(axis=0)
+            stats = {
+                'band': np.arange(stats['means'].shape[1]),
+                'cond': [k] * stats['means'].shape[1],
+                'mean': stats['means'].mean(axis=0),
+                'std': stats['stds'].mean(axis=0),
+                'max': stats['maxs'].max(axis=0),
+                'min': stats['mins'].min(axis=0)
             }
+            general_stats = pd.concat([general_stats, pd.DataFrame(stats)])
         
     return general_stats
 
