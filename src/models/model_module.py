@@ -27,10 +27,10 @@ class Normalization():
         sar_df = sar_df[sar_df['cond'] == cfg.exp.sar_condition]
         
         if len(opt_df) > 0:
-            opt_means =  list(opt_df.sort_values(by='band')['mean'])
-            opt_stds =  list(opt_df.sort_values(by='band')['std'])
-            # opt_means =  list(opt_df.sort_values(by='band')['min'])
-            # opt_stds =  list(opt_df.sort_values(by='band')['delta'])
+            # opt_means =  list(opt_df.sort_values(by='band')['mean'])
+            # opt_stds =  list(opt_df.sort_values(by='band')['std'])
+            opt_means =  list(opt_df.sort_values(by='band')['min'])
+            opt_stds =  list(opt_df.sort_values(by='band')['delta'])
             self.opt_transforms = v2.Compose([
                 v2.Normalize(mean=opt_means, std=opt_stds),
             ])
@@ -38,10 +38,10 @@ class Normalization():
             self.opt_transforms = None
             
         if len(sar_df) > 0:
-            sar_means =  list(sar_df.sort_values(by='band')['mean'])
-            sar_stds =  list(sar_df.sort_values(by='band')['std'])
-            # sar_means =  list(sar_df.sort_values(by='band')['min'])
-            # sar_stds =  list(sar_df.sort_values(by='band')['delta'])
+            # sar_means =  list(sar_df.sort_values(by='band')['mean'])
+            # sar_stds =  list(sar_df.sort_values(by='band')['std'])
+            sar_means =  list(sar_df.sort_values(by='band')['min'])
+            sar_stds =  list(sar_df.sort_values(by='band')['delta'])
             self.sar_transforms = v2.Compose([
                 v2.Normalize(mean=sar_means, std=sar_stds),
             ])
