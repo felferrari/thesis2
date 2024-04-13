@@ -2,6 +2,7 @@ optimizer:
   target: torch.optim.Adam
   params:
     lr: 2.0e-5
+    weight_decay : 1.0e-3
 
 criterion:
   target: segmentation_models_pytorch.losses.FocalLoss
@@ -12,6 +13,6 @@ criterion:
 
 early_stop_params:
   patience: 10
-  min_delta: 1.0e-5
+  min_delta: 1.0e-3
 
 max_epochs: 500

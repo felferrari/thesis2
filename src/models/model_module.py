@@ -80,7 +80,7 @@ class ModelModule(L.LightningModule):
         
     def training_step(self, batch, batch_idx):
         x, label = batch
-        x, label = self.augmentation(x, label)
+        #x, label = self.augmentation(x, label)
         # x = self.normalization(x)
         x = self.model.prepare(x)
         y_hat = self.model(x)
@@ -121,7 +121,7 @@ class ModelModule(L.LightningModule):
         # x = self.normalization(x)
         x = self.model.prepare(x)
         y_hat = self.model(x)
-        y_hat = self.pred_softmax(y_hat)
+        #y_hat = self.pred_softmax(y_hat)
         return y_hat
         
     def configure_optimizers(self):

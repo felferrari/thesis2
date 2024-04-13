@@ -43,9 +43,9 @@ def predict(cfg):
                         )['run_id'][0]
                     
                     with mlflow.start_run(run_id=run_model_id, nested=True):
-                        #model_id = f'runs:/{run_model_id}/model'
-                        #model_module = mlflow.pytorch.load_model(model_id)
-                        model_module = ModelModule(cfg)
+                        model_id = f'runs:/{run_model_id}/model'
+                        model_module = mlflow.pytorch.load_model(model_id)
+                        # model_module = ModelModule(cfg)
                         # model_module_b = ModelModule(cfg)
                         # model_module_b.model = model_module.model
                         # model_module = model_module_b
