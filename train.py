@@ -71,7 +71,7 @@ def train(cfg):
                         devices=cfg.general.accelerator.devices,
                         logger = False,
                         callbacks=callbacks,
-                        enable_progress_bar=True,
+                        enable_progress_bar=False,
                         max_epochs = cfg.exp.train_params.max_epochs
                     )
                     t0 = time()
