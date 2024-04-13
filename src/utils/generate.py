@@ -25,14 +25,14 @@ def generate_images_statistics(cfg_data, data_path, load_image, significance = 0
                     'means': np.expand_dims(data.mean(axis = (0,1)), axis=0),
                     'stds': np.expand_dims(data.std(axis = (0,1)), axis=0),
                     'maxs': np.expand_dims(data.max(axis = (0,1)), axis=0),
-                    'mins': np.expand_dims(data.min(axis = (0,1)), axis=0),
+                    'mins': np.expand_dims(data.min(axis = (0,1)), axis=0)
                 }
             else:
                 stats = {
                     'means': np.concatenate((stats['means'], np.expand_dims(data.mean(axis = (0,1)), axis=0)), axis= 0),
                     'stds': np.concatenate((stats['stds'], np.expand_dims(data.std(axis = (0,1)), axis=0)), axis= 0),
                     'maxs': np.concatenate((stats['maxs'], np.expand_dims(data.max(axis = (0,1)), axis=0)), axis= 0),
-                    'mins': np.concatenate((stats['mins'], np.expand_dims(data.min(axis = (0,1)), axis=0)), axis= 0),
+                    'mins': np.concatenate((stats['mins'], np.expand_dims(data.min(axis = (0,1)), axis=0)), axis= 0)
                 }
         if stats is not None:
             stats = {
@@ -41,7 +41,8 @@ def generate_images_statistics(cfg_data, data_path, load_image, significance = 0
                 'mean': stats['means'].mean(axis=0),
                 'std': stats['stds'].mean(axis=0),
                 'max': stats['maxs'].max(axis=0),
-                'min': stats['mins'].min(axis=0)
+                'min': stats['mins'].min(axis=0),
+                'delta': stats['maxs'].max(axis=0) - stats['mins'].min(axis=0)
             }
             general_stats = pd.concat([general_stats, pd.DataFrame(stats)])
         

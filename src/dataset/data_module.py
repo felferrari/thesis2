@@ -21,7 +21,8 @@ class DataModule(LightningDataModule):
         
     def train_dataloader(self) -> TRAIN_DATALOADERS:
         ds = TrainDataset(
-            cfg = self.cfg
+            cfg = self.cfg,
+            mode = 'train'
             )
         
         return DataLoader(
@@ -30,13 +31,14 @@ class DataModule(LightningDataModule):
             num_workers=self.cfg.general.train.num_workers,
             shuffle=True,
             persistent_workers=True,
-            #pin_memory=True
+            pin_memory=True
             
         )
     
     def val_dataloader(self) -> TRAIN_DATALOADERS:
         ds = TrainDataset(
-            cfg = self.cfg
+            cfg = self.cfg,
+            mode = 'validation'
             )
         
         return DataLoader(
@@ -45,14 +47,17 @@ class DataModule(LightningDataModule):
             num_workers=self.cfg.general.train.num_workers,
             shuffle=False,
             persistent_workers=True,
-            #pin_memory=True
+            pin_memory=True
         )
         
     
 class TrainDataset(Dataset):
-    def __init__(self, cfg, *args, **kwargs):
+    def __init__(self, cfg, mode:str, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.files = list(Path(cfg.path.prepared.train).glob('*.h5'))
+        if mode == 'train':
+            self.files = list(Path(cfg.path.prepared.train).glob('*.h5'))
+        elif mode == 'validation':
+            self.files = list(Path(cfg.path.prepared.validation).glob('*.h5'))
         opt_condition = cfg.exp.opt_condition
         sar_condition = cfg.exp.sar_condition
         

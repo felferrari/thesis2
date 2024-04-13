@@ -50,6 +50,7 @@ def train(cfg):
                         dirpath=tempdir,
                         filename=f'model_{model_i}',
                         monitor='val_loss',
+                        mode = 'min',
                         verbose = True
                     )
                     
@@ -69,7 +70,7 @@ def train(cfg):
                         devices=cfg.general.accelerator.devices,
                         logger = False,
                         callbacks=callbacks,
-                        enable_progress_bar=False,
+                        enable_progress_bar=True,
                         max_epochs = cfg.exp.train_params.max_epochs
                     )
                     t0 = time()

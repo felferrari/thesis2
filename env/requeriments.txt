@@ -10,6 +10,7 @@ geemap
 tqdm
 pyyaml
 plotly
+streamlit
 scikit-learn
 scikit-image==0.21
 tensorboard

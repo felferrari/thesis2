@@ -65,7 +65,7 @@ def predict(cfg):
                         #for overlap in cfg.exp.pred_params.overlaps:
                         #for discard_border in cfg.exp.pred_params.discard_borders:
                         #    predict_dataset.set_overlap(discard_border)
-                        predict_dataloader = DataLoader(predict_dataset, batch_size=cfg.exp.pred_params.batch_size)
+                        predict_dataloader = DataLoader(predict_dataset, batch_size=cfg.exp.pred_params.batch_size, num_workers=1)
                         
                         trainer.predict(
                             model=model_module,
@@ -78,20 +78,22 @@ def predict(cfg):
                         
                         elapsed_time = (time() - t0) / 60.0
                         
-                        pred_0_file_path = Path(tempdir) / f'{cfg.site.name}:{cfg.exp.name}:{img_combination}:{model_i}_0.tif'
-                        save_geotiff(base_image, pred_0_file_path, np.round(255.0*pred[:,:,0]).astype(np.uint8), 'byte')
-                        pred_1_file_path = Path(tempdir) / f'{cfg.site.name}:{cfg.exp.name}:{img_combination}:{model_i}_1.tif'
-                        save_geotiff(base_image, pred_1_file_path, np.round(255.0*pred[:,:,1]).astype(np.uint8), 'byte')
+                        pred_file_path= Path(tempdir) / f'{cfg.site.name}:{cfg.exp.name}:{img_combination}:{model_i}.tif'
+                        save_geotiff(base_image, pred_file_path, pred, 'float')
+                        # pred_0_file_path = Path(tempdir) / f'{cfg.site.name}:{cfg.exp.name}:{img_combination}:{model_i}_0.tif'
+                        # save_geotiff(base_image, pred_0_file_path, np.round(255.0*pred[:,:,0]).astype(np.uint8), 'byte')
+                        # pred_1_file_path = Path(tempdir) / f'{cfg.site.name}:{cfg.exp.name}:{img_combination}:{model_i}_1.tif'
+                        # save_geotiff(base_image, pred_1_file_path, np.round(255.0*pred[:,:,1]).astype(np.uint8), 'byte')
                         
                         #pred_callback.reset_image()
                         
-                        preview = rescale(pred[:,:,0:3], 0.1, channel_axis=2)
+                        preview = rescale(pred[:,:,0:3], 0.1, channel_axis=2, preserve_range=True)
                         preview = 255 * preview 
                         preview = np.clip(preview.astype(np.int32), 0, 255)
                         
                         mlflow.log_metric('prediction_time', elapsed_time)
-                        mlflow.log_artifact(pred_0_file_path, 'predictions')
-                        mlflow.log_artifact(pred_1_file_path, 'predictions')
+                        mlflow.log_artifact(pred_file_path, 'predictions')
+                        #mlflow.log_artifact(pred_1_file_path, 'predictions')
                         mlflow.log_image(preview, f'predictions/preview_{cfg.site.name}:{cfg.exp.name}:{img_combination}:{model_i}.jpg')
 
 if __name__ == "__main__":

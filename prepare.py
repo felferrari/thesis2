@@ -20,24 +20,6 @@ def prepare(cfg):
         opt_df = generate_images_statistics(cfg.site.original_data.opt.train, cfg.path.opt, load_opt_image, cfg.general.outlier_significance)
         sar_df = generate_images_statistics(cfg.site.original_data.sar.train, cfg.path.sar, load_SAR_image, cfg.general.outlier_significance)
         
-        # opt_df = None
-        # for cond in opt_stats:
-        #     stats = opt_stats[cond]
-        #     stats['cond'] = cond
-        #     if opt_df is None:
-        #         opt_df = pd.DataFrame(stats)
-        #     else:
-        #         opt_df = pd.concat((opt_df, pd.DataFrame(stats)))
-                
-        # sar_df = None
-        # for cond in sar_stats:
-        #     stats = sar_stats[cond]
-        #     stats['cond'] = cond
-        #     if sar_df is None:
-        #         sar_df = pd.DataFrame(stats)
-        #     else:
-        #         sar_df = pd.concat((sar_df, pd.DataFrame(stats)))
-
         opt_df.to_csv(cfg.path.prepared.opt_statistics)
         sar_df.to_csv(cfg.path.prepared.sar_statistics)
         
