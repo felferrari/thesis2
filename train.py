@@ -49,13 +49,14 @@ def train(cfg):
                     checkpoint_callback = ModelCheckpoint(
                         dirpath=tempdir,
                         filename=f'model_{model_i}',
-                        monitor='val_loss',
-                        mode = 'min',
+                        monitor='val_f1_score_1',
+                        mode = 'max',
                         verbose = True
                     )
                     
                     earlystop_callback = EarlyStopping(
-                        monitor= 'val_loss',
+                        monitor= 'val_f1_score_1',
+                        mode='max',
                         verbose = True,
                         **dict(cfg.exp.train_params.early_stop_params)
                     )

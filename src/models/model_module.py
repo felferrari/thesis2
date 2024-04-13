@@ -81,7 +81,7 @@ class ModelModule(L.LightningModule):
     def training_step(self, batch, batch_idx):
         x, label = batch
         x, label = self.augmentation(x, label)
-        x = self.normalization(x)
+        # x = self.normalization(x)
         x = self.model.prepare(x)
         y_hat = self.model(x)
         loss = self.criterion(y_hat, label)
@@ -100,7 +100,7 @@ class ModelModule(L.LightningModule):
         
     def validation_step(self, batch, batch_idx):
         x, label = batch
-        x = self.normalization(x)
+        # x = self.normalization(x)
         x = self.model.prepare(x)
         y_hat = self.model(x)
         loss = self.criterion(y_hat, label)
@@ -118,7 +118,7 @@ class ModelModule(L.LightningModule):
     
     def predict_step(self, batch, batch_idx):
         x, idx = batch
-        x = self.normalization(x)
+        # x = self.normalization(x)
         x = self.model.prepare(x)
         y_hat = self.model(x)
         y_hat = self.pred_softmax(y_hat)
