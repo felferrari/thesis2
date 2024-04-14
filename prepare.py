@@ -82,7 +82,7 @@ def prepare(cfg):
         base_image = Path(cfg.path.opt) / cfg.site.original_data.opt.train.imgs[0]
         save_geotiff(base_image, cfg.path.train_val_map, train_val_map, 'byte')
         
-        del train_val_map, train_w_indexes, val_w_indexes, train_label, tiles
+        del train_val_map, train_w_indexes, val_w_indexes, tiles
         
         opt_imgs = read_imgs(
             folder=cfg.path.opt, 
