@@ -1,8 +1,7 @@
 import hydra
-from src.dataset.data_module import DataModule, PredDataset
-from src.models.model_module import ModelModule
+from src.dataset.data_module import PredDataset
 from src.callbacks import PredictionCallback
-from src.utils.ops import save_geotiff, possible_combinations
+from src.utils.ops import save_geotiff
 from lightning.pytorch.trainer.trainer import Trainer
 from tempfile import TemporaryDirectory
 from torch.utils.data import DataLoader
@@ -14,6 +13,7 @@ from skimage.transform import rescale
         
 @hydra.main(version_base=None, config_path='conf', config_name='config.yaml')
 def predict(cfg):
+    mlflow.set_experiment(experiment_name = cfg.site.name)
     
     runs = mlflow.search_runs(
         filter_string = f'run_name = "{cfg.exp.name}"'

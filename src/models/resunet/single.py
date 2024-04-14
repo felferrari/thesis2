@@ -60,4 +60,21 @@ class ResUnetSAR(GenericResunet):
         x_img = self.get_sar(x)
         x = torch.cat((x_img, x['previous']), dim=1)
         return x
+
+class ResUnetOptNoPrevMap(GenericResunet):
+    @abstractmethod
+    def get_input_dims(cfg):
+        return cfg.exp.n_opt_imgs * cfg.general.n_opt_bands 
     
+    def prepare(self, x):
+        x_img = self.get_opt(x)
+        return x_img
+    
+class ResUnetSARNoPrevMap(GenericResunet):
+    @abstractmethod
+    def get_input_dims(cfg):
+        return cfg.exp.n_sar_imgs * cfg.general.n_sar_bands 
+    
+    def prepare(self, x):
+        x_img = self.get_sar(x)
+        return x_img

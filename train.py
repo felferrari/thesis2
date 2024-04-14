@@ -11,6 +11,8 @@ from time import time
 @hydra.main(version_base=None, config_path='conf', config_name='config.yaml')
 def train(cfg):
     
+    mlflow.set_experiment(experiment_name = cfg.site.name)
+    
     runs = mlflow.search_runs(
         filter_string = f'run_name = "{cfg.exp.name}"'
         )
