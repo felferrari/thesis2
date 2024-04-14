@@ -24,8 +24,9 @@ def train(cfg):
     
     with mlflow.start_run(run_name=cfg.exp.name) as parent_run:
         mlflow.set_tags({
-            'Optical Condition': cfg.exp.opt_condition,
-            'SAR Condition': cfg.exp.sar_condition
+            'opt_cond': cfg.exp.opt_condition,
+            'sar_cond': cfg.exp.sar_condition,
+            'site': cfg.site.name
         })
         total_t0 = time()
         data_module = DataModule(cfg)
