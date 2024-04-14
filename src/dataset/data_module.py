@@ -56,9 +56,25 @@ class TrainDataset(Dataset):
     def __init__(self, cfg, mode:str, *args, **kwargs):
         super().__init__(*args, **kwargs)
         if mode == 'train':
-            self.files = list(Path(cfg.path.prepared.train).glob('*.h5'))
+            opt_files = list(Path(cfg.path.prepared.validation).glob('opt_*.h5'))
+            sar_files = list(Path(cfg.path.prepared.validation).glob('sar_*.h5'))
+            gen_files = list(Path(cfg.path.prepared.validation).glob('gen_*.h5'))
+            
+            opt_files.sort()
+            sar_files.sort()
+            gen_files.sort()
+            
+            self.files = list(zip(opt_files, sar_files, gen_files))
         elif mode == 'validation':
-            self.files = list(Path(cfg.path.prepared.validation).glob('*.h5'))
+            opt_files = list(Path(cfg.path.prepared.validation).glob('opt_*.h5'))
+            sar_files = list(Path(cfg.path.prepared.validation).glob('sar_*.h5'))
+            gen_files = list(Path(cfg.path.prepared.validation).glob('gen_*.h5'))
+            
+            opt_files.sort()
+            sar_files.sort()
+            gen_files.sort()
+            
+            self.files = list(zip(opt_files, sar_files, gen_files))
         random.shuffle(self.files)
         self.mode = mode
         opt_condition = cfg.exp.opt_condition
@@ -81,14 +97,17 @@ class TrainDataset(Dataset):
         index_file = index // self.n_combinations
         comb_index = index % self.n_combinations
         opt_images_idx, sar_images_idx = self.combinations[comb_index]
-        patch_file = self.files[index_file]
+
+        opt_patch_file, sar_patch_file, gen_patch_file = self.files[index_file]
         
-        data = h5py.File(patch_file, 'r', rdcc_nbytes = 10*(1024**2))
+        opt_data = h5py.File(opt_patch_file, 'r', rdcc_nbytes = 10*(1024**2))
+        sar_data = h5py.File(sar_patch_file, 'r', rdcc_nbytes = 10*(1024**2))
+        gen_data = h5py.File(gen_patch_file, 'r', rdcc_nbytes = 10*(1024**2))
     
-        opt_patch = data['opt'][()][opt_images_idx, :, :, :].astype(np.float32)
-        sar_patch = data['sar'][()][sar_images_idx, :, :, :].astype(np.float32)
-        previous_patch = data['previous'][()].astype(np.float32)
-        label_patch = data['label'][()].astype(np.int64)
+        opt_patch = opt_data['opt'][()][opt_images_idx, :, :, :].astype(np.float32)
+        sar_patch = sar_data['sar'][()][sar_images_idx, :, :, :].astype(np.float32)
+        previous_patch = gen_data['previous'][()].astype(np.float32)
+        label_patch = gen_data['label'][()].astype(np.int64)
         
         opt_patch = np.moveaxis(opt_patch, -1, -3)
         sar_patch = np.moveaxis(sar_patch, -1, -3)

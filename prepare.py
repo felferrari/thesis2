@@ -3,7 +3,6 @@ from pathlib import Path
 from src.utils.ops import load_sb_image, load_opt_image, load_SAR_image, save_geotiff
 from src.utils.generate import generate_images_statistics, generate_tiles, generate_labels, generate_prev_map, read_imgs
 import h5py
-import pandas as pd
 import numpy as np
 from einops import rearrange
 from skimage.util import view_as_windows
@@ -83,7 +82,7 @@ def prepare(cfg):
         base_image = Path(cfg.path.opt) / cfg.site.original_data.opt.train.imgs[0]
         save_geotiff(base_image, cfg.path.train_val_map, train_val_map, 'byte')
         
-        del train_val_map, train_w_indexes, val_w_indexes
+        del train_val_map, train_w_indexes, val_w_indexes, train_label, tiles
         
         opt_imgs = read_imgs(
             folder=cfg.path.opt, 
@@ -104,6 +103,36 @@ def prepare(cfg):
             prefix_name='cloud_'
             )
         
+        pbar = tqdm(train_windows, desc='Generating Optical Training Patches')
+        train_prep_path = Path(cfg.path.prepared.train)
+        if train_prep_path.exists():
+            rmtree(train_prep_path)
+        train_prep_path.mkdir()
+        for i, patch in enumerate(pbar):
+            patch_file = train_prep_path / f'opt_{i}.h5'
+            opt_patch = np.stack([full_img[patch] for full_img in opt_imgs], axis=0)
+            cloud_patch = np.stack([full_img[patch] for full_img in cloud_imgs], axis=0)
+            
+            with h5py.File(patch_file, "w") as f:
+                f.create_dataset('opt', data=opt_patch, compression='lzf', chunks=opt_patch.shape)
+                f.create_dataset('cloud', data=cloud_patch, compression='lzf', chunks=cloud_patch.shape)
+                
+        pbar = tqdm(val_windows, desc='Generating Optical Validation Patches')
+        val_prep_path = Path(cfg.path.prepared.validation)
+        if val_prep_path.exists():
+            rmtree(val_prep_path)
+        val_prep_path.mkdir()
+        for i, patch in enumerate(pbar):
+            patch_file = val_prep_path / f'opt_{i}.h5'
+            opt_patch = np.stack([full_img[patch] for full_img in opt_imgs], axis=0)
+            cloud_patch = np.stack([full_img[patch] for full_img in cloud_imgs], axis=0)
+            
+            with h5py.File(patch_file, "w") as f:
+                f.create_dataset('opt', data=opt_patch, compression='lzf', chunks=opt_patch.shape)
+                f.create_dataset('cloud', data=cloud_patch, compression='lzf', chunks=cloud_patch.shape)
+        
+        del opt_imgs, cloud_imgs
+        
         sar_imgs = read_imgs(
             folder=cfg.path.sar, 
             imgs=cfg.site.original_data.sar.train.imgs, 
@@ -113,48 +142,47 @@ def prepare(cfg):
             factor=1.0
             )
         
+        pbar = tqdm(train_windows, desc='Generating SAR Training Patches')
+        train_prep_path = Path(cfg.path.prepared.train)
+        for i, patch in enumerate(pbar):
+            patch_file = train_prep_path / f'sar_{i}.h5'
+            sar_patch = np.stack([full_img[patch] for full_img in sar_imgs], axis=0)
+            
+            with h5py.File(patch_file, "w") as f:
+                f.create_dataset('sar', data=sar_patch, compression='lzf', chunks=sar_patch.shape)
+                
+        pbar = tqdm(val_windows, desc='Generating SAR Validation Patches')
+        val_prep_path = Path(cfg.path.prepared.validation)
+        for i, patch in enumerate(pbar):
+            patch_file = val_prep_path / f'sar_{i}.h5'
+            sar_patch = np.stack([full_img[patch] for full_img in sar_imgs], axis=0)
+            
+            with h5py.File(patch_file, "w") as f:
+                f.create_dataset('sar', data=sar_patch, compression='lzf', chunks=sar_patch.shape)
+        del sar_imgs
+        
         train_label = train_label.flatten().astype(np.uint8)
         previous_map = load_sb_image(cfg.path.prev_map.train).flatten().astype(np.float16)
         
-        patch_size = cfg.general.patch_size
-        
-        pbar = tqdm(train_windows, desc='Generating Training Patches')
+        pbar = tqdm(train_windows, desc='Generating General Training Patches')
         train_prep_path = Path(cfg.path.prepared.train)
-        if train_prep_path.exists():
-            rmtree(train_prep_path)
-        train_prep_path.mkdir()
         for i, patch in enumerate(pbar):
-            patch_file = train_prep_path / f'{i}.h5'
-            opt_patch = np.stack([full_img[patch] for full_img in opt_imgs], axis=0)
-            sar_patch = np.stack([full_img[patch] for full_img in sar_imgs], axis=0)
-            cloud_patch = np.expand_dims(np.stack([full_img[patch] for full_img in cloud_imgs], axis=0), axis= -1)
+            patch_file = train_prep_path / f'gen_{i}.h5'
             prev_map_patch = np.expand_dims(previous_map[patch], axis = 0)
             label_patch = train_label[patch]
             
             with h5py.File(patch_file, "w") as f:
-                f.create_dataset('opt', data=opt_patch, compression='lzf', chunks=opt_patch.shape)
-                f.create_dataset('cloud', data=cloud_patch, compression='lzf', chunks=cloud_patch.shape)
-                f.create_dataset('sar', data=sar_patch, compression='lzf', chunks=sar_patch.shape)
                 f.create_dataset('previous', data=prev_map_patch, compression='lzf', chunks=prev_map_patch.shape)
                 f.create_dataset('label', data=label_patch, compression='lzf', chunks=label_patch.shape)
                 
-        pbar = tqdm(val_windows, desc='Generating Validation Patches')
+        pbar = tqdm(val_windows, desc='Generating General Validation Patches')
         val_prep_path = Path(cfg.path.prepared.validation)
-        if val_prep_path.exists():
-            rmtree(val_prep_path)
-        val_prep_path.mkdir()
         for i, patch in enumerate(pbar):
-            patch_file = val_prep_path / f'{i}.h5'
-            opt_patch = np.stack([full_img[patch] for full_img in opt_imgs], axis=0)
-            sar_patch = np.stack([full_img[patch] for full_img in sar_imgs], axis=0)
-            cloud_patch = np.stack([full_img[patch] for full_img in cloud_imgs], axis=0)
+            patch_file = val_prep_path / f'gen_{i}.h5'
             prev_map_patch = previous_map[patch]
             label_patch = train_label[patch]
             
             with h5py.File(patch_file, "w") as f:
-                f.create_dataset('opt', data=opt_patch, compression='lzf', chunks=opt_patch.shape)
-                f.create_dataset('cloud', data=cloud_patch, compression='lzf', chunks=cloud_patch.shape)
-                f.create_dataset('sar', data=sar_patch, compression='lzf', chunks=sar_patch.shape)
                 f.create_dataset('previous', data=prev_map_patch, compression='lzf', chunks=prev_map_patch.shape)
                 f.create_dataset('label', data=label_patch, compression='lzf', chunks=label_patch.shape)
     

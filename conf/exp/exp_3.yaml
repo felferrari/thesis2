@@ -1,0 +1,9 @@
+defaults:
+  - /model/resunet_sar@model
+  - /default/train_params@train_params
+  - /default/pred_params@pred_params
+name: resunet_sar_combined
+opt_condition: no_opt
+sar_condition: combined
+n_opt_imgs: 0
+n_sar_imgs: 12
