@@ -62,7 +62,9 @@ class ModelModule(L.LightningModule):
         self.save_hyperparameters()
         model_params = dict(cfg.exp.model.params)
         model_params['n_classes'] = cfg.general.n_classes
-        self.model = locate(cfg.exp.model.target)(**model_params)
+        model_class = locate(cfg.exp.model.target) 
+        model_params['in_dims'] = model_class.get_input_dims(cfg)
+        self.model = model_class(**model_params)
         
         train_params = dict(cfg.exp.train_params)
         self.optimizer = locate(train_params['optimizer']['target'])

@@ -166,7 +166,7 @@ experiments
 mlruns*
 checkpoints
 
-
+.idea/
 lightning_logs
 mlruns
 multirun

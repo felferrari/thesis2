@@ -1,3 +1,5 @@
+n_opt_bands: 10
+n_sar_bands: 2
 year:
   train: 2020
   test: 2021
@@ -12,7 +14,7 @@ train:
   batch_size: 32
   num_workers: 12
 n_classes: 4
-n_models: 1 #10
+n_models: 10
 outlier_significance: 0.01
 accelerator:
   name: gpu
