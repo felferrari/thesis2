@@ -13,7 +13,10 @@ from src.utils.ops import load_SAR_image, load_opt_image, remove_outliers, load_
 from skimage.util import view_as_windows, crop
 from torchvision.tv_tensors import Image, Mask
 from skimage.transform import rescale
-
+import random
+from torchvision.transforms import v2
+import torch
+from torchvision.transforms.functional import vflip, hflip
 class DataModule(LightningDataModule):
     def __init__(self, cfg) -> None:
         super().__init__()
@@ -27,11 +30,10 @@ class DataModule(LightningDataModule):
         
         return DataLoader(
             dataset = ds,
-            batch_size=self.cfg.general.train.batch_size,
-            num_workers=self.cfg.general.train.num_workers,
+            batch_size=self.cfg.exp.train_params.batch_size,
+            num_workers=self.cfg.exp.train_params.train_workers,
             shuffle=True,
             persistent_workers=True,
-            pin_memory=True
             
         )
     
@@ -43,11 +45,10 @@ class DataModule(LightningDataModule):
         
         return DataLoader(
             dataset = ds,
-            batch_size=self.cfg.general.train.batch_size,
-            num_workers=self.cfg.general.train.num_workers,
+            batch_size=self.cfg.exp.train_params.batch_size,
+            num_workers=self.cfg.exp.train_params.val_workers,
             shuffle=False,
             persistent_workers=True,
-            pin_memory=True
         )
         
     
@@ -58,6 +59,8 @@ class TrainDataset(Dataset):
             self.files = list(Path(cfg.path.prepared.train).glob('*.h5'))
         elif mode == 'validation':
             self.files = list(Path(cfg.path.prepared.validation).glob('*.h5'))
+        random.shuffle(self.files)
+        self.mode = mode
         opt_condition = cfg.exp.opt_condition
         sar_condition = cfg.exp.sar_condition
         
@@ -90,13 +93,37 @@ class TrainDataset(Dataset):
         opt_patch = np.moveaxis(opt_patch, -1, -3)
         sar_patch = np.moveaxis(sar_patch, -1, -3)
         
-            
+        opt_patch = Image(opt_patch)
+        sar_patch = Image(sar_patch)
+        previous_patch = Image(previous_patch)
+        label_patch = Mask(label_patch)
+        
+        if self.mode == 'train':
+            if bool(random.getrandbits(1)):
+                k = random.randint(0,3)
+                opt_patch = torch.rot90(opt_patch, k=k, dims=(2, 3))
+                sar_patch = torch.rot90(sar_patch, k=k, dims=(2, 3))
+                previous_patch = torch.rot90(previous_patch, k=k, dims=(1, 2))
+                label_patch = torch.rot90(label_patch, k=k, dims=(0, 1))
+                
+            elif bool(random.getrandbits(1)):
+                opt_patch = hflip(opt_patch)
+                sar_patch = hflip(sar_patch)
+                previous_patch = hflip(previous_patch)
+                label_patch = hflip(label_patch)
+                
+            elif bool(random.getrandbits(1)):
+                opt_patch = vflip(opt_patch)
+                sar_patch = vflip(sar_patch)
+                previous_patch = vflip(previous_patch)
+                label_patch = vflip(label_patch)
+                
         return {
-            'opt': Image(opt_patch),
-            'sar': Image(sar_patch),
-            'previous': Image(previous_patch),
+            'opt': opt_patch,
+            'sar': sar_patch,
+            'previous': previous_patch,
             #'cloud': torch.from_numpy(cloud_patch),
-            }, Mask(label_patch)
+            }, label_patch
         
         
         

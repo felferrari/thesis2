@@ -2,59 +2,8 @@ from typing import Any
 import lightning as L
 from pydoc import locate
 from torch.nn import Softmax
-import pandas as pd
-from torchvision.transforms import v2
 from torchmetrics.classification import MulticlassF1Score
-
-class Augmentation():
-    def __init__(self, cfg) -> None:
-        self.transforms = v2.RandomChoice([
-            #v2.RandomResizedCrop(size=(224, 224), antialias=True),
-            v2.RandomHorizontalFlip(p=0.5),
-            v2.RandomVerticalFlip(p=0.5),
-        ])
-    def __call__(self, x, label):
-        x, label = self.transforms(x, label)
-        return x, label
-        
-
-class Normalization():
-    def __init__(self, cfg) -> None:
-        opt_df = pd.read_csv(cfg.path.prepared.opt_statistics)
-        sar_df = pd.read_csv(cfg.path.prepared.sar_statistics)
-        
-        opt_df = opt_df[opt_df['cond'] == cfg.exp.opt_condition]
-        sar_df = sar_df[sar_df['cond'] == cfg.exp.sar_condition]
-        
-        if len(opt_df) > 0:
-            # opt_means =  list(opt_df.sort_values(by='band')['mean'])
-            # opt_stds =  list(opt_df.sort_values(by='band')['std'])
-            opt_means =  list(opt_df.sort_values(by='band')['min'])
-            opt_stds =  list(opt_df.sort_values(by='band')['delta'])
-            self.opt_transforms = v2.Compose([
-                v2.Normalize(mean=opt_means, std=opt_stds),
-            ])
-        else:
-            self.opt_transforms = None
-            
-        if len(sar_df) > 0:
-            # sar_means =  list(sar_df.sort_values(by='band')['mean'])
-            # sar_stds =  list(sar_df.sort_values(by='band')['std'])
-            sar_means =  list(sar_df.sort_values(by='band')['min'])
-            sar_stds =  list(sar_df.sort_values(by='band')['delta'])
-            self.sar_transforms = v2.Compose([
-                v2.Normalize(mean=sar_means, std=sar_stds),
-            ])
-        else:
-            self.sar_transforms = None
-
-    def __call__(self, x):
-        if self.opt_transforms: 
-            x['opt'] = self.opt_transforms(x['opt'])
-        if self.sar_transforms:
-            x['sar'] = self.sar_transforms(x['sar'])
-        return x
-    
+from src.models.augmentation import Augmentation, Normalization
     
 class ModelModule(L.LightningModule):
     def __init__(self, cfg, *args, **kwargs) -> None:
@@ -82,7 +31,7 @@ class ModelModule(L.LightningModule):
         
     def training_step(self, batch, batch_idx):
         x, label = batch
-        #x, label = self.augmentation(x, label)
+        # x, label = self.augmentation(x, label)
         # x = self.normalization(x)
         x = self.model.prepare(x)
         y_hat = self.model(x)
