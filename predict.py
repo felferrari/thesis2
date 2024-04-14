@@ -21,14 +21,14 @@ def predict(cfg):
     parent_run_id = runs['run_id'][0]
 
     with mlflow.start_run(run_id=parent_run_id) as parent_run:
-
+        total_t0 = time()
         with TemporaryDirectory() as tempdir:
             
             imgs_combinations = PredDataset.test_combinations(cfg)
             for img_comb_i, img_combination in enumerate(imgs_combinations):
                 
                 pred_sum = None
-
+                t0 = time()
                 predict_dataset = PredDataset(cfg, img_combination)
                 gen_opt_imgs, gen_sar_imgs = predict_dataset.generate_sample_images(img_combination)
                 for opt_i, sample_opt in enumerate(gen_opt_imgs):
@@ -58,7 +58,7 @@ def predict(cfg):
                             enable_progress_bar=False,
                         )
                         
-                        t0 = time()
+                        
                         #for overlap in cfg.exp.pred_params.overlaps:
                         #for discard_border in cfg.exp.pred_params.discard_borders:
                         #    predict_dataset.set_overlap(discard_border)
@@ -78,26 +78,25 @@ def predict(cfg):
 
                         base_image = Path(cfg.path.opt) / cfg.site.original_data.opt.train.imgs[0]
                         
-                        elapsed_time = (time() - t0) / 60.0
-                        
                         preview = rescale(pred[:,:,0:3], 0.1, channel_axis=2, preserve_range=True)
                         preview = 255 * preview 
                         preview = np.clip(preview.astype(np.int32), 0, 255)
                         mlflow.log_image(preview, f'predictions/preview_{cfg.site.name}:{cfg.exp.name}:{img_comb_i}:{model_i}.jpg')
-                        mlflow.log_metric('prediction_time', elapsed_time)
+                        
 
                 
                 avg_pred = pred_sum / cfg.general.n_models
                 pred_file_path= Path(tempdir) / f'{cfg.site.name}:{cfg.exp.name}:{img_comb_i}.tif'
                 save_geotiff(base_image, pred_file_path, avg_pred, 'float')
                 mlflow.log_artifact(pred_file_path, 'predictions')
+                mlflow.log_metric(f'comb_pred_time_{img_comb_i}', (time() - t0) / 60.)
                 
                 preview = rescale(avg_pred[:,:,0:3], 0.1, channel_axis=2, preserve_range=True)
                 preview = 255 * preview 
                 preview = np.clip(preview.astype(np.int32), 0, 255)
                 mlflow.log_image(preview, f'predictions/preview_{cfg.site.name}:{cfg.exp.name}:{img_comb_i}.jpg')
-                mlflow.log_metric('prediction_time', elapsed_time)
-                        
+                
+        mlflow.log_metric('total_pred_time', (time() - total_t0) / 60.)
 
 if __name__ == "__main__":
     predict()

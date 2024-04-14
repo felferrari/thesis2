@@ -27,13 +27,14 @@ def train(cfg):
             'Optical Condition': cfg.exp.opt_condition,
             'SAR Condition': cfg.exp.sar_condition
         })
+        total_t0 = time()
         data_module = DataModule(cfg)
         
         with TemporaryDirectory() as tempdir:
             
             for model_i in range (cfg.general.n_models):
                 
-                with mlflow.start_run(run_name=f'model_{model_i}', nested=True, log_system_metrics=True):
+                with mlflow.start_run(run_name=f'model_{model_i}', nested=True, log_system_metrics=True) as model_run:
                     
                     mlflow.log_params({
                         'parent_run_id': parent_run.info.run_id
@@ -81,12 +82,12 @@ def train(cfg):
                         model=model_module,
                         datamodule=data_module,
                     )
-                    elapsed_time = (time() - t0) / 60.0
-                    
-                    mlflow.log_metric('train_time', elapsed_time)
+                    mlflow.log_metric('train_time', (time() - t0) / 60.0)
                     
                     best_model = ModelModule.load_from_checkpoint(checkpoint_callback.best_model_path)
                     log_model(best_model, 'model')
+
+        mlflow.log_metric('total_train_time', (time() - total_t0) / 60.)
 
 if __name__ == "__main__":
     train()
