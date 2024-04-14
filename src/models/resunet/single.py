@@ -52,6 +52,10 @@ class ResUnetOpt(GenericResunet):
         return x
     
 class ResUnetSAR(GenericResunet):
+    @abstractmethod
+    def get_input_dims(cfg):
+        return cfg.exp.n_sar_imgs * cfg.general.n_sar_bands + 1 
+    
     def prepare(self, x):
         x_img = self.get_sar(x)
         x = torch.cat((x_img, x['previous']), dim=1)
