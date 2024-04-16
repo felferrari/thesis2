@@ -3,3 +3,4 @@ defaults:
   - default/preparation@preparation
   - default/general@general
   - _self_
+retrain_model:
