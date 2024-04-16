@@ -17,7 +17,10 @@ early_stop_params:
 
 batch_size: 32
 max_epochs: 500
+min_epochs: 20
 limit_train_batches: 200
 limit_val_batches: 200
 train_workers: 14
 val_workers: 14
+min_val_f1: 0.5
+max_retrain_models: 2

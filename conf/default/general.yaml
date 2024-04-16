@@ -11,7 +11,7 @@ patch_size: 224
 train_overlap: 0.7
 min_def_prop: 0.02
 n_classes: 4
-n_models: 10
+n_models: 5 #10
 outlier_significance: 0.01
 accelerator:
   name: gpu
