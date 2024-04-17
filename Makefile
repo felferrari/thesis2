@@ -16,4 +16,4 @@ copyfiles:
 	nohup cp -r -v /mnt/storage/ferrari/thesis/$(SITE)/data/opt data/original > output_opt.log &
 	nohup cp -r -v /mnt/storage/ferrari/thesis/$(SITE)/data/prodes data/original > output_prodes.log &
 nohup-run-all:
-	nohup ./run_all.sh > output.log &
+	nohup ./run_all.sh &

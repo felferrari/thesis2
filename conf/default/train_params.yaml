@@ -4,6 +4,11 @@ optimizer:
     lr: 2.0e-5
     weight_decay : 1.0e-4
 
+scheduler:
+  target: torch.optim.lr_scheduler.ExponentialLR
+  params: 
+    gamma: 0.99
+
 criterion:
   target: segmentation_models_pytorch.losses.FocalLoss
   params:

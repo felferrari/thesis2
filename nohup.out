@@ -1,0 +1,22 @@
+2024/04/16 22:15:04 INFO mlflow.system_metrics.system_metrics_monitor: Started monitoring system metrics.
+2024/04/16 22:15:04 WARNING mlflow.utils.autologging_utils: You are using an unsupported version of pytorch. If you encounter errors during autologging, try upgrading / downgrading pytorch to a supported version, or try upgrading MLflow.
+[2024-04-16 22:15:04,743][pytorch_lightning.utilities.rank_zero][INFO] - GPU available: True (cuda), used: True
+[2024-04-16 22:15:04,748][pytorch_lightning.utilities.rank_zero][INFO] - TPU available: False, using: 0 TPU cores
+[2024-04-16 22:15:04,748][pytorch_lightning.utilities.rank_zero][INFO] - IPU available: False, using: 0 IPUs
+[2024-04-16 22:15:04,748][pytorch_lightning.utilities.rank_zero][INFO] - HPU available: False, using: 0 HPUs
+2024/04/16 22:15:04 WARNING mlflow.utils.autologging_utils: MLflow autologging encountered a warning: "/home/felferrari/anaconda3/envs/thesis2/lib/python3.11/site-packages/mlflow/pytorch/_lightning_autolog.py:463: UserWarning: Autologging is known to be compatible with pytorch-lightning versions between 1.4.9 and 2.2.0.post0 and may not succeed with packages outside this range."
+[2024-04-16 22:15:04,760][pytorch_lightning.utilities.rank_zero][INFO] - You are using a CUDA device ('NVIDIA GeForce RTX 4090') that has Tensor Cores. To properly utilize them, you should set `torch.set_float32_matmul_precision('medium' | 'high')` which will trade-off precision for performance. For more details, read https://pytorch.org/docs/stable/generated/torch.set_float32_matmul_precision.html#torch.set_float32_matmul_precision
+LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
+
+  | Name         | Type              | Params
+---------------------------------------------------
+0 | model        | ResUnetSAR        | 3.0 M 
+1 | criterion    | FocalLoss         | 0     
+2 | pred_softmax | Softmax           | 0     
+3 | train_metric | MulticlassF1Score | 0     
+4 | val_metric   | MulticlassF1Score | 0     
+---------------------------------------------------
+3.0 M     Trainable params
+0         Non-trainable params
+3.0 M     Total params
+11.840    Total estimated model params size (MB)

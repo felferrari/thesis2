@@ -16,8 +16,11 @@ class ModelModule(L.LightningModule):
         self.model = model_class(**model_params)
         
         train_params = dict(cfg.exp.train_params)
-        self.optimizer = locate(train_params['optimizer']['target'])
+        self.optimizer_class = locate(train_params['optimizer']['target'])
         self.optimizer_params = train_params ['optimizer']['params']
+        
+        self.scheduler_class = locate(train_params['scheduler']['target'])
+        self.scheduler_params = train_params ['scheduler']['params']
         
         self.criterion = locate(train_params['criterion']['target'])(**train_params['criterion']['params'])
         
@@ -40,6 +43,10 @@ class ModelModule(L.LightningModule):
         self.log('train_loss', loss.detach().cpu().item(), prog_bar=True, on_epoch=True, on_step = False)
         
         return loss
+    
+    def on_train_epoch_start(self) -> None:
+        self.log('lr', self.lr_schedulers().get_last_lr()[0])
+        return super().on_train_epoch_start()
     
     def on_train_epoch_end(self) -> None:
         train_metric = self.train_metric.compute()
@@ -76,4 +83,17 @@ class ModelModule(L.LightningModule):
         return y_hat
         
     def configure_optimizers(self):
-        return self.optimizer(self.model.parameters(), **self.optimizer_params)
+        optimizer = self.optimizer_class(self.model.parameters(), **self.optimizer_params)
+        scheduler = self.scheduler_class(optimizer, **self.scheduler_params)
+        
+        return {
+            "optimizer": optimizer,
+            "lr_scheduler": {
+                "scheduler": scheduler,
+                "monitor": "val_f1_score_1",
+                #"frequency": 1,
+                # If "monitor" references validation metrics, then "frequency" should be set to a
+                # multiple of "trainer.check_val_every_n_epoch".
+            },
+        }
+        
