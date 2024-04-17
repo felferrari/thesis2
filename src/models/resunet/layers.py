@@ -80,7 +80,20 @@ class BNIdentity(nn.Module):
         return x  
 
 
+class ResUnetClassifier(nn.Module):
+    def __init__(self, depths, n_classes): #, last_activation = nn.Softmax):
+        super(ResUnetClassifier, self).__init__()
+        self.res_block = ResidualBlock(depths[0], depths[0])
+        self.last_conv = nn.Conv2d(depths[0], n_classes, kernel_size=1)
+        #self.last_act = last_activation(dim=1)
 
+
+    def forward(self, x):
+        x = self.res_block(x)
+        x = self.last_conv(x)
+        #x = self.last_act(x)
+        return x
+    
 
 
 

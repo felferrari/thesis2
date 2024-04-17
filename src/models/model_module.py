@@ -3,7 +3,6 @@ import lightning as L
 from pydoc import locate
 from torch.nn import Softmax
 from torchmetrics.classification import MulticlassF1Score
-from src.models.augmentation import Augmentation, Normalization
     
 class ModelModule(L.LightningModule):
     def __init__(self, cfg, *args, **kwargs) -> None:
@@ -26,16 +25,11 @@ class ModelModule(L.LightningModule):
         
         self.pred_softmax = Softmax(dim=1)
         
-        self.augmentation = Augmentation(cfg)
-        self.normalization = Normalization(cfg)
-        
         self.train_metric = MulticlassF1Score(num_classes = cfg.general.n_classes, average= 'none')
         self.val_metric = MulticlassF1Score(num_classes = cfg.general.n_classes, average= 'none')
         
     def training_step(self, batch, batch_idx):
         x, label = batch
-        # x, label = self.augmentation(x, label)
-        # x = self.normalization(x)
         x = self.model.prepare(x)
         y_hat = self.model(x)
         loss = self.criterion(y_hat, label)
@@ -58,7 +52,6 @@ class ModelModule(L.LightningModule):
         
     def validation_step(self, batch, batch_idx):
         x, label = batch
-        # x = self.normalization(x)
         x = self.model.prepare(x)
         y_hat = self.model(x)
         loss = self.criterion(y_hat, label)
@@ -76,10 +69,9 @@ class ModelModule(L.LightningModule):
     
     def predict_step(self, batch, batch_idx):
         x, idx = batch
-        # x = self.normalization(x)
         x = self.model.prepare(x)
         y_hat = self.model(x)
-        #y_hat = self.pred_softmax(y_hat)
+        y_hat = self.pred_softmax(y_hat)
         return y_hat
         
     def configure_optimizers(self):
@@ -91,9 +83,6 @@ class ModelModule(L.LightningModule):
             "lr_scheduler": {
                 "scheduler": scheduler,
                 "monitor": "val_f1_score_1",
-                #"frequency": 1,
-                # If "monitor" references validation metrics, then "frequency" should be set to a
-                # multiple of "trainer.check_val_every_n_epoch".
             },
         }
         
