@@ -56,25 +56,25 @@ class TrainDataset(Dataset):
     def __init__(self, cfg, mode:str, *args, **kwargs):
         super().__init__(*args, **kwargs)
         if mode == 'train':
-            opt_files = list(Path(cfg.path.prepared.validation).glob('opt_*.h5'))
-            sar_files = list(Path(cfg.path.prepared.validation).glob('sar_*.h5'))
-            gen_files = list(Path(cfg.path.prepared.validation).glob('gen_*.h5'))
+            opt_files = list(Path(cfg.path.prepared.train).glob('opt_*.h5'))
+            sar_files = list(Path(cfg.path.prepared.train).glob('sar_*.h5'))
+            gen_files = list(Path(cfg.path.prepared.train).glob('gen_*.h5'))
             
-            opt_files.sort()
-            sar_files.sort()
-            gen_files.sort()
+            # opt_files.sort()
+            # sar_files.sort()
+            # gen_files.sort()
             
-            self.files = list(zip(opt_files, sar_files, gen_files))
+            # self.files = list(zip(opt_files, sar_files, gen_files))
         elif mode == 'validation':
             opt_files = list(Path(cfg.path.prepared.validation).glob('opt_*.h5'))
             sar_files = list(Path(cfg.path.prepared.validation).glob('sar_*.h5'))
             gen_files = list(Path(cfg.path.prepared.validation).glob('gen_*.h5'))
             
-            opt_files.sort()
-            sar_files.sort()
-            gen_files.sort()
-            
-            self.files = list(zip(opt_files, sar_files, gen_files))
+        opt_files.sort()
+        sar_files.sort()
+        gen_files.sort()
+        
+        self.files = list(zip(opt_files, sar_files, gen_files))
         random.shuffle(self.files)
         self.mode = mode
         opt_condition = cfg.exp.opt_condition
