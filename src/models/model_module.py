@@ -23,8 +23,6 @@ class ModelModule(L.LightningModule):
         
         self.criterion = locate(train_params['criterion']['target'])(**train_params['criterion']['params'])
         
-        self.pred_softmax = Softmax(dim=1)
-        
         self.train_metric = MulticlassF1Score(num_classes = cfg.general.n_classes, average= 'none')
         self.val_metric = MulticlassF1Score(num_classes = cfg.general.n_classes, average= 'none')
         
@@ -71,7 +69,6 @@ class ModelModule(L.LightningModule):
         x, idx = batch
         x = self.model.prepare(x)
         y_hat = self.model(x)
-        y_hat = self.pred_softmax(y_hat)
         return y_hat
         
     def configure_optimizers(self):

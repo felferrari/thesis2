@@ -90,10 +90,6 @@ def train(cfg):
                             **dict(cfg.exp.train_params.early_stop_params)
                         )
                         
-                        lr_monitor = LearningRateMonitor(
-                            logging_interval = 'epoch'
-                        )
-                        
                         callbacks = [
                             checkpoint_callback,
                             earlystop_callback,
