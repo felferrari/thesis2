@@ -95,8 +95,6 @@ def train(cfg):
                             earlystop_callback,
                         ]
                         t0 = time()
-                        
-                        #warm up
                         trainer = Trainer(
                             accelerator=cfg.general.accelerator.name,
                             devices=cfg.general.accelerator.devices,
@@ -105,15 +103,8 @@ def train(cfg):
                             enable_progress_bar=False,
                             limit_train_batches=cfg.exp.train_params.limit_train_batches,
                             limit_val_batches=cfg.exp.train_params.limit_val_batches,
-                            max_epochs = cfg.exp.train_params.min_epochs,
+                            max_epochs = cfg.exp.train_params.max_epochs,
                         )
-                        trainer.fit(
-                            model=model_module,
-                            datamodule=data_module,
-                        )
-                        
-                        # training until early stopping
-                        trainer.fit_loop.max_epochs=cfg.exp.train_params.max_epochs
                         trainer.fit(
                             model=model_module,
                             datamodule=data_module,
@@ -125,11 +116,13 @@ def train(cfg):
                         log_model(best_model, 'model')
                         
                         last_run_id = model_run.info.run_id
-                        if checkpoint_callback.best_model_score >= cfg.exp.train_params.min_val_f1:
+                        #if checkpoint_callback.best_model_score >= cfg.exp.train_params.min_val_f1:
+                        if trainer.current_epoch >= cfg.exp.train_params.min_epochs:
                             mlflow.set_tag('Training', 'success')
                         else:
                             mlflow.set_tag('Training', 'failed')
-                    if checkpoint_callback.best_model_score >= cfg.exp.train_params.min_val_f1:
+                    #if checkpoint_callback.best_model_score >= cfg.exp.train_params.min_val_f1:
+                    if trainer.current_epoch >= cfg.exp.train_params.min_epochs:
                         break
                     else:
                         mlflow.delete_run(run_id=last_run_id)
