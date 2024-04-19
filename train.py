@@ -7,9 +7,11 @@ from lightning.pytorch.callbacks import ModelCheckpoint, EarlyStopping, Learning
 import mlflow
 from mlflow.pytorch import autolog, log_model
 from time import time
+import torch 
         
 @hydra.main(version_base=None, config_path='conf', config_name='config.yaml')
 def train(cfg):
+    torch.set_float32_matmul_precision('high')
     
     mlflow.set_experiment(experiment_name = cfg.site.name)
     

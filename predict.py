@@ -10,9 +10,11 @@ from time import time
 import numpy as np
 from pathlib import Path
 from skimage.transform import rescale
+import torch
         
 @hydra.main(version_base=None, config_path='conf', config_name='config.yaml')
 def predict(cfg):
+    torch.set_float32_matmul_precision('high')
     mlflow.set_experiment(experiment_name = cfg.site.name)
     
     runs = mlflow.search_runs(
