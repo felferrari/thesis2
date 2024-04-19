@@ -94,6 +94,21 @@ def train(cfg):
                             checkpoint_callback,
                             earlystop_callback,
                         ]
+                        t0 = time()
+                        
+                        #pre train for min epochs
+                        trainer = Trainer(
+                            accelerator=cfg.general.accelerator.name,
+                            devices=cfg.general.accelerator.devices,
+                            logger = False,
+                            limit_train_batches=cfg.exp.train_params.limit_train_batches,
+                            limit_val_batches=cfg.exp.train_params.limit_val_batches,
+                            max_epochs = cfg.exp.train_params.min_epochs
+                        )
+                        trainer.fit(
+                            model=model_module,
+                            datamodule=data_module,
+                        )
                         
                         trainer = Trainer(
                             accelerator=cfg.general.accelerator.name,
@@ -104,9 +119,7 @@ def train(cfg):
                             limit_train_batches=cfg.exp.train_params.limit_train_batches,
                             limit_val_batches=cfg.exp.train_params.limit_val_batches,
                             max_epochs = cfg.exp.train_params.max_epochs,
-                            min_epochs = cfg.exp.train_params.min_epochs
                         )
-                        t0 = time()
                         trainer.fit(
                             model=model_module,
                             datamodule=data_module,
