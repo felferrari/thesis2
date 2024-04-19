@@ -96,21 +96,7 @@ def train(cfg):
                         ]
                         t0 = time()
                         
-                        #pre train for min epochs
-                        trainer = Trainer(
-                            accelerator=cfg.general.accelerator.name,
-                            devices=cfg.general.accelerator.devices,
-                            logger = False,
-                            enable_progress_bar=False,
-                            limit_train_batches=cfg.exp.train_params.limit_train_batches,
-                            limit_val_batches=cfg.exp.train_params.limit_val_batches,
-                            max_epochs = cfg.exp.train_params.min_epochs
-                        )
-                        trainer.fit(
-                            model=model_module,
-                            datamodule=data_module,
-                        )
-                        
+                        #warm up
                         trainer = Trainer(
                             accelerator=cfg.general.accelerator.name,
                             devices=cfg.general.accelerator.devices,
@@ -119,12 +105,20 @@ def train(cfg):
                             enable_progress_bar=False,
                             limit_train_batches=cfg.exp.train_params.limit_train_batches,
                             limit_val_batches=cfg.exp.train_params.limit_val_batches,
-                            max_epochs = cfg.exp.train_params.max_epochs,
+                            max_epochs = cfg.exp.train_params.min_epochs,
                         )
                         trainer.fit(
                             model=model_module,
                             datamodule=data_module,
                         )
+                        
+                        # training until early stopping
+                        trainer.fit_loop.max_epochs=cfg.exp.train_params.max_epochs
+                        trainer.fit(
+                            model=model_module,
+                            datamodule=data_module,
+                        )
+                        
                         mlflow.log_metric('train_time', (time() - t0) / 60.0)
                         
                         best_model = ModelModule.load_from_checkpoint(checkpoint_callback.best_model_path)
