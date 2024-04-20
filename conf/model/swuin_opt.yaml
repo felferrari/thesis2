@@ -1,3 +1,0 @@
-target: src.models.swin.single.SwinOpt
-params:
-  depths: [32, 64, 128, 256]

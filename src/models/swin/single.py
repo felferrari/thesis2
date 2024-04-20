@@ -1,5 +1,5 @@
 #from src.models.resunet.layers import ResUnetEncoder, ResUnetDecoder, ResUnetClassifier, BNIdentity
-from src.models.resunet.layers import SwinEncoder, SwinDecoder, SwinClassifier, BNIdentity
+from src.models.swin.layers import SwinEncoder, SwinDecoder, SwinClassifier, BNIdentity
 from torch import nn
 import torch
 from abc import abstractmethod
@@ -10,11 +10,12 @@ class GenericModel(nn.Module):
     def __init__(
         self, 
         in_dims, 
-        base_dim ,
-        window_size ,
-        shift_size ,
-        patch_size ,
-        n_heads ,
+        img_size,
+        base_dim,
+        window_size,
+        shift_size,
+        patch_size,
+        n_heads,
         n_blocks,
         n_classes, 
         *args, **kargs) -> None:
@@ -26,9 +27,10 @@ class GenericModel(nn.Module):
         self.base_dim = base_dim
         self.window_size = window_size
         self.shift_size = shift_size
-        self.in_dims = in_dims
-        self.in_dims = in_dims
-        self.in_dims = in_dims
+        self.patch_size = patch_size
+        self.n_heads = n_heads
+        self.n_blocks = n_blocks
+        self.img_size = img_size
 
     def get_opt(self, x):
         return rearrange(x['opt'], 'b i c h w -> b (i c) h w')
@@ -41,10 +43,33 @@ class GenericModel(nn.Module):
 class GenericSwin(GenericModel):
     def __init__(self, *args, **kargs):
         super().__init__(*args, **kargs)
-        self.encoder = SwinEncoder(self.in_dims, self.depths)
-        self.bn = BNIdentity(self.depths)
-        self.decoder = SwinDecoder(self.bn.out_depths)
-        self.classifier = SwinClassifier(self.depths, self.n_classes)
+        self.encoder = SwinEncoder(
+            input_depth = self.in_dims, 
+            base_dim = self.base_dim, 
+            window_size = self.window_size,
+            shift_size = self.shift_size,
+            img_size = self.img_size,
+            patch_size = self.patch_size,
+            n_heads = self.n_heads,
+            n_blocks = self.n_blocks
+            )
+        self.bn = BNIdentity()
+        self.decoder = SwinDecoder(
+            base_dim=self.base_dim,
+            n_heads=self.n_heads,
+            n_blocks = self.n_blocks,
+            window_size = self.window_size,
+            shift_size = self.shift_size
+            )
+        
+        self.classifier = SwinClassifier(
+            self.base_dim, 
+            n_heads=self.n_heads,
+            n_blocks = self.n_blocks,
+            window_size = self.window_size,
+            shift_size = self.shift_size,
+            n_classes = self.n_classes
+            )
 
     @abstractmethod
     def prepare_input(self, x):

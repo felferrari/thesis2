@@ -1,7 +1,9 @@
 defaults:
-  - /model/resunet_sar@model
+  - /model/resunet@model
   - /default/train_params@train_params
   - /default/pred_params@pred_params
+model: 
+  target: src.models.resunet.single.ResUnetSAR
 name: resunet_sar_combined
 opt_condition: no_opt
 sar_condition: combined

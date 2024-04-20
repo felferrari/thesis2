@@ -102,7 +102,7 @@ def train(cfg):
                             devices=cfg.general.accelerator.devices,
                             logger = False,
                             callbacks=callbacks,
-                            enable_progress_bar=False,
+                            enable_progress_bar=True,
                             limit_train_batches=cfg.exp.train_params.limit_train_batches,
                             limit_val_batches=cfg.exp.train_params.limit_val_batches,
                             max_epochs = cfg.exp.train_params.max_epochs,

@@ -1,0 +1,8 @@
+params:
+  img_size: 224
+  base_dim: 96
+  window_size: [4, 4]
+  shift_size: [2, 2]
+  patch_size: [4, 4]
+  n_heads: [3, 6, 12, 24]
+  n_blocks: [2, 2, 2, 2]

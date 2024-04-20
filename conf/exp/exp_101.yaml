@@ -1,10 +1,10 @@
 defaults:
-  - /model/swin@model
+  - /model/resunet@model
   - /default/train_params@train_params
   - /default/pred_params@pred_params
 model: 
-  target: src.models.swin.single.SwinOpt
-name: swin_opt_no_cloud
+  target: src.models.resunet.single.ResUnetOpt
+name: resunet_opt_no_cloud
 opt_condition: no_cloud
 sar_condition: no_sar
 n_opt_imgs: 2

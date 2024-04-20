@@ -15,9 +15,8 @@ class PatchEmbed(nn.Module):
         #self.in_chans = in_chans
         #self.embed_dim = embed_dim
 
-        #self.proj = Conv2D(embed_dim, kernel_size=patch_size,
-        #                   strides=patch_size, name='proj')
-        self.proj = nn.LazyConv2d(out_channels=embed_dim, kernel_size=patch_size, stride=patch_size, bias = False)
+        self.proj = nn.Conv2d(in_chans, embed_dim, kernel_size=patch_size, stride=patch_size, bias = False)
+        #self.proj = nn.LazyConv2d(out_channels=embed_dim, kernel_size=patch_size, stride=patch_size, bias = False)
         
 
     def forward(self, x):
@@ -300,9 +299,8 @@ class SwinRegressionClassifier(nn.Module):
         return x
     
 class BNIdentity(nn.Module):
-    def __init__(self, depths):
+    def __init__(self):
         super().__init__()
-        self.out_depths = depths
 
     def forward(self, x):
         return x  

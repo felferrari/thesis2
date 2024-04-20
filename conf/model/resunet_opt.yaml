@@ -1,3 +1,0 @@
-target: src.models.resunet.single.ResUnetOpt
-params:
-  depths: [32, 64, 128, 256]
