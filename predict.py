@@ -11,6 +11,7 @@ import numpy as np
 from pathlib import Path
 from skimage.transform import rescale
 import torch
+from multiprocessing import Process
         
 @hydra.main(version_base=None, config_path='conf', config_name='config.yaml')
 def predict(cfg):
@@ -25,25 +26,24 @@ def predict(cfg):
     with mlflow.start_run(run_id=parent_run_id) as parent_run:
         total_t0 = time()
     
-        
         imgs_combinations = PredDataset.test_combinations(cfg)
         for img_comb_i, img_combination in enumerate(imgs_combinations):
-            predict_dataset = PredDataset(cfg, img_combination)
-            gen_samples(predict_dataset, img_combination, img_comb_i)
+            p = Process(target=predict_models, args=(cfg, img_comb_i, img_combination, parent_run.info.run_id))
+            p.start()
+            p.join()
             
-            predict_models(cfg, predict_dataset, img_comb_i, parent_run_id)
-                
         mlflow.log_metric('total_pred_time', (time() - total_t0) / 60.)
 
-def gen_samples(predict_dataset, img_combination, img_comb_i):
+
+def predict_models(cfg, img_comb_i, img_combination, parent_run_id):
+    predict_dataset = PredDataset(cfg, img_combination)
+    
     gen_opt_imgs, gen_sar_imgs = predict_dataset.generate_sample_images(img_combination)
     for opt_i, sample_opt in enumerate(gen_opt_imgs):
         mlflow.log_image(sample_opt, f'combination_{img_comb_i}/opt_{img_combination[0][opt_i]}.jpg')
     for sar_i, sample_sar in enumerate(gen_sar_imgs):
         mlflow.log_image(sample_sar[:,:,0], f'combination_{img_comb_i}/sar_0_{img_combination[1][sar_i]}.jpg')
         mlflow.log_image(sample_sar[:,:,1], f'combination_{img_comb_i}/sar_1_{img_combination[1][sar_i]}.jpg')
-          
-def predict_models(cfg, predict_dataset, img_comb_i, parent_run_id):
     pred_sum = None
     t0 = time()
     with TemporaryDirectory() as tempdir:
