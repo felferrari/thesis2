@@ -87,8 +87,8 @@ class TrainDataset(Dataset):
         opt_combinations = possible_combinations(opt_imgs_idx)
         sar_combinations = possible_combinations(sar_imgs_idx)
         
-        self.n_combinations = len(opt_combinations) * len(sar_combinations)
-        self.combinations = list(product(opt_combinations, sar_combinations))
+        self.n_combinations = cfg.exp.train_params.repeat_batches * len(opt_combinations) * len(sar_combinations)
+        self.combinations = cfg.exp.train_params.repeat_batches * list(product(opt_combinations, sar_combinations))
         
     def __len__(self):
         return len(self.files) * self.n_combinations

@@ -29,3 +29,4 @@ val_workers: 8
 min_val_f1: 0.5
 min_epochs: 15
 max_retrain_models: 2
+repeat_batches: 1
