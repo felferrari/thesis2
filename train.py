@@ -103,9 +103,11 @@ def train(cfg):
                             logger = False,
                             callbacks=callbacks,
                             enable_progress_bar=True,
-                            limit_train_batches=cfg.exp.train_params.limit_train_batches,
+                            #limit_train_batches=cfg.exp.train_params.limit_train_batches,
                             limit_val_batches=cfg.exp.train_params.limit_val_batches,
                             max_epochs = cfg.exp.train_params.max_epochs,
+                            val_check_interval = cfg.exp.train_params.limit_train_batches,
+                            check_val_every_n_epoch = None
                         )
                         trainer.fit(
                             model=model_module,
