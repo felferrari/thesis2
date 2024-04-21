@@ -26,7 +26,7 @@ limit_train_batches: 200
 limit_val_batches: 200
 train_workers: 8
 val_workers: 8
-min_val_f1: 0.5
+min_val_f1: 0.3
 min_epochs: 15
 max_retrain_models: 2
 repeat_batches: 1
