@@ -10,3 +10,4 @@ dependencies:
   - gdal
 variables:
   PROJ_LIB: /home/felferrari/anaconda3/envs/thesis2/share/proj
+  HYDRA_FULL_ERROR: 1

@@ -32,3 +32,4 @@ torchvision
 torchmetrics
 albumentations 
 hydra-core
+captum
