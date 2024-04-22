@@ -75,8 +75,8 @@ original_data:
       condition:
         no_sar: [[], []]
         combined: [[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]] # [[combinations]]
-        # single: [[12, 13, 14], [15, 16, 17]] # [[t0], [t1]]
-        single: [[], []] # [[t0], [t1]]
+        single2: [[12, 13, 14], [15, 16, 17]] # [[t0], [t1]]
+        avg2: [[0], [11]] # [[t0], [t1]]
 
     test:
       imgs:
@@ -101,7 +101,7 @@ original_data:
       condition:
         no_sar: [[], []]
         combined: [[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]] # [[combinations]]
-        # single: [[12, 13, 14], [15, 16, 17]] # [[t0], [t1]]
-        single: [[], []] # [[t0], [t1]]
+        single2: [[12, 13, 14], [15, 16, 17]] # [[t0], [t1]]
+        avg2: [[0], [11]] # [[t0], [t1]]
 
     

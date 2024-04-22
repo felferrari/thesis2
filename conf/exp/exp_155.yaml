@@ -1,0 +1,12 @@
+defaults:
+  - /model/resunet@model
+  - /default/train_params@train_params
+  - /default/pred_params@pred_params
+  - /default/eval_params@eval_params
+model: 
+  target: src.models.swin.single.SwinSARNoPrevMap
+name: swin_sar_combined_no_prevmap
+opt_condition: no_opt
+sar_condition: combined
+n_opt_imgs: 0
+n_sar_imgs: 12
