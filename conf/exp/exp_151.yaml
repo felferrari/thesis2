@@ -2,6 +2,7 @@ defaults:
   - /model/swin@model
   - /default/train_params@train_params
   - /default/pred_params@pred_params
+  - /default/eval_params@eval_params
 model: 
   target: src.models.swin.single.SwinOpt
 name: swin_opt_no_cloud
