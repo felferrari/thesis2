@@ -10,3 +10,7 @@ opt_condition: no_opt
 sar_condition: avg2
 n_opt_imgs: 0
 n_sar_imgs: 2
+
+train_params:
+  repeat_batches: 3
+  warmup_epochs: 10
