@@ -59,6 +59,44 @@ def train(cfg):
             for model_i in models_n:
             
                 for model_attempt in range(cfg.exp.train_params.max_retrain_models + 1):
+                    model_module = ModelModule(cfg)
+                        
+                    checkpoint_callback = ModelCheckpoint(
+                        dirpath=tempdir,
+                        filename=f'model_{model_i}',
+                        monitor='val_f1_score_1',
+                        mode = 'max',
+                        verbose = True
+                    )
+                    
+                    earlystop_callback = EarlyStopping(
+                        monitor= 'val_f1_score_1',
+                        mode='max',
+                        verbose = True,
+                        **dict(cfg.exp.train_params.early_stop_params)
+                    )
+                    
+                    callbacks = [
+                        checkpoint_callback,
+                        earlystop_callback,
+                    ]
+                    
+                    t0 = time()
+                    if cfg.exp.train_params.warmup_epochs is not None:
+                        
+                        trainer = Trainer(
+                            accelerator=cfg.general.accelerator.name,
+                            devices=cfg.general.accelerator.devices,
+                            logger = False,
+                            enable_progress_bar=True,
+                            limit_train_batches=cfg.exp.train_params.limit_train_batches,
+                            limit_val_batches=cfg.exp.train_params.limit_val_batches,
+                            max_epochs = cfg.exp.train_params.warmup_epochs,
+                        )
+                        trainer.fit(
+                            model=model_module,
+                            train_dataloaders=data_module.train_dataloader(),
+                        )
                 
                     with mlflow.start_run(run_name=f'model_{model_i}', nested=True) as model_run:
                         
@@ -75,28 +113,6 @@ def train(cfg):
                             checkpoint=False,
                         )
                         
-                        model_module = ModelModule(cfg)
-                        
-                        checkpoint_callback = ModelCheckpoint(
-                            dirpath=tempdir,
-                            filename=f'model_{model_i}',
-                            monitor='val_f1_score_1',
-                            mode = 'max',
-                            verbose = True
-                        )
-                        
-                        earlystop_callback = EarlyStopping(
-                            monitor= 'val_f1_score_1',
-                            mode='max',
-                            verbose = True,
-                            **dict(cfg.exp.train_params.early_stop_params)
-                        )
-                        
-                        callbacks = [
-                            checkpoint_callback,
-                            earlystop_callback,
-                        ]
-                        t0 = time()
                         trainer = Trainer(
                             accelerator=cfg.general.accelerator.name,
                             devices=cfg.general.accelerator.devices,
