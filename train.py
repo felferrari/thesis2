@@ -60,7 +60,7 @@ def train(cfg):
             
                 for model_attempt in range(cfg.exp.train_params.max_retrain_models + 1):
                 
-                    with mlflow.start_run(run_name=f'model_{model_i}', nested=True, log_system_metrics=True) as model_run:
+                    with mlflow.start_run(run_name=f'model_{model_i}', nested=True) as model_run:
                         
                         mlflow.log_params({
                             'parent_run_id': parent_run.info.run_id
@@ -111,7 +111,6 @@ def train(cfg):
                             model=model_module,
                             datamodule=data_module,
                         )
-                        
                         mlflow.log_metric('train_time', (time() - t0) / 60.0)
                         
                         best_model = ModelModule.load_from_checkpoint(checkpoint_callback.best_model_path)
