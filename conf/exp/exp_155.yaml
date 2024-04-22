@@ -1,5 +1,5 @@
 defaults:
-  - /model/resunet@model
+  - /model/swin@models
   - /default/train_params@train_params
   - /default/pred_params@pred_params
   - /default/eval_params@eval_params

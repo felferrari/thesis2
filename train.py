@@ -105,7 +105,8 @@ def train(cfg):
                         })
                         mlflow.set_tags({
                             'Training': 'executing',
-                            'Retrain attempt': model_attempt
+                            'Retrain attempt': model_attempt,
+                            'Warmup epochs': cfg.exp.train_params.warmup_epochs
                             })
                         
                         autolog(
