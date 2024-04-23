@@ -17,6 +17,8 @@ import random
 from torchvision.transforms import v2
 import torch
 from torchvision.transforms.functional import vflip, hflip
+
+
 class DataModule(LightningDataModule):
     def __init__(self, cfg) -> None:
         super().__init__()
@@ -170,7 +172,7 @@ class PredDataset(Dataset):
         
         label = np.pad(label, pad_2d_width)
         self.shape = label.shape
-        label = label.flatten()
+        self.label = label.flatten()
         
         previous = load_sb_image(cfg.path.prev_map.test)
         self.previous = np.pad(previous, pad_2d_width).flatten()
@@ -232,9 +234,12 @@ class PredDataset(Dataset):
         previous_patch = self.previous[patch_index]
         previous_patch = np.expand_dims(previous_patch, axis=0).astype(np.float32)
         
+        label_patch = self.label[patch_index].astype(np.int64)
+        #label_patch = np.expand_dims(label_patch, axis=0)
+        
         pack_patch['previous'] = Image(previous_patch)
         
-        return pack_patch, patch_index
+        return pack_patch, patch_index, label_patch
 
     @abstractmethod
     def test_combinations(cfg):

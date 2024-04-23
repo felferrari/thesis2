@@ -3,6 +3,9 @@ import lightning as L
 from pydoc import locate
 from torch.nn import Softmax
 from torchmetrics.classification import MulticlassF1Score
+from captum.attr import IntegratedGradients
+from torch import nn
+import torch
     
 class ModelModule(L.LightningModule):
     def __init__(self, cfg, *args, **kwargs) -> None:
@@ -68,7 +71,7 @@ class ModelModule(L.LightningModule):
         return super().on_validation_epoch_end()
     
     def predict_step(self, batch, batch_idx):
-        x, idx = batch
+        x, _, _ = batch
         x = self.model.prepare(x)
         y_hat = self.model(x)
         return y_hat
@@ -84,4 +87,15 @@ class ModelModule(L.LightningModule):
                 "monitor": "val_f1_score_1",
             },
         }
+    
+        
+class AnalizeModelModule(L.LightningModule):
+    def __init__(self, model, *args, **kwargs) -> None:
+        super().__init__(*args, **kwargs)
+        self.model = model
+                
+    def predict_step(self, batch, batch_idx):
+        x, _, y = batch
+        x = self.model.prepare(x)
+        x.requires_grad=True
         

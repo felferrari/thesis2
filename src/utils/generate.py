@@ -298,7 +298,7 @@ def generate_prev_map(cfg):
 
     target_test = None
     
-def read_imgs(folder, imgs, read_fn, dtype, significance = 0, factor = 1.0, prefix_name = ''):
+def read_imgs(folder, imgs, read_fn, dtype, significance = 0, factor = 1.0, prefix_name = '', flatten = True):
     pbar = tqdm(imgs, desc='Reading data')
     data = []
     for img_file in pbar:
@@ -307,10 +307,13 @@ def read_imgs(folder, imgs, read_fn, dtype, significance = 0, factor = 1.0, pref
         img = read_fn(img_path).astype(dtype)
         img = remove_outliers(img, significance)
         img = factor * img
-        if len(img.shape) == 3:
-            data.append(rearrange(img, 'h w c -> (h w) c'))
-        elif len(img.shape) == 2:
-            data.append(rearrange(img, 'h w -> (h w)'))
+        if flatten:
+            if len(img.shape) == 3:
+                data.append(rearrange(img, 'h w c -> (h w) c'))
+            elif len(img.shape) == 2:
+                data.append(rearrange(img, 'h w -> (h w)'))
+        else:
+            data.append(img)
         
     return data
     

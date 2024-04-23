@@ -78,4 +78,7 @@ class PredictionCallback(BasePredictionWriter):
         
         return image_sum / image_count
         
-        
+class AnalyzeCallback(PredictionCallback):
+    def reset_image(self):
+        self.image_sum = None
+        self.image_count = None

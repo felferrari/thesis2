@@ -2,3 +2,4 @@
 #strides: [152] #224 - 2*discard
 discard_border: 36
 batch_size: 64
+analize_batch_size: 32
