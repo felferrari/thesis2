@@ -183,7 +183,7 @@ def evaluate_models(cfg, img_comb_i, img_combination, parent_run_id):
         entropy = (-1/2) * (cliped_pred_prob * np.log(cliped_pred_prob) + (1-cliped_pred_prob) * np.log(1-cliped_pred_prob))
         entropy_tif_file = Path(tempdir) / f'entropy_{cfg.site.name}-{cfg.exp.name}-{img_comb_i}.tif'
         save_geotiff(base_image, entropy_tif_file, entropy, 'float')
-        mlflow.log_artifact(entropy_tif_file, 'entropy')
+        mlflow.log_artifact(entropy_tif_file, 'entropy', run_id=parent_run_id)
         
         #clean predictions based on previous knowledge
         predict_data[true_data == 3] = np.array([0,0,0,1])
@@ -211,7 +211,7 @@ def evaluate_models(cfg, img_comb_i, img_combination, parent_run_id):
         error_matrix[np.logical_and(true_labels == 0, predict_labels == 1)] = 3 #fp
         error_tif_file = Path(tempdir) / f'error_{cfg.site.name}-{cfg.exp.name}-{img_comb_i}.tif'
         save_geotiff(base_image, error_tif_file, error_matrix, 'byte')
-        mlflow.log_artifact(error_tif_file, 'error')
+        mlflow.log_artifact(error_tif_file, 'error', run_id=parent_run_id)
         
         
         #load cloud data
