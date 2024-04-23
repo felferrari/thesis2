@@ -59,6 +59,15 @@ def predict(cfg):
             cloud_0_entropy_1
         ) = metrics_
         
+        tp_global = tp_cloud_0 + tp_cloud_1
+        tn_global = tn_cloud_0 + tn_cloud_1
+        fn_global = fn_cloud_0 + fn_cloud_1
+        fp_global = fp_cloud_0 + fp_cloud_1
+        
+        precision_global = tp_global / (tp_global + fp_global)
+        recall_global = tp_global / (tp_global + fn_global)
+        f1_global = 2 * precision_global * recall_global / (precision_global + recall_global)
+        
         precision_cloud_0 = tp_cloud_0 / (tp_cloud_0 + fp_cloud_0)
         recall_cloud_0 = tp_cloud_0 / (tp_cloud_0 + fn_cloud_0)
         f1_cloud_0 = 2 * precision_cloud_0 * recall_cloud_0 / (precision_cloud_0 + recall_cloud_0)
@@ -92,10 +101,16 @@ def predict(cfg):
                 'f1score',
                 'precision',
                 'recall',
+                'f1score',
+                'precision',
+                'recall',
                 'high_entropy_prop',
                 'high_entropy_prop',
             ],
             'cond':[
+                'global',
+                'global',
+                'global',
                 'cloud_0',
                 'cloud_0',
                 'cloud_0',
@@ -112,6 +127,9 @@ def predict(cfg):
                 'cloud_1'
             ],
             'value':[
+                f1_global,
+                precision_global,
+                recall_global,
                 f1_cloud_0,
                 precision_cloud_0,
                 recall_cloud_0,
