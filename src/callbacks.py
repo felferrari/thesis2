@@ -46,7 +46,7 @@ class PredictionCallback(BasePredictionWriter):
         self.image_count = np.zeros(shape = self.shape, dtype=np.int32).flatten()
         
     def write_on_batch_end(self, trainer: Trainer, pl_module: LightningModule, prediction: Any, batch_indices: Sequence[int] | None, batch: Any, batch_idx: int, dataloader_idx: int) -> None:
-        _, patch_idx_b = batch
+        _, patch_idx_b, _ = batch
         patch_idx_b = patch_idx_b.detach().cpu().numpy()
         prediction = prediction.detach().cpu().numpy()
         prediction = rearrange(prediction, 'b c h w -> b h w c')
