@@ -6,6 +6,7 @@ defaults:
 model: 
   target: src.models.resunet.single.ResUnetSAR
 name: resunet_sar_combined
+code: 103
 opt_condition: no_opt
 sar_condition: combined
 n_opt_imgs: 0

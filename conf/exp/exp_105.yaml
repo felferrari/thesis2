@@ -6,6 +6,7 @@ defaults:
 model: 
   target: src.models.resunet.single.ResUnetSARNoPrevMap
 name: resunet_sar_combined_no_prevmap
+code: 105
 opt_condition: no_opt
 sar_condition: combined
 n_opt_imgs: 0

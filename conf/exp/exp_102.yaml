@@ -6,6 +6,7 @@ defaults:
 model: 
   target: src.models.resunet.single.ResUnetOpt
 name: resunet_opt_diverse
+code: 102
 opt_condition: diverse_cloud
 sar_condition: no_sar
 n_opt_imgs: 2

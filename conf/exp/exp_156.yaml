@@ -6,6 +6,7 @@ defaults:
 model: 
   target: src.models.swin.single.SwinSAR
 name: swin_sar_avg2
+code: 156
 opt_condition: no_opt
 sar_condition: avg2
 n_opt_imgs: 0

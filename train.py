@@ -46,7 +46,8 @@ def train(cfg):
         mlflow.set_tags({
             'opt_cond': cfg.exp.opt_condition,
             'sar_cond': cfg.exp.sar_condition,
-            'site': cfg.site.name
+            'site': cfg.site.name,
+            'exp_code': cfg.exp.code
         })
         total_t0 = time()
         data_module = DataModule(cfg)

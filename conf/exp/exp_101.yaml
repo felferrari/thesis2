@@ -6,6 +6,7 @@ defaults:
 model: 
   target: src.models.resunet.single.ResUnetOpt
 name: resunet_opt_no_cloud
+code: 101
 opt_condition: no_cloud
 sar_condition: no_sar
 n_opt_imgs: 2
