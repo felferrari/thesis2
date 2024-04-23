@@ -82,21 +82,7 @@ def train(cfg):
                     ]
                     
                     t0 = time()
-                    if cfg.exp.train_params.warmup_epochs is not None:
-                        
-                        trainer = Trainer(
-                            accelerator=cfg.general.accelerator.name,
-                            devices=cfg.general.accelerator.devices,
-                            logger = False,
-                            enable_progress_bar=True,
-                            limit_train_batches=cfg.exp.train_params.limit_train_batches,
-                            limit_val_batches=cfg.exp.train_params.limit_val_batches,
-                            max_epochs = cfg.exp.train_params.warmup_epochs,
-                        )
-                        trainer.fit(
-                            model=model_module,
-                            train_dataloaders=data_module.train_dataloader(),
-                        )
+                    
                 
                     with mlflow.start_run(run_name=f'model_{model_i}', nested=True) as model_run:
                         
@@ -113,6 +99,23 @@ def train(cfg):
                             log_models=False,
                             checkpoint=False,
                         )
+                        
+                        if cfg.exp.train_params.warmup_epochs is not None:
+                            model_module.prefix = 'warmup_'
+                            trainer = Trainer(
+                                accelerator=cfg.general.accelerator.name,
+                                devices=cfg.general.accelerator.devices,
+                                logger = False,
+                                enable_progress_bar=True,
+                                limit_train_batches=cfg.exp.train_params.limit_train_batches,
+                                limit_val_batches=cfg.exp.train_params.limit_val_batches,
+                                max_epochs = cfg.exp.train_params.warmup_epochs,
+                            )
+                            trainer.fit(
+                                model=model_module,
+                                train_dataloaders=data_module.train_dataloader(),
+                            )
+                            model_module.prefix = ''
                         
                         trainer = Trainer(
                             accelerator=cfg.general.accelerator.name,
