@@ -81,7 +81,7 @@ def train(cfg):
                         earlystop_callback,
                     ]
                     
-                    t0 = time()
+                    
                     
                 
                     with mlflow.start_run(run_name=f'model_{model_i}', nested=True) as model_run:
@@ -98,8 +98,9 @@ def train(cfg):
                         autolog(
                             log_models=False,
                             checkpoint=False,
+                            silent=True
                         )
-                        
+                        t0 = time()
                         if cfg.exp.train_params.warmup_epochs is not None:
                             model_module.prefix = 'warmup_'
                             trainer = Trainer(
