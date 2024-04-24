@@ -157,7 +157,7 @@ def eval(cfg):
     with TemporaryDirectory() as tempdir:
         metrics_results_file = Path(tempdir) / f'metrics_results_{cfg.site.name}-{cfg.exp.name}.csv'
         metrics_results.to_csv(metrics_results_file)
-        mlflow.log_artifact(metrics_results_file, 'results')
+        mlflow.log_artifact(metrics_results_file, 'results', run_id=parent_run_id)
         
     mlflow.log_metric('total_eval_time', (time() - total_t0) / 60., run_id=parent_run_id)
 
