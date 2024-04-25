@@ -3,9 +3,10 @@ import lightning as L
 from pydoc import locate
 from torch.nn import Softmax
 from torchmetrics.classification import MulticlassF1Score
-from captum.attr import IntegratedGradients
 from torch import nn
 import torch
+from einops import rearrange
+from src.attributes import IntegratedGradients
     
 class ModelModule(L.LightningModule):
     def __init__(self, cfg, *args, **kwargs) -> None:
@@ -87,15 +88,27 @@ class ModelModule(L.LightningModule):
                 "monitor": "val_f1_score_1",
             },
         }
+        
+        
+def create_wrapper(model):
+    def fn_wrapper(input):
+        x = rearrange(input, 'b c (h w) -> b c h w', h=224, w=224)
+        y = model(x)
+        y = torch.argmax(y, 1)
+        y = rearrange(y, 'b h w-> b (h w)')
+        return y
+    return fn_wrapper
+        
+    
     
         
 class AnalizeModelModule(L.LightningModule):
     def __init__(self, model, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
         self.model = model
+        self.ig = IntegratedGradients(model)
                 
     def predict_step(self, batch, batch_idx):
         x, _, y = batch
         x = self.model.prepare(x)
-        x.requires_grad=True
-        
+        self.ig.attributes(x)

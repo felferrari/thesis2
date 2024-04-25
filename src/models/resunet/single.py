@@ -1,4 +1,4 @@
-from src.models.resunet.layers import ResUnetEncoder, ResUnetDecoder, ResUnetClassifier, BNIdentity
+from src.models.resunet.layers import ResUnetEncoder, ResUnetDecoder, ResUnetClassifier, IdentityFusion
 from src.models.resunet.layers import ResUnetDecoderJF, ResUnetDecoderJFNoSkip, ResUnetRegressionClassifier
 from torch import nn
 import torch
@@ -12,6 +12,7 @@ class GenericModel(nn.Module):
         self.n_classes = n_classes
         self.depths = depths
         self.in_dims = in_dims
+        self.construct_model()
 
     def get_opt(self, x):
         return rearrange(x['opt'], 'b i c h w -> b (i c) h w')
@@ -19,24 +20,17 @@ class GenericModel(nn.Module):
     def get_sar(self, x):
         return rearrange(x['sar'], 'b i c h w -> b (i c) h w')
     
-
-
-class GenericResunet(GenericModel):
-    def __init__(self, *args, **kargs):
-        super().__init__(*args, **kargs)
+    def construct_model(self):
         self.encoder = ResUnetEncoder(self.in_dims, self.depths)
-        self.bn = BNIdentity(self.depths)
-        self.decoder = ResUnetDecoder(self.bn.out_depths)
+        self.fusion = IdentityFusion(self.depths)
+        self.decoder = ResUnetDecoder(self.fusion.out_depths)
         self.classifier = ResUnetClassifier(self.depths, self.n_classes)
 
-    @abstractmethod
-    def prepare_input(self, x):
-        pass
-    
+class GenericResunet(GenericModel):
     def forward(self, x):
-        #x = self.prepare_input(x)
+        x = torch.cat(x, dim=1)
         x = self.encoder(x)
-        x = self.bn(x)
+        x = self.fusion(x)
         x = self.decoder(x)
         x = self.classifier(x)
         return x
@@ -48,8 +42,8 @@ class ResUnetOpt(GenericResunet):
     
     def prepare(self, x):
         x_img = self.get_opt(x)
-        x = torch.cat((x_img, x['previous']), dim=1)
-        return x
+        #x = torch.cat((x_img, x['previous']), dim=1)
+        return (x_img, x['previous'])
     
 class ResUnetSAR(GenericResunet):
     @abstractmethod
@@ -58,8 +52,8 @@ class ResUnetSAR(GenericResunet):
     
     def prepare(self, x):
         x_img = self.get_sar(x)
-        x = torch.cat((x_img, x['previous']), dim=1)
-        return x
+        #x = torch.cat((x_img, x['previous']), dim=1)
+        return (x_img, x['previous'])
 
 class ResUnetOptNoPrevMap(GenericResunet):
     @abstractmethod
@@ -68,7 +62,7 @@ class ResUnetOptNoPrevMap(GenericResunet):
     
     def prepare(self, x):
         x_img = self.get_opt(x)
-        return x_img
+        return (x_img,)
     
 class ResUnetSARNoPrevMap(GenericResunet):
     @abstractmethod
@@ -77,4 +71,4 @@ class ResUnetSARNoPrevMap(GenericResunet):
     
     def prepare(self, x):
         x_img = self.get_sar(x)
-        return x_img
+        return (x_img,)

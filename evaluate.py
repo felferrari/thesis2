@@ -25,7 +25,7 @@ def eval(cfg):
         filter_string = f'run_name = "{cfg.exp.name}"'
         )
     parent_run_id = runs['run_id'][0]
-
+    
     #with mlflow.start_run(run_id=parent_run_id) as parent_run:
     total_t0 = time()
 
@@ -160,8 +160,18 @@ def eval(cfg):
         mlflow.log_artifact(metrics_results_file, 'results', run_id=parent_run_id)
         
     mlflow.log_metric('total_eval_time', (time() - total_t0) / 60., run_id=parent_run_id)
-
-
+    
+    
+    if cfg.clean_predictions:
+        with mlflow.start_run(run_id=parent_run_id) as parent_run:
+            for img_comb_i, img_combination in enumerate(imgs_combinations):
+                predict_paths = mlflow.artifacts.list_artifacts(run_id=parent_run_id, artifact_path= f'predictions')
+                for  pred_path in predict_paths:
+                    if pred_path.path.endswith('.tif'):
+                        file_path = Path(parent_run.info.artifact_uri[7:]) / pred_path.path
+                        file_path.unlink()
+                    
+                    
 def evaluate_models(cfg, img_comb_i, img_combination, parent_run_id):
     print(f'Evaluating Combination {img_comb_i}')
     base_image = Path(cfg.path.opt) / cfg.site.original_data.opt.train.imgs[0]

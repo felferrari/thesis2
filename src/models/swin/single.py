@@ -71,12 +71,13 @@ class GenericSwin(GenericModel):
             n_classes = self.n_classes
             )
 
-    @abstractmethod
-    def prepare_input(self, x):
-        pass
+    # @abstractmethod
+    # def prepare_input(self, x):
+    #     pass
     
     def forward(self, x):
         #x = self.prepare_input(x)
+        x = torch.cat(x, dim=1)
         x = self.encoder(x)
         x = self.bn(x)
         x = self.decoder(x)
@@ -90,8 +91,8 @@ class SwinOpt(GenericSwin):
     
     def prepare(self, x):
         x_img = self.get_opt(x)
-        x = torch.cat((x_img, x['previous']), dim=1)
-        return x
+        #x = torch.cat((x_img, x['previous']), dim=1)
+        return (x_img, x['previous'])
     
 class SwinSAR(GenericSwin):
     @abstractmethod
@@ -100,8 +101,8 @@ class SwinSAR(GenericSwin):
     
     def prepare(self, x):
         x_img = self.get_sar(x)
-        x = torch.cat((x_img, x['previous']), dim=1)
-        return x
+        #x = torch.cat((x_img, x['previous']), dim=1)
+        return (x_img, x['previous'])
 
 class SwinOptNoPrevMap(GenericSwin):
     @abstractmethod
@@ -110,7 +111,7 @@ class SwinOptNoPrevMap(GenericSwin):
     
     def prepare(self, x):
         x_img = self.get_opt(x)
-        return x_img
+        return (x_img,)
     
 class SwinSARNoPrevMap(GenericSwin):
     @abstractmethod
@@ -119,4 +120,4 @@ class SwinSARNoPrevMap(GenericSwin):
     
     def prepare(self, x):
         x_img = self.get_sar(x)
-        return x_img
+        return (x_img,)

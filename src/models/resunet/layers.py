@@ -71,7 +71,7 @@ class ResUnetDecoder(nn.Module):
 
         return x_out  
 
-class BNIdentity(nn.Module):
+class IdentityFusion(nn.Module):
     def __init__(self, depths):
         super().__init__()
         self.out_depths = depths
@@ -95,7 +95,14 @@ class ResUnetClassifier(nn.Module):
         return x
     
 
+class TemporalConcat(nn.Module):
+    def __init__(self, depths):
+        super().__init__()
+        self.out_depths = [2*d for d in depths]
 
+    def forward(self, x):
+        x = [torch.cat([x[0][i], x[1][i]], dim=1) for i in range(len(x[0]))]
+        return x
 
 
 
