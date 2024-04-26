@@ -235,12 +235,7 @@ def eval(cfg):
             metrics_results.to_csv(metrics_results_file)
             mlflow.log_artifact(metrics_results_file, 'results', run_id=parent_run_id)
         
-        
-        
-        
-    
     mlflow.log_metric('total_eval_time', (time() - total_t0) / 60., run_id=parent_run_id)
-    
     
     if cfg.clean_predictions:
         with mlflow.start_run(run_id=parent_run_id) as parent_run:
@@ -251,11 +246,11 @@ def eval(cfg):
                         file_path = Path(parent_run.info.artifact_uri[7:]) / pred_path.path
                         file_path.unlink()
                 entropy_paths = mlflow.artifacts.list_artifacts(run_id=parent_run_id, artifact_path= f'entropy')
-                for  entropy_path in entropy_paths:
+                for entropy_path in entropy_paths:
                     if entropy_path.path.endswith('.tif'):
                         file_path = Path(parent_run.info.artifact_uri[7:]) / entropy_path.path
                         file_path.unlink()
-                    file_path.parent.rmdir()
+                file_path.parent.rmdir()
                     
                     
 def evaluate_models(cfg, img_comb_i, img_combination, parent_run_id):
