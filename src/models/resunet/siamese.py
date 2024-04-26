@@ -1,5 +1,5 @@
 from pydoc import locate
-from src.models.resunet.layers import ResUnetEncoder, ResUnetDecoder, ResUnetClassifier, IdentityFusion
+from src.models.resunet.layers import ResUnetEncoder, ResUnetDecoder, ResUnetClassifier, ResunetPoolings
 from torch import nn
 from abc import abstractmethod
 
@@ -26,7 +26,6 @@ class GenericResunetSiamese(nn.Module):
         x = self.classifier(x)
         
         return x
-        
 class SiameseOpt(GenericResunetSiamese):
     @abstractmethod
     def get_input_dims(cfg):
@@ -42,3 +41,33 @@ class SiameseSAR(GenericResunetSiamese):
     
     def prepare(self, x):
         return (x['sar'][:, 0], x['sar'][:, 1])
+    
+
+class GenericResunetSiamesePrevDef(GenericResunetSiamese):
+    def construct_model(self):
+        super().construct_model()
+        self.prev_def_poolings = ResunetPoolings(self.depths)
+        
+    def forward(self, x):
+        x_0 = self.encoder(x[0])
+        x_1 = self.encoder(x[1])
+        x_2 = self.prev_def_poolings(x[2])
+        x = self.fusion([x_0, x_1, x_2])
+        x = self.decoder(x)
+        x = self.classifier(x)
+        return x
+class SiameseOptPrevMap(GenericResunetSiamesePrevDef):
+    @abstractmethod
+    def get_input_dims(cfg):
+        return cfg.general.n_opt_bands
+    
+    def prepare(self, x):
+        return (x['opt'][:, 0], x['opt'][:, 1], x['previous'])
+    
+class SiameseSARPrevMap(GenericResunetSiamesePrevDef):
+    @abstractmethod
+    def get_input_dims(cfg):
+        return cfg.general.n_sar_bands
+    
+    def prepare(self, x):
+        return (x['sar'][:, 0], x['sar'][:, 1], x['previous'])

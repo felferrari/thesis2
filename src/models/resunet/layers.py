@@ -79,6 +79,22 @@ class ResUnetDecoder(nn.Module):
 #     def forward(self, x):
 #         return x  
 
+class ResunetPoolings(nn.Module):
+    def __init__(self, depths) -> None:
+        super().__init__()
+        self.poolings = nn.ModuleList([
+            nn.MaxPool2d(2, 2)
+            for _ in range(len(depths))
+        ])
+        
+    def forward(self, x):
+        out = [x]
+        x_ = x
+        for i, pooling in enumerate(self.poolings):
+            x_ = pooling(x_)
+            out.append(x_)
+        return out
+
 class BNIdentity(nn.Module):
     def __init__(self, depths):
         super().__init__()
@@ -119,6 +135,22 @@ class TemporalConcat(nn.Module):
             out.append(x_)
         return out
     
+class TemporalConcatPrevMap(nn.Module):
+    def __init__(self, depths):
+        super().__init__()
+        self.projs = nn.ModuleList([
+            nn.Conv2d(2*depths[i]+1, depths[i], 1)
+            for i in range(len(depths))
+        ])
+        
+    def forward(self, x):
+        x_0, x_1, x_2 = x
+        out = []
+        for i, proj in enumerate(self.projs):
+            x_ = torch.cat([x_0[i], x_1[i], x_2[i]], axis=1)
+            x_ = proj(x_)
+            out.append(x_)
+        return out    
 class ResUnetDecoderJF(nn.Module):
     def __init__(self, depths):
         super(ResUnetDecoderJF, self).__init__()

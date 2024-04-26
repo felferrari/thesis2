@@ -4,11 +4,11 @@ defaults:
   - /default/pred_params@pred_params
   - /default/eval_params@eval_params
 model: 
-  target: src.models.resunet.siamese.SiameseSAR
+  target: src.models.resunet.siamese.SiameseSARPrevMap
   params:
-    temp_fusion: src.models.resunet.layers.TemporalConcat
-name: resunet_siamese_sar_avg2
-code: 202
+    temp_fusion: src.models.resunet.layers.TemporalConcatPrevMap
+name: resunet_siamese_sar_prevmap_avg2
+code: 205
 opt_condition: no_opt
 sar_condition: avg2
 n_opt_imgs: 0

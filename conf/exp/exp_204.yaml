@@ -1,0 +1,15 @@
+defaults:
+  - /model/resunet@model
+  - /default/train_params@train_params
+  - /default/pred_params@pred_params
+  - /default/eval_params@eval_params
+model: 
+  target: src.models.resunet.siamese.SiameseOptPrevMap
+  params:
+    temp_fusion: src.models.resunet.layers.TemporalConcatPrevMap
+name: resunet_siamese_opt_prevmap_no_cloud
+code: 204
+opt_condition: no_cloud
+sar_condition: no_sar
+n_opt_imgs: 2
+n_sar_imgs: 0

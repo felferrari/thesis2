@@ -1,0 +1,15 @@
+defaults:
+  - /model/swin@model
+  - /default/train_params@train_params
+  - /default/pred_params@pred_params
+  - /default/eval_params@eval_params
+model: 
+  target: src.models.swin.siamese.SiameseOptPrevMap
+  params:
+    temp_fusion: src.models.swin.layers.TemporalConcatPrevMap
+name: swin_siamese_opt_prevmap_no_cloud
+code: 254
+opt_condition: no_cloud
+sar_condition: no_sar
+n_opt_imgs: 2
+n_sar_imgs: 0

@@ -320,3 +320,59 @@ class BNIdentity(nn.Module):
 
     def forward(self, x):
         return x  
+    
+class SwinPoolings(nn.Module):
+    def __init__(self, depths) -> None:
+        super().__init__()
+        self.pooling_0 = nn.MaxPool2d(4, 4)
+        self.poolings = nn.ModuleList([
+            nn.MaxPool2d(2, 2)
+            for _ in range(len(depths))
+        ])
+        
+    def forward(self, x):
+        x_ = self.pooling_0(x)
+        out = [x_]
+        for i, pooling in enumerate(self.poolings):
+            x_ = pooling(x_)
+            out.append(x_)
+        return out
+    
+class TemporalConcat(nn.Module):
+    def __init__(self, base_dim, n_blocks):
+        super().__init__()
+        self.projs = nn.ModuleList([
+            nn.Conv2d(base_dim*2**(i+1), base_dim*2**(i), 1)
+            for i in range(len(n_blocks))
+        ])
+
+    def forward(self, x):
+        x_0, x_1 = x
+        out = []
+        for i, proj in enumerate(self.projs):
+            x_ = torch.cat([x_0[i], x_1[i]], axis=-1)
+            x_ = x_.moveaxis(-1,1)
+            x_ = proj(x_)
+            x_ = x_.moveaxis(1, -1)
+            out.append(x_)
+        return out
+    
+class TemporalConcatPrevMap(nn.Module):
+    def __init__(self, base_dim, n_blocks):
+        super().__init__()
+        self.projs = nn.ModuleList([
+            nn.Conv2d(base_dim*2**(i+1)+1, base_dim*2**(i), 1)
+            for i in range(len(n_blocks))
+        ])
+
+    def forward(self, x):
+        x_0, x_1, x_2 = x
+        out = []
+        for i, proj in enumerate(self.projs):
+            x_2_ = x_2[i].moveaxis(1, -1)
+            x_ = torch.cat([x_0[i], x_1[i], x_2_], axis=-1)
+            x_ = x_.moveaxis(-1,1)
+            x_ = proj(x_)
+            x_ = x_.moveaxis(1, -1)
+            out.append(x_)
+        return out

@@ -1,5 +1,5 @@
 from pydoc import locate
-from src.models.swin.layers import SwinEncoder, SwinDecoder, SwinClassifier, BNIdentity
+from src.models.swin.layers import SwinEncoder, SwinDecoder, SwinClassifier, SwinPoolings
 from torch import nn
 import torch
 from abc import abstractmethod
@@ -93,3 +93,33 @@ class SiameseSAR(GenericSwinSiamese):
     
     def prepare(self, x):
         return (x['sar'][:, 0], x['sar'][:, 1])
+    
+class GenericSwinSiamesePrevDef(GenericSwinSiamese):
+    def construct_model(self):
+        super().construct_model()
+        self.prev_def_poolings = SwinPoolings(self.n_blocks)
+        
+    def forward(self, x):
+        x_0 = self.encoder(x[0])
+        x_1 = self.encoder(x[1])
+        x_2 = self.prev_def_poolings(x[2])
+        x = self.fusion([x_0, x_1, x_2])
+        x = self.decoder(x)
+        x = self.classifier(x)
+        return x
+    
+class SiameseOptPrevMap(GenericSwinSiamesePrevDef):
+    @abstractmethod
+    def get_input_dims(cfg):
+        return cfg.general.n_opt_bands
+    
+    def prepare(self, x):
+        return (x['opt'][:, 0], x['opt'][:, 1], x['previous'])
+    
+class SiameseSARPrevMap(GenericSwinSiamesePrevDef):
+    @abstractmethod
+    def get_input_dims(cfg):
+        return cfg.general.n_sar_bands
+    
+    def prepare(self, x):
+        return (x['sar'][:, 0], x['sar'][:, 1], x['previous'])

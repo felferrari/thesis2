@@ -4,9 +4,11 @@ defaults:
   - /default/pred_params@pred_params
   - /default/eval_params@eval_params
 model: 
-  target: src.models.swin.single.SwinSAR
-name: swin_sar_single2
-code: 157
+  target: src.models.swin.siamese.SiameseSARPrevMap
+  params:
+    temp_fusion: src.models.swin.layers.TemporalConcatPrevMap
+name: swin_siamese_sar_prevmap_single2
+code: 256
 opt_condition: no_opt
 sar_condition: single2
 n_opt_imgs: 0
