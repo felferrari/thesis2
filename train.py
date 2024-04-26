@@ -81,10 +81,7 @@ def train(cfg):
                         checkpoint_callback,
                         earlystop_callback,
                     ]
-                    
-                    
-                    
-                
+
                     with mlflow.start_run(run_name=f'model_{model_i}', nested=True) as model_run:
                         
                         mlflow.log_params({

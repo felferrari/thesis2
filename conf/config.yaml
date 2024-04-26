@@ -4,4 +4,4 @@ defaults:
   - default/general@general
   - _self_
 retrain_model:
-clean_predictions: False
+clean_predictions: True

@@ -1,6 +1,8 @@
 from torch import nn
 from torchvision.models.swin_transformer import SwinTransformerBlock, PatchMerging
 import torch
+from einops import rearrange
+
 
 class PatchEmbed(nn.Module):
     def __init__(self, img_size, patch_size, in_chans, embed_dim, norm_layer=None):
@@ -135,6 +137,25 @@ class SwinEncoder(nn.Module):
         
         return x_out
 
+class TemporalConcat(nn.Module):
+    def __init__(self, base_dim, n_blocks):
+        super().__init__()
+        self.projs = nn.ModuleList([
+            nn.Conv2d(base_dim*2**(i+1), base_dim*2**(i), 1)
+            for i in range(len(n_blocks))
+        ])
+
+    def forward(self, x):
+        x_0, x_1 = x
+        out = []
+        for i, proj in enumerate(self.projs):
+            x_ = torch.cat([x_0[i], x_1[i]], axis=-1)
+            x_ = x_.moveaxis(-1,1)
+            x_ = proj(x_)
+            x_ = x_.moveaxis(1, -1)
+            out.append(x_)
+        return out
+
 class SwinDecoder(nn.Module):
     def __init__(self, 
                  base_dim, 
@@ -166,11 +187,6 @@ class SwinDecoder(nn.Module):
             nn.Conv2d( (2**(i+1))*base_dim,  (2**(i))*base_dim, kernel_size=1, bias = False)
             for i in range(self.n_layers-1)
         ])
-        
-
-        #self.patch_expand_last = PatchExpandx4(dim = base_dim)
-
-    
 
     def forward(self, x):
         x_out = x[-1]

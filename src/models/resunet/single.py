@@ -1,4 +1,4 @@
-from src.models.resunet.layers import ResUnetEncoder, ResUnetDecoder, ResUnetClassifier, IdentityFusion
+from src.models.resunet.layers import ResUnetEncoder, ResUnetDecoder, ResUnetClassifier, BNIdentity
 from src.models.resunet.layers import ResUnetDecoderJF, ResUnetDecoderJFNoSkip, ResUnetRegressionClassifier
 from torch import nn
 import torch
@@ -6,7 +6,27 @@ from abc import abstractmethod
 from einops import rearrange
 #from ..utils import ModelModule, ModelModuleMultiTask
 
-class GenericModel(nn.Module):
+# class GenericModel(nn.Module):
+#     def __init__(self, depths, n_classes, in_dims, *args, **kargs) -> None:
+#         super().__init__(*args, **kargs)
+#         self.n_classes = n_classes
+#         self.depths = depths
+#         self.in_dims = in_dims
+#         self.construct_model()
+
+#     def get_opt(self, x):
+#         return rearrange(x['opt'], 'b i c h w -> b (i c) h w')
+    
+#     def get_sar(self, x):
+#         return rearrange(x['sar'], 'b i c h w -> b (i c) h w')
+    
+#     def construct_model(self):
+#         self.encoder = ResUnetEncoder(self.in_dims, self.depths)
+#         self.fusion = IdentityFusion(self.depths)
+#         self.decoder = ResUnetDecoder(self.fusion.out_depths)
+#         self.classifier = ResUnetClassifier(self.depths, self.n_classes)
+
+class GenericResunet(nn.Module):
     def __init__(self, depths, n_classes, in_dims, *args, **kargs) -> None:
         super().__init__(*args, **kargs)
         self.n_classes = n_classes
@@ -22,15 +42,14 @@ class GenericModel(nn.Module):
     
     def construct_model(self):
         self.encoder = ResUnetEncoder(self.in_dims, self.depths)
-        self.fusion = IdentityFusion(self.depths)
-        self.decoder = ResUnetDecoder(self.fusion.out_depths)
+        self.bn = BNIdentity(self.depths)
+        self.decoder = ResUnetDecoder(self.depths)
         self.classifier = ResUnetClassifier(self.depths, self.n_classes)
-
-class GenericResunet(GenericModel):
+        
     def forward(self, x):
         x = torch.cat(x, dim=1)
         x = self.encoder(x)
-        x = self.fusion(x)
+        x = self.bn(x)
         x = self.decoder(x)
         x = self.classifier(x)
         return x

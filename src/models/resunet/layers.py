@@ -71,14 +71,21 @@ class ResUnetDecoder(nn.Module):
 
         return x_out  
 
-class IdentityFusion(nn.Module):
+# class IdentityFusion(nn.Module):
+#     def __init__(self, depths):
+#         super().__init__()
+#         self.out_depths = depths
+
+#     def forward(self, x):
+#         return x  
+
+class BNIdentity(nn.Module):
     def __init__(self, depths):
         super().__init__()
         self.out_depths = depths
 
     def forward(self, x):
         return x  
-
 
 class ResUnetClassifier(nn.Module):
     def __init__(self, depths, n_classes, last_activation = nn.Softmax):
@@ -98,15 +105,19 @@ class ResUnetClassifier(nn.Module):
 class TemporalConcat(nn.Module):
     def __init__(self, depths):
         super().__init__()
-        self.out_depths = [2*d for d in depths]
+        self.projs = nn.ModuleList([
+            nn.Conv2d(2*depths[i], depths[i], 1)
+            for i in range(len(depths))
+        ])
 
     def forward(self, x):
-        x = [torch.cat([x[0][i], x[1][i]], dim=1) for i in range(len(x[0]))]
-        return x
-
-
-
-
+        x_0, x_1 = x
+        out = []
+        for i, proj in enumerate(self.projs):
+            x_ = torch.cat([x_0[i], x_1[i]], axis=1)
+            x_ = proj(x_)
+            out.append(x_)
+        return out
     
 class ResUnetDecoderJF(nn.Module):
     def __init__(self, depths):

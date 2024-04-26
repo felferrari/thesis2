@@ -15,6 +15,7 @@ import pandas as pd
 from multiprocessing import Pool
 from matplotlib import pyplot as plt
 import matplotlib
+from einops import rearrange
 
 @hydra.main(version_base=None, config_path='conf', config_name='config.yaml')
 def eval(cfg):
@@ -39,7 +40,13 @@ def eval(cfg):
         
     with Pool(cfg.exp.eval_params.n_rois_processes) as pool:
         _ = pool.starmap(gen_roi_figures, args_list)
-    metrics_ = np.stack(metrics, axis= 0).sum(axis=0)
+        
+    #metrics_ = np.stack(metrics, axis= 0).sum(axis=0)
+    
+    metrics_ = np.stack(metrics, axis= 0)
+    metrics_results = np.concatenate([np.expand_dims(metrics_.sum(axis=0), axis=0), metrics_], axis=0)
+    
+    metrics_results = rearrange(metrics_results, 'n m -> m n')
     
     (
         tn_cloud_0,
@@ -62,7 +69,7 @@ def eval(cfg):
         cloud_1_entropy_1,
         cloud_1_entropy_0,
         cloud_0_entropy_1
-    ) = metrics_
+    ) = metrics_results
     
     tp_global = tp_cloud_0 + tp_cloud_1
     tn_global = tn_cloud_0 + tn_cloud_1
@@ -132,33 +139,106 @@ def eval(cfg):
             'cloud_1'
         ],
         'value':[
-            f1_global,
-            precision_global,
-            recall_global,
-            f1_cloud_0,
-            precision_cloud_0,
-            recall_cloud_0,
-            f1_cloud_1,
-            precision_cloud_1,
-            recall_cloud_1,
-            f1_entropy_0,
-            precision_entropy_0,
-            recall_entropy_0,
-            f1_entropy_1,
-            precision_entropy_1,
-            recall_entropy_1,
-            entropy_cloud_0,
-            entropy_cloud_1
+            f1_global[0],
+            precision_global[0],
+            recall_global[0],
+            f1_cloud_0[0],
+            precision_cloud_0[0],
+            recall_cloud_0[0],
+            f1_cloud_1[0],
+            precision_cloud_1[0],
+            recall_cloud_1[0],
+            f1_entropy_0[0],
+            precision_entropy_0[0],
+            recall_entropy_0[0],
+            f1_entropy_1[0],
+            precision_entropy_1[0],
+            recall_entropy_1[0],
+            entropy_cloud_0[0],
+            entropy_cloud_1[0]
         ]
     }
     
     metrics_results = pd.DataFrame(data = results_data, columns=['metric', 'cond', 'value'])
     
     with TemporaryDirectory() as tempdir:
-        metrics_results_file = Path(tempdir) / f'metrics_results_{cfg.site.name}-{cfg.exp.name}.csv'
+        metrics_results_file = Path(tempdir) / f'metrics_results_{cfg.site.name}-{cfg.exp.name}-global.csv'
         metrics_results.to_csv(metrics_results_file)
         mlflow.log_artifact(metrics_results_file, 'results', run_id=parent_run_id)
+    
+    
+    for i in range(1, len(imgs_combinations)+1):
+        results_data = {
+            'metric':[
+                'f1score',
+                'precision',
+                'recall',
+                'f1score',
+                'precision',
+                'recall',
+                'f1score',
+                'precision',
+                'recall',
+                'f1score',
+                'precision',
+                'recall',
+                'f1score',
+                'precision',
+                'recall',
+                'high_entropy_prop',
+                'high_entropy_prop',
+            ],
+            'cond':[
+                'global',
+                'global',
+                'global',
+                'cloud_0',
+                'cloud_0',
+                'cloud_0',
+                'cloud_1',
+                'cloud_1',
+                'cloud_1',
+                'entropy_0',
+                'entropy_0',
+                'entropy_0',
+                'entropy_1',
+                'entropy_1',
+                'entropy_1',
+                'cloud_0',
+                'cloud_1'
+            ],
+            'value':[
+                f1_global[i],
+                precision_global[i],
+                recall_global[i],
+                f1_cloud_0[i],
+                precision_cloud_0[i],
+                recall_cloud_0[i],
+                f1_cloud_1[i],
+                precision_cloud_1[i],
+                recall_cloud_1[i],
+                f1_entropy_0[i],
+                precision_entropy_0[i],
+                recall_entropy_0[i],
+                f1_entropy_1[i],
+                precision_entropy_1[i],
+                recall_entropy_1[i],
+                entropy_cloud_0[i],
+                entropy_cloud_1[i]
+            ]
+        }
         
+        metrics_results = pd.DataFrame(data = results_data, columns=['metric', 'cond', 'value'])
+        
+        with TemporaryDirectory() as tempdir:
+            metrics_results_file = Path(tempdir) / f'metrics_results_{cfg.site.name}-{cfg.exp.name}-{i}.csv'
+            metrics_results.to_csv(metrics_results_file)
+            mlflow.log_artifact(metrics_results_file, 'results', run_id=parent_run_id)
+        
+        
+        
+        
+    
     mlflow.log_metric('total_eval_time', (time() - total_t0) / 60., run_id=parent_run_id)
     
     
@@ -170,6 +250,12 @@ def eval(cfg):
                     if pred_path.path.endswith('.tif'):
                         file_path = Path(parent_run.info.artifact_uri[7:]) / pred_path.path
                         file_path.unlink()
+                entropy_paths = mlflow.artifacts.list_artifacts(run_id=parent_run_id, artifact_path= f'entropy')
+                for  entropy_path in entropy_paths:
+                    if entropy_path.path.endswith('.tif'):
+                        file_path = Path(parent_run.info.artifact_uri[7:]) / entropy_path.path
+                        file_path.unlink()
+                    file_path.parent.rmdir()
                     
                     
 def evaluate_models(cfg, img_comb_i, img_combination, parent_run_id):

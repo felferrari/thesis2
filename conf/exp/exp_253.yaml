@@ -1,0 +1,15 @@
+defaults:
+  - /model/swin@model
+  - /default/train_params@train_params
+  - /default/pred_params@pred_params
+  - /default/eval_params@eval_params
+model: 
+  target: src.models.swin.siamese.SiameseSAR
+  params:
+    temp_fusion: src.models.swin.layers.TemporalConcat
+name: swin_siamese_sar_single2
+code: 253
+opt_condition: no_opt
+sar_condition: single2
+n_opt_imgs: 0
+n_sar_imgs: 2
