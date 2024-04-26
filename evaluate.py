@@ -250,7 +250,6 @@ def eval(cfg):
                     if entropy_path.path.endswith('.tif'):
                         file_path = Path(parent_run.info.artifact_uri[7:]) / entropy_path.path
                         file_path.unlink()
-                file_path.parent.rmdir()
                     
                     
 def evaluate_models(cfg, img_comb_i, img_combination, parent_run_id):
