@@ -94,6 +94,7 @@ class GenericSwin(nn.Module):
         self.n_heads = n_heads
         self.n_blocks = n_blocks
         self.img_size = img_size
+        self.construct_model()
 
     def get_opt(self, x):
         return rearrange(x['opt'], 'b i c h w -> b (i c) h w')
