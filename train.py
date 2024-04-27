@@ -137,12 +137,14 @@ def train(cfg):
                         
                         last_run_id = model_run.info.run_id
                         #if checkpoint_callback.best_model_score >= cfg.exp.train_params.min_val_f1:
-                        if trainer.current_epoch >= cfg.exp.train_params.min_epochs and checkpoint_callback.best_model_score >= cfg.exp.train_params.min_val_f1:
+                        #if trainer.current_epoch >= cfg.exp.train_params.min_epochs and checkpoint_callback.best_model_score >= cfg.exp.train_params.min_val_f1:
+                        if checkpoint_callback.best_model_score >= cfg.exp.train_params.min_val_f1:
                             mlflow.set_tag('Training', 'success')
                         else:
                             mlflow.set_tag('Training', 'failed')
                     #if checkpoint_callback.best_model_score >= cfg.exp.train_params.min_val_f1:
-                    if trainer.current_epoch >= cfg.exp.train_params.min_epochs and checkpoint_callback.best_model_score >= cfg.exp.train_params.min_val_f1:
+                    #if trainer.current_epoch >= cfg.exp.train_params.min_epochs and checkpoint_callback.best_model_score >= cfg.exp.train_params.min_val_f1:
+                    if checkpoint_callback.best_model_score >= cfg.exp.train_params.min_val_f1:
                         break
                     else:
                         mlflow.delete_run(run_id=last_run_id)

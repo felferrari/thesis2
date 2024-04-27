@@ -103,6 +103,8 @@ def predict_models(cfg, img_comb_i, img_combination, parent_run_id):
         preview = 255 * preview 
         preview = np.clip(preview.astype(np.int32), 0, 255)
         mlflow.log_image(preview, f'predictions/preview_{cfg.site.name}-{cfg.exp.name}-{img_comb_i}.jpg')
+        
+        mlflow.set_tag('Predict', 'concluded')
 
         
 if __name__ == "__main__":
