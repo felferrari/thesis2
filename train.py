@@ -85,12 +85,13 @@ def train(cfg):
                     with mlflow.start_run(run_name=f'model_{model_i}', nested=True) as model_run:
                         
                         mlflow.log_params({
-                            'parent_run_id': parent_run.info.run_id
+                            'parent_run_id': parent_run.info.run_id,
+                            'Training Params': dict(cfg.exp.train_params),
+                            'Model Params': dict(cfg.exp.model),
                         })
                         mlflow.set_tags({
                             'Training': 'executing',
-                            'Retrain attempt': model_attempt,
-                            'Warmup epochs': cfg.exp.train_params.warmup_epochs
+                            'Retrain attempt': model_attempt
                             })
                         
                         autolog(

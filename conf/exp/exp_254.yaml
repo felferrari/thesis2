@@ -13,3 +13,6 @@ opt_condition: no_cloud
 sar_condition: no_sar
 n_opt_imgs: 2
 n_sar_imgs: 0
+
+train_params:
+  repeat_batches: 3

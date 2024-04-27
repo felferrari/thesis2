@@ -24,10 +24,10 @@ batch_size: 32
 max_epochs: 500
 limit_train_batches: 200
 limit_val_batches: 200
-train_workers: 8
-val_workers: 8
+train_workers: 6
+val_workers: 6
 min_val_f1: 0.2
 #min_epochs: 15
 max_retrain_models: 5
 repeat_batches: 1
-warmup_epochs: 
+warmup_epochs: 10
