@@ -8,6 +8,8 @@ import mlflow
 from mlflow.pytorch import autolog, log_model
 from time import time
 import torch 
+from datetime import datetime
+
         
 @hydra.main(version_base=None, config_path='conf', config_name='config.yaml')
 def train(cfg):
@@ -142,6 +144,7 @@ def train(cfg):
                         #if trainer.current_epoch >= cfg.exp.train_params.min_epochs and checkpoint_callback.best_model_score >= cfg.exp.train_params.min_val_f1:
                         if checkpoint_callback.best_model_score >= cfg.exp.train_params.min_val_f1:
                             mlflow.set_tag('Training', 'success')
+                            mlflow.set_tag('Train_time', datetime.now())
                         else:
                             mlflow.set_tag('Training', 'failed')
                     #if checkpoint_callback.best_model_score >= cfg.exp.train_params.min_val_f1:
