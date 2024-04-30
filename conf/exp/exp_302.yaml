@@ -4,9 +4,11 @@ defaults:
   - /default/pred_params@pred_params
   - /default/eval_params@eval_params
 model: 
-  target: src.models.resunet.fusion.PixelLevel
-name: resunet_pixel_level_no_cloud_combined
-code: 301
+  target: src.models.resunet.fusion.MiddleFeatureLevel
+  params:
+    modal_fusion: src.models.resunet.layers.ModalConcat
+name: resunet_feature_middle_concat_no_cloud_combined
+code: 302
 opt_condition: no_cloud
 sar_condition: combined
 n_opt_imgs: 2

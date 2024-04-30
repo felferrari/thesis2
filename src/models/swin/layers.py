@@ -376,3 +376,34 @@ class TemporalConcatPrevMap(nn.Module):
             x_ = x_.moveaxis(1, -1)
             out.append(x_)
         return out
+    
+class ModalConcat(nn.Module):
+    def __init__(self, base_dim, n_blocks):
+        super().__init__()
+        self.projs = nn.ModuleList([
+            nn.Conv2d(base_dim*2**(i+1), base_dim*2**(i), 1)
+            for i in range(len(n_blocks))
+        ])
+
+    def forward(self, x):
+        x_0, x_1 = x
+        out = []
+        for i, proj in enumerate(self.projs):
+            x_ = torch.cat([x_0[i], x_1[i]], axis=-1)
+            x_ = x_.moveaxis(-1,1)
+            x_ = proj(x_)
+            x_ = x_.moveaxis(1, -1)
+            out.append(x_)
+        return out
+    
+class ModalLateConcat(nn.Module):
+    def __init__(self, base_dim):
+        super().__init__()
+        self.proj= nn.Conv2d(2*base_dim, base_dim, 1)
+
+    def forward(self, x):
+        x = torch.cat(x, axis=-1)
+        x = x.moveaxis(-1,1)
+        x = self.proj(x)
+        x = x.moveaxis(1, -1)
+        return x

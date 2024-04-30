@@ -1,0 +1,15 @@
+defaults:
+  - /model/resunet@model
+  - /default/train_params@train_params
+  - /default/pred_params@pred_params
+  - /default/eval_params@eval_params
+model: 
+  target: src.models.resunet.fusion.LateFeatureLevel
+  params:
+    modal_fusion: src.models.resunet.layers.ModalLateConcat
+name: resunet_feature_late_concat_diverse_combined
+code: 313
+opt_condition: diverse_cloud
+sar_condition: combined
+n_opt_imgs: 2
+n_sar_imgs: 12
