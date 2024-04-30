@@ -1,0 +1,18 @@
+defaults:
+  - /model/resunet@model
+  - /default/train_params@train_params
+  - /default/pred_params@pred_params
+  - /default/eval_params@eval_params
+model: 
+  target: src.models.resunet.fusion.PixelLevel
+  params:
+    #temp_fusion: src.models.resunet.layers.TemporalConcat
+name: resunet_pixel_level_no_cloud_avg12
+code: 301
+opt_condition: no_cloud
+sar_condition: avg12
+n_opt_imgs: 2
+n_sar_imgs: 12
+
+train_params:
+  repeat_batches: 3
