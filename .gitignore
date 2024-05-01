@@ -172,3 +172,5 @@ mlruns
 multirun
 data/
 outputs
+
+notebooks/figures
