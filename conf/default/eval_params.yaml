@@ -1,4 +1,4 @@
 min_cloudy: 0.5
 min_entropy: 0.1
 n_metric_processes: 6
-n_rois_processes: 3
+n_rois_processes: 2
