@@ -171,6 +171,7 @@ lightning_logs
 mlruns
 multirun
 data/
+data*/
 outputs
 
 notebooks/figures
