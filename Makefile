@@ -12,8 +12,9 @@ copyfiles:
 	mkdir data/prepared
 	mkdir data/prepared/train
 	mkdir data/prepared/validation
-	nohup cp -r -v /mnt/storage/ferrari/thesis/$(SITE)/data/sar data/original > output_sar.log &
-	nohup cp -r -v /mnt/storage/ferrari/thesis/$(SITE)/data/opt data/original > output_opt.log &
-	nohup cp -r -v /mnt/storage/ferrari/thesis/$(SITE)/data/prodes data/original > output_prodes.log &
+	cp -r -v /mnt/storage/ferrari/thesis/$(SITE)/data/sar data/original
+	cp -r -v /mnt/storage/ferrari/thesis/$(SITE)/data/opt data/original
+	cp -r -v /mnt/storage/ferrari/thesis/$(SITE)/data/prodes data/original
+	python prepare.py +site=$(SITE) preparation.calculate.statistics=True preparation.generate.tiles=True preparation.generate.labels=True preparation.generate.prev_map=True preparation.generate.patches=True
 nohup-run-all:
 	nohup ./run_all.sh &
