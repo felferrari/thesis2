@@ -7,6 +7,7 @@ model:
   target: src.models.swin.single.SwinOpt
 name: swin_opt_no_cloud
 code: 151
+base_architecture: transformer
 opt_condition: no_cloud
 sar_condition: no_sar
 n_opt_imgs: 2

@@ -7,6 +7,7 @@ model:
   target: src.models.swin.fusion.PixelLevel
 name: swin_pixel_level_no_cloud_combined
 code: 351
+base_architecture: transformer
 opt_condition: no_cloud
 sar_condition: combined
 n_opt_imgs: 2

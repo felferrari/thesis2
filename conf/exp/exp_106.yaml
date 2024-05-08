@@ -7,6 +7,7 @@ model:
   target: src.models.resunet.single.ResUnetSAR
 name: resunet_sar_avg2
 code: 106
+base_architecture: resunet
 opt_condition: no_opt
 sar_condition: avg2
 n_opt_imgs: 0

@@ -7,6 +7,7 @@ model:
   target: src.models.swin.single.SwinSARNoPrevMap
 name: swin_sar_combined_no_prevmap
 code: 155
+base_architecture: transformer
 opt_condition: no_opt
 sar_condition: combined
 n_opt_imgs: 0

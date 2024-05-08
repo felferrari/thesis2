@@ -7,8 +7,9 @@ model:
   target: src.models.resunet.siamese.SiameseSARPrevMap
   params:
     temp_fusion: src.models.resunet.layers.TemporalConcatPrevMap
-name: resunet_siamese_sar_prevmap_single2
+name: resunet_siamese_sar_single2
 code: 206
+base_architecture: resunet
 opt_condition: no_opt
 sar_condition: single2
 n_opt_imgs: 0

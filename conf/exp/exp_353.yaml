@@ -9,6 +9,7 @@ model:
     modal_fusion: src.models.swin.layers.ModalLateConcat
 name: swin_feature_late_concat_no_cloud_combined
 code: 353
+base_architecture: transformer
 opt_condition: no_cloud
 sar_condition: combined
 n_opt_imgs: 2

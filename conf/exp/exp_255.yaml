@@ -7,8 +7,9 @@ model:
   target: src.models.swin.siamese.SiameseSARPrevMap
   params:
     temp_fusion: src.models.swin.layers.TemporalConcatPrevMap
-name: swin_siamese_sar_prevmap_avg2
+name: swin_siamese_sar_avg2
 code: 255
+base_architecture: transformer
 opt_condition: no_opt
 sar_condition: avg2
 n_opt_imgs: 0

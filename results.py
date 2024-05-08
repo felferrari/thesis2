@@ -6,12 +6,6 @@ conf_path = Path('conf')
 exps_path =  conf_path / 'exp'
 sites_path =  conf_path / 'site'
 
-
-st.set_page_config(
-    page_title="Results",
-    page_icon="👋",
-)
-
 experiments = {}
 for exp_file in  exps_path.glob('exp_*.*'):
     exp_code = exp_file.stem
@@ -28,3 +22,8 @@ for site_file in  sites_path.glob('s*.*'):
         
 st.session_state['experiments'] = experiments
 st.session_state['sites'] = sites
+
+st.set_page_config(
+    page_title="Results",
+    page_icon="👋",
+)

@@ -7,8 +7,9 @@ model:
   target: src.models.resunet.siamese.SiameseOpt
   params:
     temp_fusion: src.models.resunet.layers.TemporalConcat
-name: resunet_siamese_opt_no_cloud
+name: resunet_siamese_opt_no_prevmap_no_cloud
 code: 201
+base_architecture: resunet
 opt_condition: no_cloud
 sar_condition: no_sar
 n_opt_imgs: 2

@@ -7,8 +7,9 @@ model:
   target: src.models.resunet.siamese.SiameseSAR
   params:
     temp_fusion: src.models.resunet.layers.TemporalConcat
-name: resunet_siamese_sar_avg2
+name: resunet_siamese_sar_no_prevmap_avg2
 code: 202
+base_architecture: resunet
 opt_condition: no_opt
 sar_condition: avg2
 n_opt_imgs: 0

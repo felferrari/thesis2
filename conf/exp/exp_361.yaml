@@ -7,6 +7,7 @@ model:
   target: src.models.swin.fusion.PixelLevel
 name: swin_pixel_level_diverse_combined
 code: 361
+base_architecture: transformer
 opt_condition: diverse_cloud
 sar_condition: combined
 n_opt_imgs: 2

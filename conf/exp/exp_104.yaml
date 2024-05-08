@@ -7,6 +7,7 @@ model:
   target: src.models.resunet.single.ResUnetOptNoPrevMap
 name: resunet_opt_no_cloud_no_prevmap
 code: 104
+base_architecture: resunet
 opt_condition: no_cloud
 sar_condition: no_sar
 n_opt_imgs: 2

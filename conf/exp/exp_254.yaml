@@ -7,8 +7,9 @@ model:
   target: src.models.swin.siamese.SiameseOptPrevMap
   params:
     temp_fusion: src.models.swin.layers.TemporalConcatPrevMap
-name: swin_siamese_opt_prevmap_no_cloud
+name: swin_siamese_opt_no_cloud
 code: 254
+base_architecture: transformer
 opt_condition: no_cloud
 sar_condition: no_sar
 n_opt_imgs: 2

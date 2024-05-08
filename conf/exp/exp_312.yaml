@@ -9,6 +9,7 @@ model:
     modal_fusion: src.models.resunet.layers.ModalConcat
 name: resunet_feature_middle_concat_diverse_combined
 code: 312
+base_architecture: resunet
 opt_condition: diverse_cloud
 sar_condition: combined
 n_opt_imgs: 2
