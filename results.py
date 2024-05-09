@@ -7,14 +7,14 @@ exps_path =  conf_path / 'exp'
 sites_path =  conf_path / 'site'
 
 experiments = {}
-for exp_file in  exps_path.glob('exp_*.*'):
+for exp_file in  sorted(exps_path.glob('exp_*.*')):
     exp_code = exp_file.stem
     with initialize(version_base=None, config_path=str(conf_path), job_name="test_app"):
         cfg = compose(config_name="config", overrides=[f"+exp={exp_code}"])
         experiments[exp_code] = dict(cfg.exp)
         
 sites = {}
-for site_file in  sites_path.glob('s*.*'):
+for site_file in  sorted(sites_path.glob('s*.*')):
     site_code = site_file.stem
     with initialize(version_base=None, config_path=str(conf_path), job_name="test_app"):
         cfg = compose(config_name="config", overrides=[f"+site={site_code}"])

@@ -7,6 +7,7 @@ def plot_training(site_name, exp_name, metric):
     metric = get_exp_metric(site_name, exp_name, metric)
     if metric is None:
         st.write(f'Data incomplete for Site:{site_name}, Exps: [{exp_name}]')
+        return
     
     metric = metric.rename(columns={
         'step': 'Epoch',
