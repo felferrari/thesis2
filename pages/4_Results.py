@@ -35,3 +35,4 @@ for site_code in st.session_state['sites']:
    #plt.ylim([0,1])
    plt.xticks(rotation=325, ha='left')
    st.pyplot(fig)
+   plt.close(fig)

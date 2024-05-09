@@ -19,6 +19,7 @@ def plot_training(site_name, exp_name, metric):
     sns.lineplot(x='Epoch', y='F1-Score', hue = 'run', legend = 'full', data = metric)
     plt.title(f'Site: {site_name} Model:{exp_name} ({exp_code})')
     st.pyplot(fig)
+    plt.close(fig)
 
 for site_code in st.session_state['sites'] :
     st.header(f"{st.session_state['sites'][site_code]['name']} ({site_code})")

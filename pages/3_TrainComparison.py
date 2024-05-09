@@ -25,6 +25,7 @@ def plot_training_comp(site_name, experiments, exp_codes, metric):
    #ax.yaxis.set_major_formatter(FormatStrFormatter('%.1f'))
    #plt.ylim([0,1])
    st.pyplot(fig)
+   plt.close(fig)
         
 
 for site_code in st.session_state['sites']:
