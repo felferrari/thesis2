@@ -61,7 +61,7 @@ def get_exps_metric(site_name, exp_codes, metric, experiments, include_warmup = 
             metrics =  pd.concat([metrics, metrics_i])  
     return metrics
 
-def get_site_results(site_name, experiments):
+def get_site_results(site_name, experiments, exp_codes = None):
     mlflow_client = mlflow.client.MlflowClient()
     
     mlflow_experiment_l = mlflow_client.search_experiments(filter_string=f"name='{site_name}'")
@@ -72,8 +72,10 @@ def get_site_results(site_name, experiments):
     results = []
     my_bar = st.progress(0, text='Loading Data')
     with TemporaryDirectory() as temp_dir:
-        n_exps = len(experiments)
-        for i, exp_code in enumerate(experiments):
+        if exp_codes is None:
+            exp_codes = list(experiments.keys)
+        n_exps = len(exp_codes)
+        for i, exp_code in enumerate(exp_codes):
             my_bar.progress((i/n_exps))
             exp_name = experiments[exp_code]['name']
             mlflow_parent_run_l = mlflow_client.search_runs(experiment_ids=[mlflow_experiment.experiment_id], filter_string=f"run_name='{exp_name}'")
@@ -108,9 +110,14 @@ def get_site_results(site_name, experiments):
                 results_df['type'] = ''
                 
             if 'siamese' in exp_name:
-                results_df['layout'] = 'siamese'
-            elif 'sar' in exp_name:
-                results_df['type'] = 'SAR'
+                results_df['siamese'] = True
+            else:
+                results_df['siamese'] = False
+                
+            if 'pretrained' in exp_name:
+                results_df['pretrained'] = True
+            else:
+                results_df['pretrained'] = False
             
             
             results.append(results_df)
