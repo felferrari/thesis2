@@ -1,0 +1,21 @@
+defaults:
+  - /model/resunet@model
+  - /default/train_params@train_params
+  - /default/pred_params@pred_params
+  - /default/eval_params@eval_params
+model: 
+  target: src.models.resunet.fusion.LateFeatureLevel
+  params:
+    modal_fusion: src.models.resunet.layers.ModalLateConcat
+name: resunet_feature_late_concat_no_cloud_combined_pretrained
+code: 402
+base_architecture: resunet
+opt_condition: no_cloud
+sar_condition: combined
+n_opt_imgs: 2
+n_sar_imgs: 12
+
+train_params:
+  repeat_batches: 3
+  warmup_epochs:
+  pretrain_encoder_decoder: [101, 103]

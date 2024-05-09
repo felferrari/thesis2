@@ -31,3 +31,5 @@ min_val_f1: 0.2
 max_retrain_models: 5
 repeat_batches: 1
 warmup_epochs: 10
+pretrain_encoder:
+pretrain_encoder_decoder:

@@ -1,0 +1,20 @@
+defaults:
+  - /model/resunet@model
+  - /default/train_params@train_params
+  - /default/pred_params@pred_params
+  - /default/eval_params@eval_params
+model: 
+  target: src.models.resunet.fusion.MiddleFeatureLevel
+  params:
+    modal_fusion: src.models.resunet.layers.ModalConcat
+name: resunet_feature_middle_concat_diverse_combined_pretrained
+code: 411
+base_architecture: resunet
+opt_condition: diverse_cloud
+sar_condition: combined
+n_opt_imgs: 2
+n_sar_imgs: 12
+
+train_params:
+  warmup_epochs:
+  pretrain_encoder: [101, 103]

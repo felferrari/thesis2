@@ -117,6 +117,56 @@ def get_site_results(site_name, experiments):
     results = pd.concat(results)
     my_bar.empty()
     return results
+
+def load_model(site_name, exp_code, model_i):
+    mlflow_client = mlflow.MlflowClient()
+    
+    experiment = mlflow_client.search_experiments(filter_string=f"name = '{site_name}'")[0]
+    
+    parent_run = mlflow_client.search_runs(
+        experiment_ids=[experiment.experiment_id],
+        filter_string=f"tags.exp_code = '{exp_code}'"
+    )[0]
+    
+    run =  mlflow_client.search_runs(
+        experiment_ids=[experiment.experiment_id],
+        filter_string=f"parameters.parent_run_id = '{parent_run.info.run_id}' AND attributes.run_name = 'model_{model_i}'"
+    )[0]
+    
+    model_id = f'runs:/{run.info.run_id}/model'
+    return mlflow.pytorch.load_model(model_id)
+    
             
         
+def update_pretrained_weights(cfg, model_module, model_i):
+    if cfg.exp.train_params.pretrain_encoder is not None:
+        site_name = cfg.site.name
+        exp_opt_code, exp_sar_code = cfg.exp.train_params.pretrain_encoder
         
+        opt_model_module = load_model(site_name, exp_opt_code, model_i)
+        sar_model_module = load_model(site_name, exp_sar_code, model_i)
+        
+        model_module.model.encoder_opt.load_state_dict(opt_model_module.model.encoder.state_dict())
+        model_module.model.encoder_sar.load_state_dict(sar_model_module.model.encoder.state_dict())
+            
+    if cfg.exp.train_params.pretrain_encoder_decoder is not None:
+        site_name = cfg.site.name
+        exp_opt_code, exp_sar_code = cfg.exp.train_params.pretrain_encoder_decoder
+        
+        opt_model_module = load_model(site_name, exp_opt_code, model_i)
+        sar_model_module = load_model(site_name, exp_sar_code, model_i)
+        
+        model_module.model.encoder_opt.load_state_dict(opt_model_module.model.encoder.state_dict())
+        model_module.model.bn_opt.load_state_dict(opt_model_module.model.bn.state_dict())
+        model_module.model.decoder_opt.load_state_dict(opt_model_module.model.decoder.state_dict())
+        
+        model_module.model.encoder_sar.load_state_dict(sar_model_module.model.encoder.state_dict())
+        model_module.model.bn_sar.load_state_dict(sar_model_module.model.bn.state_dict())
+        model_module.model.decoder_sar.load_state_dict(sar_model_module.model.decoder.state_dict())
+            
+    
+    if cfg.exp.train_params.pretrain_encoder_decoder is not None:
+        with TemporaryDirectory() as tempdir:
+            pass
+    
+    return model_module

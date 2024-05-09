@@ -1,6 +1,7 @@
 import hydra
 from src.dataset.data_module import DataModule
 from src.models.model_module import ModelModule
+from src.utils.mlflow import update_pretrained_weights
 from lightning.pytorch.trainer.trainer import Trainer
 from tempfile import TemporaryDirectory
 from lightning.pytorch.callbacks import ModelCheckpoint, EarlyStopping, LearningRateMonitor
@@ -54,15 +55,18 @@ def train(cfg):
         total_t0 = time()
         data_module = DataModule(cfg)
         
-        with TemporaryDirectory() as tempdir:
-            if cfg.retrain_model is None:
-                models_n = range(cfg.general.n_models)
-            else:
-                models_n = [cfg.retrain_model]
-            for model_i in models_n:
-            
-                for model_attempt in range(cfg.exp.train_params.max_retrain_models + 1):
-                    model_module = ModelModule(cfg)
+        
+        if cfg.retrain_model is None:
+            models_n = range(cfg.general.n_models)
+        else:
+            models_n = [cfg.retrain_model]
+        for model_i in models_n:
+        
+            for model_attempt in range(cfg.exp.train_params.max_retrain_models + 1):
+                model_module = ModelModule(cfg)
+                model_module = update_pretrained_weights(cfg, model_module, model_i)
+                
+                with TemporaryDirectory() as tempdir:
                         
                     checkpoint_callback = ModelCheckpoint(
                         dirpath=tempdir,

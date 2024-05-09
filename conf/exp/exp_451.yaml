@@ -1,0 +1,21 @@
+defaults:
+  - /model/swin@model
+  - /default/train_params@train_params
+  - /default/pred_params@pred_params
+  - /default/eval_params@eval_params
+model: 
+  target: src.models.swin.fusion.MiddleFeatureLevel
+  params:
+    modal_fusion: src.models.swin.layers.ModalConcat
+name: swin_feature_middle_concat_no_cloud_combined_pretrained
+code: 451
+base_architecture: transformer
+opt_condition: no_cloud
+sar_condition: combined
+n_opt_imgs: 2
+n_sar_imgs: 12
+
+train_params:
+  repeat_batches: 3
+  warmup_epochs:
+  pretrain_encoder: [151, 153]

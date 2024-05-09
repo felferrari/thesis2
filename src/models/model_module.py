@@ -1,12 +1,11 @@
-from typing import Any
 import lightning as L
 from pydoc import locate
-from torch.nn import Softmax
 from torchmetrics.classification import MulticlassF1Score
-from torch import nn
 import torch
 from einops import rearrange
 from src.attributes import IntegratedGradients
+from tempfile import TemporaryDirectory
+
     
 class ModelModule(L.LightningModule):
     def __init__(self, cfg, *args, **kwargs) -> None:
