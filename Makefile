@@ -18,3 +18,7 @@ copyfiles:
 	python prepare.py +site=$(SITE) preparation.calculate.statistics=True preparation.generate.tiles=True preparation.generate.labels=True preparation.generate.prev_map=True preparation.generate.patches=True
 nohup-run-all:
 	nohup ./run_all.sh &
+push-mlruns:
+	rsync --progress -r mlruns /mnt/storage/ferrari/thesis/
+pull-mlruns:
+	rsync --progress -r /mnt/storage/ferrari/thesis/mlruns .
