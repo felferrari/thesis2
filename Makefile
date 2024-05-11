@@ -21,4 +21,5 @@ nohup-run-all:
 push-mlruns:
 	rsync --progress -r mlruns /mnt/storage/ferrari/thesis/
 pull-mlruns:
+	rm -rf mlruns
 	rsync --progress -r /mnt/storage/ferrari/thesis/mlruns .
