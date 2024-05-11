@@ -17,4 +17,4 @@ n_sar_imgs: 12
 
 train_params:
   warmup_epochs:
-  pretrain_encoder_decoder: [101, 103]
+  pretrain_encoder_decoder: [102, 103]
