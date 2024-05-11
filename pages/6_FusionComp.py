@@ -53,38 +53,3 @@ for site_code in st.session_state['sites']:
    st.pyplot(fig)
    plt.close(fig)
    
-   
-   f1_global_sar_results = f1_results[
-      (f1_results['type'] == 'SAR') &
-      (f1_results['cond'] == 'global') 
-   ]
-   
-   #f1_global_sar_results = f1_global_sar_results.sort_values(by=['siamese', 'sar_condition', 'exp_code'])
-   
-   f1_global_sar_results = f1_global_sar_results.rename(columns={
-      'value': 'F1-Score',
-      'base_architecture': 'Base Architecture',
-      'sar_condition': 'SAR Data',
-      'prev_map': 'Previous Map',
-      'siamese': 'Siamese',
-   })
-   
-   f1_global_sar_results['Base Architecture'] = f1_global_sar_results['Base Architecture'].replace('resunet', 'ResUnet')
-   f1_global_sar_results['Base Architecture'] = f1_global_sar_results['Base Architecture'].replace('transformer', 'Swin')
-   f1_global_sar_results['SAR Data'] = f1_global_sar_results['SAR Data'].replace('avg2', '2 Average Images')
-   f1_global_sar_results['SAR Data'] = f1_global_sar_results['SAR Data'].replace('single2', '2 Single Images')
-   f1_global_sar_results['SAR Data'] = f1_global_sar_results['SAR Data'].replace('combined', '12 Average Images')
-   
-   #f1_global_sar_results.loc[f1_global_sar_results['Siamese'] == True, 'SAR Data'] = f1_global_sar_results.loc[f1_global_sar_results['Siamese'] ==True, 'SAR Data'] + ' (Siamese)'
-   f1_global_sar_results.loc[f1_global_sar_results['Siamese'] == True, 'Base Architecture'] = f1_global_sar_results.loc[f1_global_sar_results['Siamese'] ==True, 'Base Architecture'] + ' (Siamese)'
-   f1_global_sar_results['Base Architecture'] = f1_global_sar_results['Base Architecture'] + ' [' + f1_global_sar_results['SAR Data'] + ']'
-   
-   fig, ax = plt.subplots(figsize=(8,6))
-   sns.barplot(data = f1_global_sar_results, x ='Base Architecture', y = 'F1-Score', hue = 'Previous Map', errorbar = None)
-   plt.title(f'Previous Map SAR Comparison (Site: {site_name})')
-   #sns.move_legend(ax, "upper right", bbox_to_anchor=(1.0, 1.3))
-   #ax.yaxis.set_major_formatter(FormatStrFormatter('%.1f'))
-   plt.ylim([0,1.09])
-   plt.xticks(ha='left', rotation = 325)
-   st.pyplot(fig)
-   plt.close(fig)
