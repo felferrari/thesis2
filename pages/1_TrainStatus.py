@@ -3,6 +3,8 @@ import matplotlib.pyplot as plt
 from src.utils.mlflow import get_exp_metric
 import seaborn as sns
 
+st.set_page_config(layout="wide")
+
 def plot_training(site_name, exp_name, metric):
     metric = get_exp_metric(site_name, exp_name, metric)
     if metric is None:

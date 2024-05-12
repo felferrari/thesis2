@@ -4,6 +4,8 @@ from src.utils.mlflow import get_exps_metric
 import seaborn as sns
 from matplotlib.ticker import FormatStrFormatter
 
+st.set_page_config(layout="wide")
+
 
 def plot_training_comp(site_name, experiments, exp_codes, metric):
    metrics = get_exps_metric(site_name, exp_codes, metric, experiments)

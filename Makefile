@@ -19,7 +19,7 @@ copyfiles:
 nohup-run-all:
 	nohup ./run_all.sh &
 push-mlruns:
-	rsync --progress -r mlruns /mnt/storage/ferrari/thesis/
+	rsync --progress -r -u -t mlruns /mnt/storage/ferrari/thesis/
 pull-mlruns:
 	rm -rf mlruns
-	rsync --progress -r /mnt/storage/ferrari/thesis/mlruns .
+	rsync --progress -r -u -t /mnt/storage/ferrari/thesis/mlruns .

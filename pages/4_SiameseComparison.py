@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 from src.utils.mlflow import get_site_results
 
-
+st.set_page_config(layout="wide")
 
 
 for site_code in st.session_state['sites']:
