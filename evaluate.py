@@ -16,6 +16,7 @@ from multiprocessing import Pool
 from matplotlib import pyplot as plt
 import matplotlib
 from einops import rearrange
+from tqdm import tqdm
 
 @hydra.main(version_base=None, config_path='conf', config_name='config.yaml')
 def eval(cfg):
@@ -43,199 +44,52 @@ def eval(cfg):
         
     #metrics_ = np.stack(metrics, axis= 0).sum(axis=0)
     
-    metrics_ = np.stack(metrics, axis= 0)
-    metrics_results = np.concatenate([np.expand_dims(metrics_.sum(axis=0), axis=0), metrics_], axis=0)
+    results = [m[0] for m in metrics]
+    proportions = [m[1] for m in metrics]
+    entropy = [m[2] for m in metrics]
     
-    metrics_results = rearrange(metrics_results, 'n m -> m n')
+    results = pd.concat(results)
+    proportions = pd.concat(proportions)
+    entropy = pd.concat(entropy)
     
-    (
-        tn_cloud_0,
-        tp_cloud_0,
-        fn_cloud_0,
-        fp_cloud_0,
-        tn_cloud_1,
-        tp_cloud_1,
-        fn_cloud_1,
-        fp_cloud_1,
-        tn_entropy_0,
-        tp_entropy_0,
-        fn_entropy_0,
-        fp_entropy_0,
-        tn_entropy_1,
-        tp_entropy_1,
-        fn_entropy_1,
-        fp_entropy_1,
-        cloud_0_entropy_0,
-        cloud_1_entropy_1,
-        cloud_1_entropy_0,
-        cloud_0_entropy_1
-    ) = metrics_results
+    global_results = results.groupby(['cond']).sum().drop(['comb_i'], axis=1)
+    global_results = global_results.reset_index()
+    global_results.loc[:, 'precision'] = global_results['tps'] / (global_results['tps'] + global_results['fps'])
+    global_results.loc[:, 'recall'] = global_results['tps'] / (global_results['tps'] + global_results['fns'])
+    global_results.loc[:, 'f1score'] = (2 * global_results.loc[:, 'precision'] * global_results.loc[:, 'recall']) / (global_results.loc[:, 'precision'] + global_results.loc[:, 'recall'])
+    global_results = global_results.reindex([2, 0, 1, 4, 3])
+    global_results = global_results[['cond', 'f1score', 'precision', 'recall', 'tns', 'tps', 'fns', 'fps']]
+
+    all_results = results.groupby(['cond', 'comb_i']).sum()
+    all_results = all_results.reset_index()
+    all_results.loc[:, 'precision'] = all_results['tps'] / (all_results['tps'] + all_results['fps'])
+    all_results.loc[:, 'recall'] = all_results['tps'] / (all_results['tps'] + all_results['fns'])
+    all_results.loc[:, 'f1score'] = (2 * all_results.loc[:, 'precision'] * all_results.loc[:, 'recall']) / (all_results.loc[:, 'precision'] + all_results.loc[:, 'recall'])
+    all_results = all_results[['cond', 'comb_i', 'f1score', 'precision', 'recall', 'tns', 'tps', 'fns', 'fps']]
     
-    tp_global = tp_cloud_0 + tp_cloud_1
-    tn_global = tn_cloud_0 + tn_cloud_1
-    fn_global = fn_cloud_0 + fn_cloud_1
-    fp_global = fp_cloud_0 + fp_cloud_1
+    entropy_analysis = entropy.groupby(['percentile']).sum().drop(['comb_i'], axis=1)
+    entropy_analysis = entropy_analysis.reset_index()
+    entropy_analysis.loc[:, 'precision'] = entropy_analysis['tps'] / (entropy_analysis['tps'] + entropy_analysis['fps'])
+    entropy_analysis.loc[:, 'recall'] = entropy_analysis['tps'] / (entropy_analysis['tps'] + entropy_analysis['fns'])
+    entropy_analysis.loc[:, 'f1score'] = (2 * entropy_analysis.loc[:, 'precision'] * entropy_analysis.loc[:, 'recall']) / (entropy_analysis.loc[:, 'precision'] + entropy_analysis.loc[:, 'recall'])
     
-    precision_global = tp_global / (tp_global + fp_global)
-    recall_global = tp_global / (tp_global + fn_global)
-    f1_global = 2 * precision_global * recall_global / (precision_global + recall_global)
-    
-    precision_cloud_0 = tp_cloud_0 / (tp_cloud_0 + fp_cloud_0)
-    recall_cloud_0 = tp_cloud_0 / (tp_cloud_0 + fn_cloud_0)
-    f1_cloud_0 = 2 * precision_cloud_0 * recall_cloud_0 / (precision_cloud_0 + recall_cloud_0)
-    
-    precision_cloud_1 = tp_cloud_1 / (tp_cloud_1 + fp_cloud_1)
-    recall_cloud_1 = tp_cloud_1 / (tp_cloud_1 + fn_cloud_1)
-    f1_cloud_1 = 2 * precision_cloud_1 * recall_cloud_1 / (precision_cloud_1 + recall_cloud_1)
-    
-    precision_entropy_0 = tp_entropy_0 / (tp_entropy_0 + fp_entropy_0)
-    recall_entropy_0 = tp_entropy_0 / (tp_entropy_0 + fn_entropy_0)
-    f1_entropy_0 = 2 * precision_entropy_0 * recall_entropy_0 / (precision_entropy_0 + recall_entropy_0)
-    
-    precision_entropy_1 = tp_entropy_1 / (tp_entropy_1 + fp_entropy_1)
-    recall_entropy_1 = tp_entropy_1 / (tp_entropy_1 + fn_entropy_1)
-    f1_entropy_1 = 2 * precision_entropy_1 * recall_entropy_1 / (precision_entropy_1 + recall_entropy_1)
-    
-    entropy_cloud_0 = cloud_0_entropy_1 / (cloud_0_entropy_0 + cloud_0_entropy_1)
-    entropy_cloud_1 = cloud_1_entropy_1 / (cloud_1_entropy_0 + cloud_1_entropy_1)
-    
-    results_data = {
-        'metric':[
-            'f1score',
-            'precision',
-            'recall',
-            'f1score',
-            'precision',
-            'recall',
-            'f1score',
-            'precision',
-            'recall',
-            'f1score',
-            'precision',
-            'recall',
-            'f1score',
-            'precision',
-            'recall',
-            'high_entropy_prop',
-            'high_entropy_prop',
-        ],
-        'cond':[
-            'global',
-            'global',
-            'global',
-            'cloud_0',
-            'cloud_0',
-            'cloud_0',
-            'cloud_1',
-            'cloud_1',
-            'cloud_1',
-            'entropy_0',
-            'entropy_0',
-            'entropy_0',
-            'entropy_1',
-            'entropy_1',
-            'entropy_1',
-            'cloud_0',
-            'cloud_1'
-        ],
-        'value':[
-            f1_global[0],
-            precision_global[0],
-            recall_global[0],
-            f1_cloud_0[0],
-            precision_cloud_0[0],
-            recall_cloud_0[0],
-            f1_cloud_1[0],
-            precision_cloud_1[0],
-            recall_cloud_1[0],
-            f1_entropy_0[0],
-            precision_entropy_0[0],
-            recall_entropy_0[0],
-            f1_entropy_1[0],
-            precision_entropy_1[0],
-            recall_entropy_1[0],
-            entropy_cloud_0[0],
-            entropy_cloud_1[0]
-        ]
-    }
-    
-    metrics_results = pd.DataFrame(data = results_data, columns=['metric', 'cond', 'value'])
     
     with TemporaryDirectory() as tempdir:
         metrics_results_file = Path(tempdir) / f'metrics_results_{cfg.site.name}-{cfg.exp.name}-global.csv'
-        metrics_results.to_csv(metrics_results_file)
+        global_results.to_csv(metrics_results_file)
         mlflow.log_artifact(metrics_results_file, 'results', run_id=parent_run_id)
-    
-    
-    for i in range(1, len(imgs_combinations)+1):
-        results_data = {
-            'metric':[
-                'f1score',
-                'precision',
-                'recall',
-                'f1score',
-                'precision',
-                'recall',
-                'f1score',
-                'precision',
-                'recall',
-                'f1score',
-                'precision',
-                'recall',
-                'f1score',
-                'precision',
-                'recall',
-                'high_entropy_prop',
-                'high_entropy_prop',
-            ],
-            'cond':[
-                'global',
-                'global',
-                'global',
-                'cloud_0',
-                'cloud_0',
-                'cloud_0',
-                'cloud_1',
-                'cloud_1',
-                'cloud_1',
-                'entropy_0',
-                'entropy_0',
-                'entropy_0',
-                'entropy_1',
-                'entropy_1',
-                'entropy_1',
-                'cloud_0',
-                'cloud_1'
-            ],
-            'value':[
-                f1_global[i],
-                precision_global[i],
-                recall_global[i],
-                f1_cloud_0[i],
-                precision_cloud_0[i],
-                recall_cloud_0[i],
-                f1_cloud_1[i],
-                precision_cloud_1[i],
-                recall_cloud_1[i],
-                f1_entropy_0[i],
-                precision_entropy_0[i],
-                recall_entropy_0[i],
-                f1_entropy_1[i],
-                precision_entropy_1[i],
-                recall_entropy_1[i],
-                entropy_cloud_0[i],
-                entropy_cloud_1[i]
-            ]
-        }
         
-        metrics_results = pd.DataFrame(data = results_data, columns=['metric', 'cond', 'value'])
+        all_results_file = Path(tempdir) / f'metrics_results_{cfg.site.name}-{cfg.exp.name}-all.csv'
+        all_results.to_csv(all_results_file)
+        mlflow.log_artifact(all_results_file, 'results', run_id=parent_run_id)
         
-        with TemporaryDirectory() as tempdir:
-            metrics_results_file = Path(tempdir) / f'metrics_results_{cfg.site.name}-{cfg.exp.name}-{i}.csv'
-            metrics_results.to_csv(metrics_results_file)
-            mlflow.log_artifact(metrics_results_file, 'results', run_id=parent_run_id)
+        entropy_props_file = Path(tempdir) / f'metrics_results_{cfg.site.name}-{cfg.exp.name}-entropy-proportions.csv'
+        proportions.to_csv(entropy_props_file)
+        mlflow.log_artifact(entropy_props_file, 'results', run_id=parent_run_id)
         
-    mlflow.log_metric('total_eval_time', (time() - total_t0) / 60., run_id=parent_run_id)
+        entropy_analysis_file = Path(tempdir) / f'metrics_results_{cfg.site.name}-{cfg.exp.name}-entropy-analysis.csv'
+        entropy_analysis.to_csv(entropy_analysis_file)
+        mlflow.log_artifact(entropy_analysis_file, 'results', run_id=parent_run_id)
     
     if cfg.clean_predictions:
         with mlflow.start_run(run_id=parent_run_id) as parent_run:
@@ -244,24 +98,24 @@ def eval(cfg):
                 for  pred_path in predict_paths:
                     if pred_path.path.endswith('.tif'):
                         file_path = Path(parent_run.info.artifact_uri[7:]) / pred_path.path
-                        file_path.unlink()
+                        # file_path.unlink()
                 entropy_paths = mlflow.artifacts.list_artifacts(run_id=parent_run_id, artifact_path= f'entropy')
                 for entropy_path in entropy_paths:
                     if entropy_path.path.endswith('.tif'):
                         file_path = Path(parent_run.info.artifact_uri[7:]) / entropy_path.path
-                        file_path.unlink()
+                        # file_path.unlink()
                     
                     
 def evaluate_models(cfg, img_comb_i, img_combination, parent_run_id):
     print(f'Evaluating Combination {img_comb_i}')
     base_image = Path(cfg.path.opt) / cfg.site.original_data.opt.train.imgs[0]
     with TemporaryDirectory() as tempdir:
-        true_data = np.squeeze(load_ml_image(cfg.path.label.test), axis=-1)
-        true_labels = np.zeros_like(true_data)
-        true_labels[true_data == 0] = 0 #negative
-        true_labels[true_data == 1] = 1 #positive
-        true_labels[true_data == 2] = 2 #discard
-        true_labels[true_data == 3] = 2 # discard
+        ref_data = np.squeeze(load_ml_image(cfg.path.label.test), axis=-1)
+        ref_labels = np.zeros_like(ref_data)
+        ref_labels[ref_data == 0] = 0 #negative
+        ref_labels[ref_data == 1] = 1 #positive
+        ref_labels[ref_data == 2] = 2 #discard
+        ref_labels[ref_data == 3] = 2 # discard
         
         predict_path = mlflow.artifacts.download_artifacts(run_id=parent_run_id, dst_path = tempdir, artifact_path= f'predictions/{cfg.site.name}-{cfg.exp.name}-{img_comb_i}.tif')
         predict_data = load_ml_image(predict_path)
@@ -276,13 +130,13 @@ def evaluate_models(cfg, img_comb_i, img_combination, parent_run_id):
         mlflow.log_artifact(entropy_tif_file, 'entropy', run_id=parent_run_id)
         
         #clean predictions based on previous knowledge
-        predict_data[true_data == 3] = np.array([0,0,0,1])
-        predict_data[true_data == 2] = np.array([0,0,1,0])
-        predict_data[np.logical_and(true_data != 2, true_data != 3)] = np.array([1,1,0,0]) * predict_data[np.logical_and(true_data != 2, true_data != 3)]
+        predict_data[ref_data == 3] = np.array([0,0,0,1])
+        predict_data[ref_data == 2] = np.array([0,0,1,0])
+        predict_data[np.logical_and(ref_data != 2, ref_data != 3)] = np.array([1,1,0,0]) * predict_data[np.logical_and(ref_data != 2, ref_data != 3)]
         predict_labels = np.argmax(predict_data, axis=-1)
         predict_labels[predict_labels==3] = 2
         
-        del true_data, predict_data, pred_prob, cliped_pred_prob
+        del ref_data, predict_data, pred_prob, cliped_pred_prob
         
         
         #remove small areas
@@ -295,10 +149,10 @@ def evaluate_models(cfg, img_comb_i, img_combination, parent_run_id):
         
         error_matrix = np.zeros_like(predict_labels)
         
-        error_matrix[np.logical_and(true_labels == 0, predict_labels == 0)] = 0 #tn
-        error_matrix[np.logical_and(true_labels == 1, predict_labels == 1)] = 1 #tp
-        error_matrix[np.logical_and(true_labels == 1, predict_labels == 0)] = 2 #fn
-        error_matrix[np.logical_and(true_labels == 0, predict_labels == 1)] = 3 #fp
+        error_matrix[np.logical_and(ref_labels == 0, predict_labels == 0)] = 0 #tn
+        error_matrix[np.logical_and(ref_labels == 1, predict_labels == 1)] = 1 #tp
+        error_matrix[np.logical_and(ref_labels == 1, predict_labels == 0)] = 2 #fn
+        error_matrix[np.logical_and(ref_labels == 0, predict_labels == 1)] = 3 #fp
         error_tif_file = Path(tempdir) / f'error_{cfg.site.name}-{cfg.exp.name}-{img_comb_i}.tif'
         save_geotiff(base_image, error_tif_file, error_matrix, 'byte')
         mlflow.log_artifact(error_tif_file, 'error', run_id=parent_run_id)
@@ -327,60 +181,116 @@ def evaluate_models(cfg, img_comb_i, img_combination, parent_run_id):
         entropy_pixels = np.zeros_like(predict_labels)
         entropy_pixels[entropy > cfg.exp.eval_params.min_entropy] = 1
         
-        del entropy
+        #del entropy
+        conds, tns, tps, fns, fps = [], [], [], [], []
         
-        #cloud
+        #global
+        conds.append('global')
+        tns.append((error_matrix.flatten() == 0).sum())
+        tps.append((error_matrix.flatten() == 1).sum())
+        fns.append((error_matrix.flatten() == 2).sum())
+        fps.append((error_matrix.flatten() == 3).sum())
+        
+        #Cloud
+        
+        #Cloud-free
         error_0 = error_matrix.flatten()[cloudy_pixels.flatten() == 0]
-        tn_cloud_0 = (error_0 == 0).sum()
-        tp_cloud_0 = (error_0 == 1).sum()
-        fn_cloud_0 = (error_0 == 2).sum()
-        fp_cloud_0 = (error_0 == 3).sum()
+        conds.append('cloud-free')
+        tns.append((error_0 == 0).sum())
+        tps.append((error_0 == 1).sum())
+        fns.append((error_0 == 2).sum())
+        fps.append((error_0 == 3).sum())
+        
+        #Cloudy
         error_1 = error_matrix.flatten()[cloudy_pixels.flatten() == 1]
-        tn_cloud_1 = (error_1 == 0).sum()
-        tp_cloud_1 = (error_1 == 1).sum()
-        fn_cloud_1 = (error_1 == 2).sum()
-        fp_cloud_1 = (error_1 == 3).sum()
+        conds.append('cloudy')
+        tns.append((error_1 == 0).sum())
+        tps.append((error_1 == 1).sum())
+        fns.append((error_1 == 2).sum())
+        fps.append((error_1 == 3).sum())
         
-        #entropy
+        #Entropy
+        
+        #Low-entropy
         error_0 = error_matrix.flatten()[entropy_pixels.flatten() == 0]
-        tn_entropy_0 = (error_0 == 0).sum()
-        tp_entropy_0 = (error_0 == 1).sum()
-        fn_entropy_0 = (error_0 == 2).sum()
-        fp_entropy_0 = (error_0 == 3).sum()
+        conds.append('low-entropy')
+        tns.append((error_0 == 0).sum())
+        tps.append((error_0 == 1).sum())
+        fns.append((error_0 == 2).sum())
+        fps.append((error_0 == 3).sum())
+        
+        #High-entropy
         error_1 = error_matrix.flatten()[entropy_pixels.flatten() == 1]
-        tn_entropy_1 = (error_1 == 0).sum()
-        tp_entropy_1 = (error_1 == 1).sum()
-        fn_entropy_1 = (error_1 == 2).sum()
-        fp_entropy_1 = (error_1 == 3).sum()
+        conds.append('high-entropy')
+        tns.append((error_1 == 0).sum())
+        tps.append((error_1 == 1).sum())
+        fns.append((error_1 == 2).sum())
+        fps.append((error_1 == 3).sum())
         
+        #Entropy-cloud proportions
         
-        cloud_0_entropy_0 = np.logical_and(cloudy_pixels == 0, entropy_pixels == 0).sum()
-        cloud_1_entropy_1 = np.logical_and(cloudy_pixels == 1, entropy_pixels == 1).sum()
-        cloud_1_entropy_0 = np.logical_and(cloudy_pixels == 1, entropy_pixels == 0).sum()
-        cloud_0_entropy_1 = np.logical_and(cloudy_pixels == 0, entropy_pixels == 1).sum()
+        data = {
+            'comb_i': img_comb_i,
+            'cond': conds,
+            'tns': tns,
+            'tps': tps,
+            'fns': fns,
+            'fps': fps,
+        }
         
-        return (
-            tn_cloud_0,
-            tp_cloud_0,
-            fn_cloud_0,
-            fp_cloud_0,
-            tn_cloud_1,
-            tp_cloud_1,
-            fn_cloud_1,
-            fp_cloud_1,
-            tn_entropy_0,
-            tp_entropy_0,
-            fn_entropy_0,
-            fp_entropy_0,
-            tn_entropy_1,
-            tp_entropy_1,
-            fn_entropy_1,
-            fp_entropy_1,
-            cloud_0_entropy_0,
-            cloud_1_entropy_1,
-            cloud_1_entropy_0,
-            cloud_0_entropy_1
-        )
+        results = pd.DataFrame(data=data)
+        
+        conds, pixels = [], []
+        
+        conds.append('cloud_0_entropy_0')
+        pixels.append(np.logical_and(cloudy_pixels == 0, entropy_pixels == 0).sum())
+        conds.append('cloud_1_entropy_1')
+        pixels.append(np.logical_and(cloudy_pixels == 1, entropy_pixels == 1).sum())
+        conds.append('cloud_1_entropy_0')
+        pixels.append(np.logical_and(cloudy_pixels == 1, entropy_pixels == 0).sum())
+        conds.append('cloud_0_entropy_1')
+        pixels.append(np.logical_and(cloudy_pixels == 0, entropy_pixels == 1).sum())
+        
+        data = {
+            'comb_i': img_comb_i,
+            'cond': conds,
+            'pixels': pixels,
+        }
+        
+        proportions = pd.DataFrame(data=data)
+        
+        entropy_percentiles = np.concatenate([np.linspace(0.05, 1, 20), np.linspace(1, 5, 11), np.linspace(5.5, 10, 10)])
+        percs, tns, tps, fns, fps = [], [], [], [], []
+        for percentile in tqdm(entropy_percentiles):
+            min_entropy = np.percentile(entropy.flatten(), (100-percentile))
+            percs.append(percentile)
+            
+            correction_pixels = np.zeros_like(predict_labels)
+            correction_pixels[entropy > min_entropy] = 1
+            
+            #Low-entropy
+            error_p = error_matrix.copy()
+            error_p[np.logical_and(correction_pixels == 1, ref_labels == 0)] = 0
+            error_p[np.logical_and(correction_pixels == 1, ref_labels == 1)] = 1
+            
+            tns.append((error_p == 0).sum())
+            tps.append((error_p == 1).sum())
+            fns.append((error_p == 2).sum())
+            fps.append((error_p == 3).sum())
+            
+            
+        data = {
+            'comb_i': img_comb_i,
+            'percentile': percs,
+            'tns': tns,
+            'tps': tps,
+            'fns': fns,
+            'fps': fps,
+        }
+        
+        entropy = pd.DataFrame(data=data)
+        
+        return (results, proportions, entropy)
     
 def save_def_class_fig(fp, data):
     fig, ax = plt.subplots(1,1, figsize = (8,8))

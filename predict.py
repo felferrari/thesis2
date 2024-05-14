@@ -41,12 +41,12 @@ def predict_models(cfg, img_comb_i, img_combination, parent_run_id):
     print(f'Predicting Combination {img_comb_i}')
     predict_dataset = PredDataset(cfg, img_combination)
 
-    gen_opt_imgs, gen_sar_imgs = predict_dataset.generate_sample_images(img_combination)
-    for opt_i, sample_opt in enumerate(gen_opt_imgs):
-        mlflow.log_image(sample_opt, f'pred_input/combination_{img_comb_i}/opt_{img_combination[0][opt_i]}.jpg')
-    for sar_i, sample_sar in enumerate(gen_sar_imgs):
-        mlflow.log_image(sample_sar[:,:,0], f'pred_input/combination_{img_comb_i}/sar_0_{img_combination[1][sar_i]}.jpg')
-        mlflow.log_image(sample_sar[:,:,1], f'pred_input/combination_{img_comb_i}/sar_1_{img_combination[1][sar_i]}.jpg')
+    # gen_opt_imgs, gen_sar_imgs = predict_dataset.generate_sample_images(img_combination)
+    # for opt_i, sample_opt in enumerate(gen_opt_imgs):
+    #     mlflow.log_image(sample_opt, f'pred_input/combination_{img_comb_i}/opt_{img_combination[0][opt_i]}.jpg')
+    # for sar_i, sample_sar in enumerate(gen_sar_imgs):
+    #     mlflow.log_image(sample_sar[:,:,0], f'pred_input/combination_{img_comb_i}/sar_0_{img_combination[1][sar_i]}.jpg')
+    #     mlflow.log_image(sample_sar[:,:,1], f'pred_input/combination_{img_comb_i}/sar_1_{img_combination[1][sar_i]}.jpg')
     pred_sum = None
     t0 = time()
     with TemporaryDirectory() as tempdir:
@@ -67,7 +67,7 @@ def predict_models(cfg, img_comb_i, img_combination, parent_run_id):
                     devices=cfg.general.accelerator.devices,
                     logger = False,
                     callbacks=callbacks,
-                    enable_progress_bar=False,
+                    enable_progress_bar=True,
                 )
                 
                 
