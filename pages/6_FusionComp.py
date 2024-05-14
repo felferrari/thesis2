@@ -79,7 +79,7 @@ for site_code in st.session_state['sites']:
    st.header(site_name)
    
    #siamese comparison no cloud
-   exps = [101, 301, 302, 303, 103, 102, 311, 312, 313, 411, 412, 151, 351, 352, 353, 153, 152, 361, 362, 363, 461] #, 462]
+   exps = [101, 301, 302, 303, 103, 102, 311, 312, 313, 411, 412, 151, 351, 352, 353, 153, 152, 361, 362, 363, 461, 462]
    exp_codes = [f'exp_{code}' for code in exps]
    
    results = get_site_results(site_name, st.session_state['experiments'], exp_codes)
