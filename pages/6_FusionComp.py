@@ -42,10 +42,10 @@ def plot_graphic(results, metric, metric_header):
    ax[1].axvspan(8.5, 10.5, facecolor='y', alpha=alpha, label='Diverse Cloud (Pre-trained)')
    
    sns.barplot(data = f1_results_resunet, x ='exp_name', y = 'value', hue = 'name', ax = ax[0], edgecolor='k', errorbar = None, legend=False)
-   bar_p = sns.barplot(data = f1_results_swin, x ='exp_name', y = 'value', hue = 'name', ax = ax[1], edgecolor='k', errorbar = None, legend=False)
+   bar_p = sns.barplot(data = f1_results_swin, x ='exp_name', y = 'value', hue = 'name', ax = ax[1], edgecolor='k', errorbar = None, legend=True)
    sns.lineplot(data = f1_results_resunet, x ='exp_name', y = 'max', color= 'k', ax= ax[0], label = 'Best Result', legend=False)
-   line_p = sns.lineplot(data = f1_results_swin, x ='exp_name', y = 'max', color= 'k', ax = ax[1], label = 'Best Result', legend=False)
-   ax[1].legend(handles = [bar_p, line_p])
+   line_p = sns.lineplot(data = f1_results_swin, x ='exp_name', y = 'max', color= 'k', ax = ax[1], label = 'Best Result', legend=True)
+   #ax[1].legend(handles = [bar_p, line_p])
    #g = sns.FacetGrid(f1_results, col="base_architecture")
    #g.map(sns.barplot, "exp_name", "value")
    

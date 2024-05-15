@@ -1,13 +1,13 @@
 optimizer:
-  target: torch.optim.Adam
+  target: torch.optim.AdamW
   params:
     lr: 2.0e-5
-    weight_decay : 1.0e-4
+    weight_decay : 0 #1.0e-4
 
 scheduler:
   target: torch.optim.lr_scheduler.ExponentialLR
   params: 
-    gamma: 0.95
+    gamma: 1 #0.95
 
 criterion:
   target: segmentation_models_pytorch.losses.FocalLoss
