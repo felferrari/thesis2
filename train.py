@@ -1,5 +1,5 @@
 import hydra
-from src.dataset.data_module import DataModule
+from src.dataset.data_module import DataModule, TrainDataset
 from src.models.model_module import ModelModule
 from src.utils.mlflow import update_pretrained_weights
 from lightning.pytorch.trainer.trainer import Trainer
@@ -55,6 +55,11 @@ def train(cfg):
         total_t0 = time()
         data_module = DataModule(cfg)
         
+        mlflow.log_params({
+            'train_patches': TrainDataset(cfg = cfg, mode = 'train').n_patches,
+            'val_patches': TrainDataset(cfg = cfg, mode = 'validation').n_patches,
+        })
+        
         
         if cfg.retrain_model is None:
             models_n = range(cfg.general.n_models)
@@ -64,6 +69,7 @@ def train(cfg):
         
             for model_attempt in range(cfg.exp.train_params.max_retrain_models + 1):
                 model_module = ModelModule(cfg)
+                
                 model_module = update_pretrained_weights(cfg, model_module, model_i)
                 
                 with TemporaryDirectory() as tempdir:
@@ -120,7 +126,7 @@ def train(cfg):
                             )
                             trainer.fit(
                                 model=model_module,
-                                train_dataloaders=data_module.train_dataloader(),
+                                datamodule=data_module,
                             )
                             model_module.prefix = ''
                         

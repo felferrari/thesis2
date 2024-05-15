@@ -91,7 +91,11 @@ class TrainDataset(Dataset):
         
         self.n_combinations = cfg.exp.train_params.repeat_batches * len(opt_combinations) * len(sar_combinations)
         self.combinations = cfg.exp.train_params.repeat_batches * list(product(opt_combinations, sar_combinations))
-        
+    
+    @property
+    def n_patches(self):
+        return len(self.files)
+    
     def __len__(self):
         return len(self.files) * self.n_combinations
     

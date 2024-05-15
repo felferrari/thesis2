@@ -170,10 +170,5 @@ def update_pretrained_weights(cfg, model_module, model_i):
         model_module.model.encoder_sar.load_state_dict(sar_model_module.model.encoder.state_dict())
         model_module.model.bn_sar.load_state_dict(sar_model_module.model.bn.state_dict())
         model_module.model.decoder_sar.load_state_dict(sar_model_module.model.decoder.state_dict())
-            
-    
-    if cfg.exp.train_params.pretrain_encoder_decoder is not None:
-        with TemporaryDirectory() as tempdir:
-            pass
     
     return model_module
