@@ -18,7 +18,7 @@ criterion:
 
 early_stop_params:
   patience: 10
-  min_delta: 2.0e-3
+  min_delta: 1.0e-5
 
 batch_size: 32
 max_epochs: 500
