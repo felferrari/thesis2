@@ -12,3 +12,6 @@ opt_condition: no_opt
 sar_condition: combined
 n_opt_imgs: 0
 n_sar_imgs: 12
+
+train_params:
+  repeat_batches: 3

@@ -12,6 +12,3 @@ opt_condition: no_opt
 sar_condition: single2
 n_opt_imgs: 0
 n_sar_imgs: 2
-
-train_params:
-  warmup_epochs: 10
