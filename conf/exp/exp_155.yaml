@@ -15,3 +15,4 @@ n_sar_imgs: 12
 
 train_params:
   repeat_batches: 3
+  warmup_epochs: 15
