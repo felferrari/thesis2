@@ -4,11 +4,11 @@ defaults:
   - /default/pred_params@pred_params
   - /default/eval_params@eval_params
 model: 
-  target: src.models.resunet.fusion.LateFeatureLevel
+  target: src.models.resunet.fusion.MiddleFeatureLevel
   params:
-    modal_fusion: src.models.resunet.layers.ModalLateConcat
-name: resunet_feature_late_concat_diverse_combined_pretrained
-code: 412
+    modal_fusion: src.models.resunet.layers.ModalConcat
+name: resunet_feature_middle_concat_diverse_combined_pretrained
+code: 511
 base_architecture: resunet
 opt_condition: diverse_cloud
 sar_condition: combined
@@ -17,4 +17,4 @@ n_sar_imgs: 12
 
 train_params:
   warmup_epochs:
-  pretrain_encoder_decoder: [101, 103]
+  pretrain_encoder: [101, 103]
