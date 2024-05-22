@@ -57,7 +57,7 @@ def predict_models(cfg, img_comb_i, img_combination, parent_run_id):
             
             with mlflow.start_run(run_id=run_model_id, nested=True) as model_run:
                 model_id = f'runs:/{run_model_id}/model'
-                model_module = mlflow.pytorch.load_model(model_id)
+                model_module = mlflow.pytorch.load_model(model_id, map_location = 'cpu')
                 
                 pred_callback = PredictionCallback(cfg)
                 callbacks = [pred_callback]
