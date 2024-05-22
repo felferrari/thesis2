@@ -125,7 +125,7 @@ def get_site_results(site_name, experiments, exp_codes = None):
     my_bar.empty()
     return results
 
-def load_model(site_name, exp_code, model_i):
+def load_model(site_name, exp_code, model_i, device):
     mlflow_client = mlflow.MlflowClient()
     
     experiment = mlflow_client.search_experiments(filter_string=f"name = '{site_name}'")[0]
@@ -141,7 +141,7 @@ def load_model(site_name, exp_code, model_i):
     )[0]
     
     model_id = f'runs:/{run.info.run_id}/model'
-    return mlflow.pytorch.load_model(model_id)
+    return mlflow.pytorch.load_model(model_id, map_location = device)
     
             
         
@@ -150,8 +150,8 @@ def update_pretrained_weights(cfg, model_module, model_i):
         site_name = cfg.site.name
         exp_opt_code, exp_sar_code = cfg.exp.train_params.pretrain_encoder
         
-        opt_model_module = load_model(site_name, exp_opt_code, model_i)
-        sar_model_module = load_model(site_name, exp_sar_code, model_i)
+        opt_model_module = load_model(site_name, exp_opt_code, model_i, model_module.device)
+        sar_model_module = load_model(site_name, exp_sar_code, model_i, model_module.device)
         
         model_module.model.encoder_opt.load_state_dict(opt_model_module.model.encoder.state_dict())
         model_module.model.encoder_sar.load_state_dict(sar_model_module.model.encoder.state_dict())
@@ -160,8 +160,8 @@ def update_pretrained_weights(cfg, model_module, model_i):
         site_name = cfg.site.name
         exp_opt_code, exp_sar_code = cfg.exp.train_params.pretrain_encoder_decoder
         
-        opt_model_module = load_model(site_name, exp_opt_code, model_i)
-        sar_model_module = load_model(site_name, exp_sar_code, model_i)
+        opt_model_module = load_model(site_name, exp_opt_code, model_i, model_module.device)
+        sar_model_module = load_model(site_name, exp_sar_code, model_i, model_module.device)
         
         model_module.model.encoder_opt.load_state_dict(opt_model_module.model.encoder.state_dict())
         model_module.model.bn_opt.load_state_dict(opt_model_module.model.bn.state_dict())
