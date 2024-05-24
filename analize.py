@@ -13,7 +13,24 @@ from pathlib import Path
 from skimage.transform import rescale
 import torch
 from multiprocessing import Process
-        
+
+from torchvision import models
+from torchvision import transforms
+
+from captum.attr import visualization as viz
+from captum.attr import LayerGradCam, FeatureAblation, LayerActivation, LayerAttribution
+
+
+def agg_segmentation_wrapper(model):
+    def agg(inp, out_max):
+        model_out = model(inp)
+        # Creates binary matrix with 1 for original argmax class for each pixel
+        # and 0 otherwise. Note that this may change when the input is ablated
+        # so we use the original argmax predicted above, out_max.
+        selected_inds = torch.zeros_like(model_out[0:1]).scatter_(1, out_max, 1)
+        return (model_out * selected_inds).sum(dim=(2,3))
+    return agg
+
 @hydra.main(version_base=None, config_path='conf', config_name='config.yaml')
 def analize(cfg):
     torch.set_float32_matmul_precision('high')
@@ -36,6 +53,7 @@ def analize(cfg):
         mlflow.log_metric('total_pred_time', (time() - total_t0) / 60.)
 
 
+
 def predict_models(cfg, img_comb_i, img_combination, parent_run_id):
     print(f'Predicting Combination {img_comb_i}')
     predict_dataset = PredDataset(cfg, img_combination)
@@ -52,54 +70,27 @@ def predict_models(cfg, img_comb_i, img_combination, parent_run_id):
                 model_id = f'runs:/{run_model_id}/model'
                 #model_module = mlflow.pytorch.load_model(model_id)
                 
-                analize_model_module = AnalizeModelModule(mlflow.pytorch.load_model(model_id).model)
+                analize_model_module = mlflow.pytorch.load_model(model_id).model
+                analize_model_module.eval()
+                analize_model_module.to('cuda:0')
                 
-                pred_callback = PredictionCallback(cfg)
-                callbacks = [pred_callback]
+                predict_dataloader = DataLoader(predict_dataset, 
+                                                batch_size=cfg.exp.pred_params.analize_batch_size, 
+                                                num_workers=1,
+                                                )
                 
-                trainer = Trainer(
-                    accelerator=cfg.general.accelerator.name,
-                    devices=cfg.general.accelerator.devices,
-                    logger = False,
-                    callbacks=callbacks,
-                    enable_progress_bar=True,
-                )
+                for x, idx, label in predict_dataloader:
+                    for k in x.keys():
+                        x[k] = x[k].to('cuda:0')
+                    x = analize_model_module.prepare(x)
+                    
+                    out = analize_model_module(x)
+                    out_max = torch.argmax(out, dim=1, keepdim=True)
+                    
+                    fa = FeatureAblation(agg_segmentation_wrapper(analize_model_module))
+                    fa_attr = fa.attribute(x, feature_mask=out_max, perturbations_per_eval=2, target=1)
                 
                 
-                #for overlap in cfg.exp.pred_params.overlaps:
-                #for discard_border in cfg.exp.pred_params.discard_borders:
-                #    predict_dataset.set_overlap(discard_border)
-                predict_dataloader = DataLoader(predict_dataset, batch_size=cfg.exp.pred_params.analize_batch_size, num_workers=1)
-                
-                trainer.predict(
-                    model=analize_model_module,
-                    dataloaders=predict_dataloader,
-                    return_predictions=False
-                )
-                pred = pred_callback.get_final_image()
-                
-                if pred_sum is None:
-                    pred_sum = pred.copy()
-                else:
-                    pred_sum += pred.copy()
-
-                base_image = Path(cfg.path.opt) / cfg.site.original_data.opt.train.imgs[0]
-                
-                preview = rescale(pred[:,:,0:3], 0.1, channel_axis=2, preserve_range=True)
-                preview = 255 * preview 
-                preview = np.clip(preview.astype(np.int32), 0, 255)
-                mlflow.log_image(preview, f'predictions/preview_{cfg.site.name}-{cfg.exp.name}-{img_comb_i}-{model_i}.jpg')
-
-        avg_pred = pred_sum / cfg.general.n_models
-        pred_file_path= Path(tempdir) / f'{cfg.site.name}-{cfg.exp.name}-{img_comb_i}.tif'
-        save_geotiff(base_image, pred_file_path, avg_pred, 'float')
-        mlflow.log_artifact(pred_file_path, 'predictions')
-        mlflow.log_metric(f'comb_pred_time_{img_comb_i}', (time() - t0) / 60.)
-
-        preview = rescale(avg_pred[:,:,0:3], 0.1, channel_axis=2, preserve_range=True)
-        preview = 255 * preview 
-        preview = np.clip(preview.astype(np.int32), 0, 255)
-        mlflow.log_image(preview, f'predictions/preview_{cfg.site.name}-{cfg.exp.name}-{img_comb_i}.jpg')
 
         
 if __name__ == "__main__":
