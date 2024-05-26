@@ -1,6 +1,7 @@
 import hydra
 from src.dataset.data_module import PredDataset
 from src.callbacks import PredictionCallback
+from src.models.model_module import ModelModule
 from src.utils.ops import save_geotiff
 from lightning.pytorch.trainer.trainer import Trainer
 from tempfile import TemporaryDirectory
@@ -57,7 +58,8 @@ def predict_models(cfg, img_comb_i, img_combination, parent_run_id):
             
             with mlflow.start_run(run_id=run_model_id, nested=True) as model_run:
                 model_id = f'runs:/{run_model_id}/model'
-                model_module = mlflow.pytorch.load_model(model_id, map_location = 'cpu')
+                model_module = ModelModule(cfg)
+                model_module.load_state_dict( mlflow.pytorch.load_model(model_id, map_location = 'cpu').state_dict())
                 
                 pred_callback = PredictionCallback(cfg)
                 callbacks = [pred_callback]
