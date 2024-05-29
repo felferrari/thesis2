@@ -3,6 +3,7 @@ from src.dataset.data_module import PredDataset
 from src.callbacks import PredictionCallback
 from src.models.model_module import ModelModule
 from src.utils.ops import save_geotiff
+from src.utils.roi import gen_roi_figures
 from lightning.pytorch.trainer.trainer import Trainer
 from tempfile import TemporaryDirectory
 from torch.utils.data import DataLoader
@@ -103,12 +104,21 @@ def predict_models(cfg, img_comb_i, img_combination, parent_run_id):
         save_geotiff(base_image, pred_file_path, avg_pred, 'float')
         mlflow.log_artifact(pred_file_path, 'predictions')
         mlflow.log_metric(f'comb_pred_time_{img_comb_i}', (time() - t0) / 60.)
+        
+        #calculate entropy
+        pred_prob = avg_pred[:,:,1]
+        ep = 1e-7
+        cliped_pred_prob = np.clip(pred_prob.astype(np.float32), ep, 1-ep)
+        entropy = (-1/2) * (cliped_pred_prob * np.log(cliped_pred_prob) + (1-cliped_pred_prob) * np.log(1-cliped_pred_prob))
+        entropy_tif_file = Path(tempdir) / f'entropy_{cfg.site.name}-{cfg.exp.name}-{img_comb_i}.tif'
+        save_geotiff(base_image, entropy_tif_file, entropy, 'float')
+        mlflow.log_artifact(entropy_tif_file, 'entropy', run_id=parent_run_id)
 
         preview = rescale(avg_pred[:,:,0:3], 0.1, channel_axis=2, preserve_range=True)
         preview = 255 * preview 
         preview = np.clip(preview.astype(np.int32), 0, 255)
         mlflow.log_image(preview, f'predictions/preview_{cfg.site.name}-{cfg.exp.name}-{img_comb_i}.jpg')
-        
+                
         mlflow.set_tag('Predict', 'concluded')
 
         
