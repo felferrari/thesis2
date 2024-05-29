@@ -260,28 +260,35 @@ def evaluate_models(cfg, img_comb_i, img_combination, parent_run_id):
         proportions = pd.DataFrame(data=data)
         
         entropy_percentiles = np.concatenate([np.linspace(0.05, 1, 20), np.linspace(1, 5, 11), np.linspace(5.5, 10, 10)])
-        percs, tns, tps, fns, fps = [], [], [], [], []
+        percs, tns, tps, fns, fps, entropys = [], [], [], [], [], []
+        tns_high, tps_high, fns_high, fps_high = [], [], [], [], [], []
+        tns_low, tps_low, fns_low, fps_low = [], [], [], [], [], []
         for percentile in tqdm(entropy_percentiles):
             min_entropy = np.percentile(entropy.flatten(), (100-percentile))
+            entropys.append(min_entropy)
             percs.append(percentile)
             
-            correction_pixels = np.zeros_like(predict_labels)
-            correction_pixels[entropy > min_entropy] = 1
+            audit_pixels = np.zeros_like(predict_labels)
+            audit_pixels[entropy > min_entropy] = 1
             
-            #Low-entropy
+            #audition
             error_p = error_matrix.copy()
-            error_p[np.logical_and(correction_pixels == 1, ref_labels == 0)] = 0
-            error_p[np.logical_and(correction_pixels == 1, ref_labels == 1)] = 1
+            error_p[np.logical_and(audit_pixels == 1, ref_labels == 0)] = 0
+            error_p[np.logical_and(audit_pixels == 1, ref_labels == 1)] = 1
             
             tns.append((error_p == 0).sum())
             tps.append((error_p == 1).sum())
             fns.append((error_p == 2).sum())
             fps.append((error_p == 3).sum())
             
+            #high entropy
+            
+            
             
         data = {
             'comb_i': img_comb_i,
             'percentile': percs,
+            'entropy': entropys,
             'tns': tns,
             'tps': tps,
             'fns': fns,
