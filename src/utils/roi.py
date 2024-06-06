@@ -15,18 +15,29 @@ from multiprocessing import Pool
 from matplotlib import pyplot as plt
 import matplotlib
 from tqdm import tqdm
+from mpl_toolkits.axes_grid1 import make_axes_locatable
 
 def save_def_class_fig(fp, data):
     fig, ax = plt.subplots(1,1, figsize = (8,8))
-    plt.imshow(data[:,:,1], vmin=0, vmax=1, cmap='viridis')
+    im = plt.imshow(data[:,:,1], vmin=0, vmax=1, cmap='viridis')
     plt.axis('off')
+    divider = make_axes_locatable(ax)
+    cax = divider.append_axes("right", size="5%", pad=0.05)
+    cbar = plt.colorbar(im, cax=cax)
+    cbar.set_ticks([0, 0.2, 0.4, 0.6, 0.8, 1])
+    cbar.set_ticklabels([0, 0.2, 0.4, 0.6, 0.8, 1])
     plt.savefig(fp)
     plt.close(fig)
 
 def save_entropy_fig(fp, data):
     fig, ax = plt.subplots(1,1, figsize = (8,8))
-    plt.imshow(data, vmin=0, vmax=0.3466, cmap='viridis')
+    im = plt.imshow(data, vmin=0, vmax=0.3466, cmap='viridis')
     plt.axis('off')
+    divider = make_axes_locatable(ax)
+    cax = divider.append_axes("right", size="5%", pad=0.05)
+    cbar = plt.colorbar(im, cax=cax)
+    cbar.set_ticks([0, 0.1, 0.2, 0.3])
+    cbar.set_ticklabels([0, 0.1, 0.2, 0.3])
     plt.savefig(fp)
     plt.close(fig)
 
@@ -49,8 +60,13 @@ def save_opt_fig(fp, data):
     
 def save_cloud_fig(fp, data):
     fig, ax = plt.subplots(1,1, figsize = (8,8))
-    plt.imshow(data, vmin=0, vmax=1)
+    im = plt.imshow(data, vmin=0, vmax=1)
     plt.axis('off')
+    divider = make_axes_locatable(ax)
+    cax = divider.append_axes("right", size="5%", pad=0.05)
+    cbar = plt.colorbar(im, cax=cax)
+    cbar.set_ticks([0, 0.2, 0.4, 0.6, 0.8, 1])
+    cbar.set_ticklabels([0, 0.2, 0.4, 0.6, 0.8, 1])
     plt.savefig(fp)
     plt.close(fig)
     

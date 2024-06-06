@@ -16,6 +16,7 @@ import torch
 from multiprocessing import Process
 from datetime import datetime
 
+prediction_version = 2
         
 @hydra.main(version_base=None, config_path='conf', config_name='config.yaml')
 def predict(cfg):
@@ -120,6 +121,8 @@ def predict_models(cfg, img_comb_i, img_combination, parent_run_id):
         mlflow.log_image(preview, f'predictions/preview_{cfg.site.name}-{cfg.exp.name}-{img_comb_i}.jpg')
                 
         mlflow.set_tag('Predict', 'concluded')
+        mlflow.log_metric('pred_version', prediction_version)
+        mlflow.log_metric('pred_date', datetime.now())
 
         
 if __name__ == "__main__":

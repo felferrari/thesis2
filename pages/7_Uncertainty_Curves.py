@@ -10,17 +10,47 @@ st.set_page_config(layout="wide")
 def plot_uncertainty_graphic(results, metric, metric_header):
    uncertainty_results = results.copy()
    
-   fig, ax = plt.subplots(1,1,figsize=(15,10))
-   fig.tight_layout()
+   base_results = uncertainty_results.copy()
+   base_results[:] = base_results[base_results['percentile'] == 0]
+   base_results['percentile'] = uncertainty_results['percentile']
    
-   sns.lineplot(data = uncertainty_results, x ='percentile', y = metric, hue = 'exp_name')
-   ax.set_xticks(np.arange(0,11))
-   ax.axvline(x=3, color = 'k', linestyle = '--')
-   ax.set_xlabel('Revised Pixels (%)')
-   ax.set_ylabel(metric_header)
+
+   
+   # fig, ax = plt.subplots(1,1,figsize=(9,6))
+   # fig.tight_layout()
+   
+   # sns.lineplot(data = uncertainty_results, x ='percentile', y = metric, color = 'blue', label='Pos Audition Result')
+   # sns.lineplot(data = base_results, x ='percentile', y = metric, color='red', linestyle= ':', label = 'Pre Audition Result')
+   # sns.lineplot(data = uncertainty_results, x ='percentile', y = f'{metric}_high', color = 'darkorange', linestyle= '--', label = 'High Uncertainty (Audited Pixels)')
+   # sns.lineplot(data = uncertainty_results, x ='percentile', y = f'{metric}_low', color = 'darkorange', linestyle= '-.', label = 'Low Uncertainty (No Change)')
+   # ax.set_xticks(np.arange(0,11))
+   # ax.axvline(x=3, color = 'k', linestyle = '--')
+   # ax.set_xlabel('Revised Pixels (%)')
+   # ax.set_ylabel(metric_header)
+   # st.pyplot(fig)
+   # plt.close(fig)
+   
+   fig, ax = plt.subplots(1,2,figsize=(16,5))
+   #fig.tight_layout()
+   
+   sns.lineplot(data = uncertainty_results, x ='percentile', y = metric, color = 'blue', label='Pos Audition Result', ax=ax[0])
+   sns.lineplot(data = base_results, x ='percentile', y = metric, color='red', linestyle= ':', label = 'Pre Audition Result', ax=ax[0])
+   sns.lineplot(data = uncertainty_results, x ='percentile', y = f'{metric}_high', color = 'darkorange', linestyle= '--', label = 'High Uncertainty (Audited Pixels)', ax=ax[0])
+   sns.lineplot(data = uncertainty_results, x ='percentile', y = f'{metric}_low', color = 'darkorange', linestyle= '-.', label = 'Low Uncertainty (No Change)', ax=ax[0])
+   
+   sns.lineplot(data = uncertainty_results, x ='percentile', y = f'entropy', color = 'blue', ax=ax[1])
+   ax[0].set_xticks(np.arange(0,11))
+   ax[0].axvline(x=3, color = 'k', linestyle = '--')
+   ax[0].set_xlabel('Revised Pixels (%)')
+   ax[0].set_ylabel(metric_header)
+   ax[0].title.set_text('Audition Results')
+   
+   ax[1].set_xticks(np.arange(0,11))
+   ax[1].set_xlabel('Revised Pixels (%)')
+   ax[1].set_ylabel('Entropy')
+   ax[1].title.set_text('Entropy Thresholds')
    st.pyplot(fig)
    plt.close(fig)
-   
 
 for site_code in st.session_state['sites']:
    sns.set_theme(style="darkgrid")
@@ -32,16 +62,9 @@ for site_code in st.session_state['sites']:
    st.header(site_name)
    
    #siamese comparison no cloud
-   exp_list = [
-      [101, 103],
-      [151, 153],
-      [101, 103, 311, 312, 313, 411, 412],
-      [151, 153, 361, 362, 363, 461, 462],
-   ]
-   for exps in exp_list:
-      exp_codes = [f'exp_{code}' for code in exps]
+   for exp_code in st.session_state['experiments'] :
       
-      results = get_uncertainty_data(site_name, st.session_state['experiments'], exp_codes)
+      results = get_uncertainty_data(site_name, st.session_state['experiments'], [exp_code])
       plot_uncertainty_graphic(results, 'f1score', 'F1-Score')
    
    

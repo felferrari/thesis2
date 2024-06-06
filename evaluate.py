@@ -1,8 +1,8 @@
 import hydra
 from src.dataset.data_module import PredDataset
-from src.utils.ops import save_geotiff, load_ml_image, load_sb_image, load_opt_image, load_SAR_image
-from src.utils.roi import gen_roi_figures
+from src.utils.ops import save_geotiff, load_ml_image, load_sb_image
 from src.utils.generate import read_imgs
+from src.utils.roi import gen_roi_figures
 from tempfile import TemporaryDirectory
 import mlflow
 from time import time
@@ -13,8 +13,6 @@ import torch
 from operator import itemgetter
 import pandas as pd
 from multiprocessing import Pool
-from matplotlib import pyplot as plt
-import matplotlib
 from tqdm import tqdm
 
 eval_version = 2
@@ -37,11 +35,11 @@ def eval(cfg):
     for img_comb_i, img_combination in enumerate(imgs_combinations):
         args_list.append((cfg, img_comb_i, img_combination, parent_run_id))
         
-    with Pool(cfg.exp.eval_params.n_metric_processes) as pool:
-        metrics = pool.starmap(evaluate_models, args_list)
+    # with Pool(cfg.exp.eval_params.n_metric_processes) as pool:
+    #     metrics = pool.starmap(evaluate_models, args_list)
         
-    # with Pool(cfg.exp.eval_params.n_rois_processes) as pool:
-    #     _ = pool.starmap(gen_roi_figures, args_list)
+    with Pool(cfg.exp.eval_params.n_rois_processes) as pool:
+        _ = pool.starmap(gen_roi_figures, args_list)
         
     #metrics_ = np.stack(metrics, axis= 0).sum(axis=0)
     
@@ -69,6 +67,7 @@ def eval(cfg):
     all_results = all_results[['cond', 'comb_i', 'f1score', 'precision', 'recall', 'tns', 'tps', 'fns', 'fps']]
     
     entropy_analysis = entropy.groupby(['percentile']).sum().drop(['comb_i'], axis=1)
+    entropy_analysis.loc[:, 'entropy'] = entropy_analysis.loc[:, 'entropy'] / entropy.groupby(['percentile'])['entropy'].count()
     entropy_analysis = entropy_analysis.reset_index()
     entropy_analysis.loc[:, 'precision'] = entropy_analysis['tps'] / (entropy_analysis['tps'] + entropy_analysis['fps'])
     entropy_analysis.loc[:, 'recall'] = entropy_analysis['tps'] / (entropy_analysis['tps'] + entropy_analysis['fns'])
@@ -81,6 +80,19 @@ def eval(cfg):
     entropy_analysis.loc[:, 'precision_high'] = entropy_analysis['tps_high'] / (entropy_analysis['tps_high'] + entropy_analysis['fps_high'])
     entropy_analysis.loc[:, 'recall_high'] = entropy_analysis['tps_high'] / (entropy_analysis['tps_high'] + entropy_analysis['fns_high'])
     entropy_analysis.loc[:, 'f1score_high'] = (2 * entropy_analysis.loc[:, 'precision_high'] * entropy_analysis.loc[:, 'recall_high']) / (entropy_analysis.loc[:, 'precision_high'] + entropy_analysis.loc[:, 'recall_high'])
+    
+    entropy_full = entropy.copy()
+    entropy_full.loc[:, 'precision'] = entropy_full['tps'] / (entropy_full['tps'] + entropy_full['fps'])
+    entropy_full.loc[:, 'recall'] = entropy_full['tps'] / (entropy_full['tps'] + entropy_full['fns'])
+    entropy_full.loc[:, 'f1score'] = (2 * entropy_full.loc[:, 'precision'] * entropy_full.loc[:, 'recall']) / (entropy_full.loc[:, 'precision'] + entropy_full.loc[:, 'recall'])
+    
+    entropy_full.loc[:, 'precision_low'] = entropy_full['tps_low'] / (entropy_full['tps_low'] + entropy_full['fps_low'])
+    entropy_full.loc[:, 'recall_low'] = entropy_full['tps_low'] / (entropy_full['tps_low'] + entropy_full['fns_low'])
+    entropy_full.loc[:, 'f1score_low'] = (2 * entropy_full.loc[:, 'precision_low'] * entropy_full.loc[:, 'recall_low']) / (entropy_full.loc[:, 'precision_low'] + entropy_full.loc[:, 'recall_low'])
+    
+    entropy_full.loc[:, 'precision_high'] = entropy_full['tps_high'] / (entropy_full['tps_high'] + entropy_full['fps_high'])
+    entropy_full.loc[:, 'recall_high'] = entropy_full['tps_high'] / (entropy_full['tps_high'] + entropy_full['fns_high'])
+    entropy_full.loc[:, 'f1score_high'] = (2 * entropy_full.loc[:, 'precision_high'] * entropy_full.loc[:, 'recall_high']) / (entropy_full.loc[:, 'precision_high'] + entropy_full.loc[:, 'recall_high'])
     
     
     with TemporaryDirectory() as tempdir:
@@ -99,6 +111,10 @@ def eval(cfg):
         entropy_analysis_file = Path(tempdir) / f'metrics_results_{cfg.site.name}-{cfg.exp.name}-entropy-analysis.csv'
         entropy_analysis.to_csv(entropy_analysis_file)
         mlflow.log_artifact(entropy_analysis_file, 'results', run_id=parent_run_id)
+        
+        entropy_full_analysis_file = Path(tempdir) / f'metrics_results_{cfg.site.name}-{cfg.exp.name}-entropy-full-analysis.csv'
+        entropy_full.to_csv(entropy_full_analysis_file)
+        mlflow.log_artifact(entropy_full_analysis_file, 'results', run_id=parent_run_id)
     
     if cfg.clean_predictions:
         with mlflow.start_run(run_id=parent_run_id) as parent_run:
@@ -108,12 +124,12 @@ def eval(cfg):
                 for  pred_path in predict_paths:
                     if pred_path.path.endswith('.tif'):
                         file_path = Path(parent_run.info.artifact_uri[7:]) / pred_path.path
-                        file_path.unlink()
+                        # file_path.unlink()
                 entropy_paths = mlflow.artifacts.list_artifacts(run_id=parent_run_id, artifact_path= f'entropy')
                 for entropy_path in entropy_paths:
                     if entropy_path.path.endswith('.tif'):
                         file_path = Path(parent_run.info.artifact_uri[7:]) / entropy_path.path
-                        file_path.unlink()
+                        # file_path.unlink()
                     
                     
 def evaluate_models(cfg, img_comb_i, img_combination, parent_run_id):
