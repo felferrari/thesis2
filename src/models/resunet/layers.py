@@ -170,14 +170,48 @@ class ModalConcat(nn.Module):
         return out
     
 class ModalLateConcat(nn.Module):
-    def __init__(self, base_dim):
+    def __init__(self, depths):
         super().__init__()
-        self.proj= nn.Conv2d(2*base_dim[0], base_dim[0], 1)
+        self.proj= nn.Conv2d(2*depths[0], depths[0], 1)
 
     def forward(self, x):
         x = torch.cat(x, axis=1)
         x = self.proj(x)
         return x
+    
+    
+class CrossFusion(nn.Module):
+    def __init__(self, depths):
+        super().__init__()
+        self.proj_pre_a= nn.Conv2d(depths[0], depths[0], 1)
+        self.proj_pre_b= nn.Conv2d(depths[0], depths[0], 1)
+        
+        self.proj_o= nn.Conv2d(depths[0], depths[0], 1)
+        
+        self.proj_s= nn.Conv2d(2*depths[0], depths[0], 1)
+        
+        self.proj_last= nn.Conv2d(3*depths[0], depths[0], 1)
+
+    def forward(self, x):
+        x_0, x_1 = x
+        x_pre_0_a = self.proj_pre_a(x_0)
+        x_pre_0_b = self.proj_pre_b(x_0)
+        x_pre_1_a = self.proj_pre_a(x_1)
+        x_pre_1_b = self.proj_pre_b(x_1)
+        
+        sum_a = x_pre_0_a + x_pre_1_a
+        sum_b = x_pre_0_b + x_pre_1_b
+        
+        concat_sum = torch.cat([self.proj_o(sum_a), self.proj_o(sum_b)], axis=1)
+        
+        concat_0 = torch.cat([x_pre_0_a, x_pre_0_b], axis=1)
+        concat_1 = torch.cat([x_pre_1_a, x_pre_1_b], axis=1)
+        
+        out = torch.cat([self.proj_s(concat_sum), self.proj_s(concat_0), self.proj_s(concat_1)], axis=1)
+        out = self.proj_last(out)
+        
+        return out
+    
 # class ResUnetDecoderJF(nn.Module):
 #     def __init__(self, depths):
 #         super(ResUnetDecoderJF, self).__init__()
