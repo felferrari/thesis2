@@ -35,8 +35,8 @@ def eval(cfg):
     for img_comb_i, img_combination in enumerate(imgs_combinations):
         args_list.append((cfg, img_comb_i, img_combination, parent_run_id))
         
-    # with Pool(cfg.exp.eval_params.n_metric_processes) as pool:
-    #     metrics = pool.starmap(evaluate_models, args_list)
+    with Pool(cfg.exp.eval_params.n_metric_processes) as pool:
+        metrics = pool.starmap(evaluate_models, args_list)
         
     with Pool(cfg.exp.eval_params.n_rois_processes) as pool:
         _ = pool.starmap(gen_roi_figures, args_list)
