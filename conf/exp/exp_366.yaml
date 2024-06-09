@@ -1,0 +1,16 @@
+defaults:
+  - /model/swin@model
+  - /default/train_params@train_params
+  - /default/pred_params@pred_params
+  - /default/eval_params@eval_params
+model: 
+  target: src.models.swin.fusion.LateFeatureLevel
+  params:
+    modal_fusion: src.models.swin.layers.CrossFusion
+name: swin_cross_fusion_diverse_combined
+code: 366
+base_architecture: transformer
+opt_condition: diverse_cloud
+sar_condition: combined
+n_opt_imgs: 2
+n_sar_imgs: 12
