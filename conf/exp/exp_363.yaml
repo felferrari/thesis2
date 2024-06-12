@@ -8,6 +8,7 @@ model:
   params:
     modal_fusion: src.models.swin.layers.ModalLateConcat
 name: swin_feature_late_concat_diverse_combined
+full_name: SWIN Feat-Late [CLOUD-DIVERSE]
 code: 363
 base_architecture: transformer
 opt_condition: diverse_cloud

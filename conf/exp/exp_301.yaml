@@ -6,6 +6,7 @@ defaults:
 model: 
   target: src.models.resunet.fusion.PixelLevel
 name: resunet_pixel_level_no_cloud_combined
+full_name: ResUnet Pix [CLOUD-FREE]
 code: 301
 base_architecture: resunet
 opt_condition: no_cloud

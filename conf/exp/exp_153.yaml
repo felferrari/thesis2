@@ -6,6 +6,7 @@ defaults:
 model: 
   target: src.models.swin.single.SwinSAR
 name: swin_sar_combined
+full_name: SWIN SAR [AVERAGE-12]
 code: 153
 base_architecture: transformer
 opt_condition: no_opt

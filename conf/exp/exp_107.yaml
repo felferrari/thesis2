@@ -6,6 +6,7 @@ defaults:
 model: 
   target: src.models.resunet.single.ResUnetSAR
 name: resunet_sar_single2
+full_name: ResUnet SAR [SINGLE-2]
 code: 107
 base_architecture: resunet
 opt_condition: no_opt

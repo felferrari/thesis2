@@ -8,6 +8,7 @@ model:
   params:
     modal_fusion: src.models.resunet.layers.ModalLateConcat
 name: resunet_feature_late_concat_diverse_combined_pretrained
+full_name: ResUnet Feat-Late [CLOUD-DIVERSE] [PRE-TRAINED]
 code: 412
 base_architecture: resunet
 opt_condition: diverse_cloud

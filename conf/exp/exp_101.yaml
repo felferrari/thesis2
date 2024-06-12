@@ -6,6 +6,7 @@ defaults:
 model: 
   target: src.models.resunet.single.ResUnetOpt
 name: resunet_opt_no_cloud
+full_name: ResUnet Optical [CLOUD-FREE]
 base_architecture: resunet
 code: 101
 opt_condition: no_cloud

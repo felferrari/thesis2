@@ -8,6 +8,7 @@ model:
   params:
     modal_fusion: src.models.resunet.layers.CrossFusion
 name: resunet_cross_fusion_no_cloud_combined
+full_name: ResUnet Cross-Fusion [CLOUD-FREE]
 code: 306
 base_architecture: resunet
 opt_condition: no_cloud

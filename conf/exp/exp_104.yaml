@@ -6,6 +6,7 @@ defaults:
 model: 
   target: src.models.resunet.single.ResUnetOptNoPrevMap
 name: resunet_opt_no_cloud_no_prevmap
+full_name: ResUnet Optical [CLOUD-FREE] [NO PREV MAP]
 code: 104
 base_architecture: resunet
 opt_condition: no_cloud

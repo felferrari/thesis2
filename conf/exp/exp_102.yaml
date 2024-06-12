@@ -6,6 +6,7 @@ defaults:
 model: 
   target: src.models.resunet.single.ResUnetOpt
 name: resunet_opt_diverse
+full_name: ResUnet Optical [CLOUD-DIVERSE]
 code: 102
 base_architecture: resunet
 opt_condition: diverse_cloud

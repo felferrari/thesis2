@@ -8,6 +8,7 @@ model:
   params:
     modal_fusion: src.models.resunet.layers.ModalConcat
 name: resunet_feature_middle_concat_no_cloud_combined
+full_name: ResUnet Feat-Mid [CLOUD-FREE]
 code: 302
 base_architecture: resunet
 opt_condition: no_cloud

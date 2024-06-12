@@ -6,6 +6,7 @@ defaults:
 model: 
   target: src.models.swin.single.SwinSARNoPrevMap
 name: swin_sar_combined_no_prevmap
+full_name: SWIN SAR [AVERAGE-12] [NO PREV MAP]
 code: 155
 base_architecture: transformer
 opt_condition: no_opt

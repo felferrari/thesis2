@@ -8,6 +8,7 @@ model:
   params:
     modal_fusion: src.models.swin.layers.ModalConcat
 name: swin_feature_middle_concat_diverse_combined
+full_name: SWIN Feat-Mid [CLOUD-DIVERSE]
 code: 362
 base_architecture: transformer
 opt_condition: diverse_cloud

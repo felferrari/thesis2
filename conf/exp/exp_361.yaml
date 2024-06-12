@@ -6,6 +6,7 @@ defaults:
 model: 
   target: src.models.swin.fusion.PixelLevel
 name: swin_pixel_level_diverse_combined
+full_name: SWIN Pix [CLOUD-DIVERSE]
 code: 361
 base_architecture: transformer
 opt_condition: diverse_cloud

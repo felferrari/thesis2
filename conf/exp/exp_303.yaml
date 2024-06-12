@@ -8,6 +8,7 @@ model:
   params:
     modal_fusion: src.models.resunet.layers.ModalLateConcat
 name: resunet_feature_late_concat_no_cloud_combined
+full_name: ResUnet Feat-Late [CLOUD-FREE]
 code: 303
 base_architecture: resunet
 opt_condition: no_cloud

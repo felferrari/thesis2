@@ -8,6 +8,7 @@ model:
   params:
     modal_fusion: src.models.resunet.layers.ModalConcat
 name: resunet_feature_middle_concat_diverse_combined
+full_name: ResUnet Feat-Mid [CLOUD-DIVERSE]
 code: 312
 base_architecture: resunet
 opt_condition: diverse_cloud

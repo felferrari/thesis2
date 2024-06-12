@@ -8,6 +8,7 @@ model:
   params:
     modal_fusion: src.models.swin.layers.ModalLateConcat
 name: swin_feature_late_concat_no_cloud_combined_pretrained
+full_name: SWIN Feat-Late [CLOUD-FREE] [PRE-TRAINED]
 code: 452
 base_architecture: transformer
 opt_condition: no_cloud

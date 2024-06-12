@@ -6,6 +6,7 @@ defaults:
 model: 
   target: src.models.swin.single.SwinOptNoPrevMap
 name: swin_opt_no_cloud_no_prevmap
+full_name: SWIN Optical [CLOUD-FREE] [NO PREV MAP]
 code: 154
 base_architecture: transformer
 opt_condition: no_cloud

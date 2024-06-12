@@ -8,6 +8,7 @@ model:
   params:
     modal_fusion: src.models.swin.layers.ModalConcat
 name: swin_feature_middle_concat_diverse_combined_pretrained
+full_name: SWIN Feat-Mid [CLOUD-DIVERSE] [PRE-TRAINED]
 code: 461
 base_architecture: transformer
 opt_condition: diverse_cloud

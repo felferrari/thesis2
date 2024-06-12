@@ -6,6 +6,7 @@ defaults:
 model: 
   target: src.models.swin.single.SwinOpt
 name: swin_opt_diverse
+full_name: SWIN Optical [CLOUD-DIVERSE]
 code: 152
 base_architecture: transformer
 opt_condition: diverse_cloud

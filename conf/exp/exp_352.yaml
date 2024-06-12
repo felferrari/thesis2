@@ -8,6 +8,7 @@ model:
   params:
     modal_fusion: src.models.swin.layers.ModalConcat
 name: swin_feature_middle_concat_no_cloud_combined
+full_name: SWIN Feat-Mid [CLOUD-FREE]
 code: 352
 base_architecture: transformer
 opt_condition: no_cloud

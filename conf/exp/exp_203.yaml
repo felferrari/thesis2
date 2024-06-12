@@ -8,6 +8,7 @@ model:
   params:
     temp_fusion: src.models.resunet.layers.TemporalConcat
 name: resunet_siamese_sar_no_prevmap_single2
+full_name: ResUnet Siamese SAR [SINGLE-2] [NO PREV MAP]
 code: 203
 base_architecture: resunet
 opt_condition: no_opt

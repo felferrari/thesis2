@@ -8,6 +8,7 @@ model:
   params:
     modal_fusion: src.models.swin.layers.CrossFusion
 name: swin_cross_fusion_diverse_combined
+full_name: SWIN Cross-Fusion [CLOUD-DIVERSE]
 code: 366
 base_architecture: transformer
 opt_condition: diverse_cloud

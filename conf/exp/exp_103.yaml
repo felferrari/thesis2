@@ -6,6 +6,7 @@ defaults:
 model: 
   target: src.models.resunet.single.ResUnetSAR
 name: resunet_sar_combined
+full_name: ResUnet SAR [AVERAGE-12]
 code: 103
 base_architecture: resunet
 opt_condition: no_opt
