@@ -1,7 +1,10 @@
 import streamlit as st
 from pathlib import Path
 from hydra import compose, initialize
+import mlflow 
 
+
+mlflow.environment_variables.MLFLOW_ENABLE_ARTIFACTS_PROGRESS_BAR= False
 conf_path = Path('conf')
 exps_path =  conf_path / 'exp'
 sites_path =  conf_path / 'site'

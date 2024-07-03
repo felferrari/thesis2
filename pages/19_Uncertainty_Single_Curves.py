@@ -33,6 +33,8 @@ def plot_uncertainty_graphic(results, metric, metric_header):
    fig, ax = plt.subplots(1,2,figsize=(16,5))
    #fig.tight_layout()
    
+   fig.suptitle(uncertainty_results['full_name'][0])
+   
    sns.lineplot(data = uncertainty_results, x ='percentile', y = metric, color = 'blue', label='Pos Audition Result', ax=ax[0])
    sns.lineplot(data = base_results, x ='percentile', y = metric, color='red', linestyle= ':', label = 'Pre Audition Result', ax=ax[0])
    sns.lineplot(data = uncertainty_results, x ='percentile', y = f'{metric}_high', color = 'darkorange', linestyle= '--', label = 'High Uncertainty (Audited Pixels)', ax=ax[0])
@@ -42,6 +44,7 @@ def plot_uncertainty_graphic(results, metric, metric_header):
    ax[0].set_xticks(np.arange(0,11))
    ax[0].axvline(x=3, color = 'k', linestyle = '--')
    ax[0].set_xlabel('Revised Pixels (%)')
+   ax[0].set_ylim([0,1])
    ax[0].set_ylabel(metric_header)
    ax[0].title.set_text('Audition Results')
    

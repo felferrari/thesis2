@@ -7,7 +7,7 @@ import numpy as np
 
 st.set_page_config(layout="wide")
 
-def plot_simple_graphic(results, metric, metric_header):
+def plot_simple_graphic(results, metric, metric_header, site_code):
    
    global_results = results[results['cond'] == 'global']
    
@@ -15,29 +15,37 @@ def plot_simple_graphic(results, metric, metric_header):
    global_results_swin = global_results[global_results['base_architecture'] == 'transformer']
    
    global_results_resunet.loc[:, 'max'] = global_results_resunet[metric].max()
+   resunet_max = global_results_resunet[metric].max()
    global_results_swin.loc[:, 'max'] = global_results_swin[metric].max()
+   swin_max = global_results_swin[metric].max()
    
    sns.set_theme(font_scale=1.5)
    sns.set_palette('tab10')
    
    fig, ax = plt.subplots(1,2,figsize=(15,5))
    fig.tight_layout()
+   #fig.tight_layout(pad=1.4, w_pad=0.5, h_pad=1.0)
    alpha = 0.4
    
-   ax[0].axvspan(-0.5, 3.5, facecolor='g', alpha=alpha) #, label='Cloud-Free')
-   ax[0].axvspan(3.5, 4.5, facecolor='r', alpha=alpha) #, label='No Optical')
-   ax[0].axvspan(4.5, 8.5, facecolor='b', alpha=alpha) #, label='Diverse Cloud')
-   ax[0].axvspan(8.5, 10.5, facecolor='y', alpha=alpha) #, label='Diverse Cloud (Pre-trained)')
+   fig.suptitle(f'{metric_header} for Site {site_code[1]}', y=1.1)
    
-   ax[1].axvspan(-0.5, 3.5, facecolor='g', alpha=alpha, label='Cloud-Free')
-   ax[1].axvspan(3.5, 4.5, facecolor='r', alpha=alpha, label='No Optical')
-   ax[1].axvspan(4.5, 8.5, facecolor='b', alpha=alpha, label='Diverse Cloud')
-   ax[1].axvspan(8.5, 10.5, facecolor='y', alpha=alpha, label='Diverse Cloud (Pre-trained)')
+   ax[0].axvspan(-0.5, 4.5, facecolor='g', alpha=alpha) #, label='Cloud-Free')
+   ax[0].axvspan(4.5, 5.5, facecolor='r', alpha=alpha) #, label='No Optical')
+   ax[0].axvspan(5.5, 10.5, facecolor='b', alpha=alpha) #, label='Diverse Cloud')
+   ax[0].axvspan(10.5, 13.5, facecolor='y', alpha=alpha) #, label='Diverse Cloud (Pre-trained)')
+   
+   ax[1].axvspan(-0.5, 4.5, facecolor='g', alpha=alpha, label='Cloud-Free')
+   ax[1].axvspan(4.5, 5.5, facecolor='r', alpha=alpha, label='No Optical')
+   ax[1].axvspan(5.5, 10.5, facecolor='b', alpha=alpha, label='Diverse Cloud')
+   ax[1].axvspan(10.5, 13.5, facecolor='y', alpha=alpha, label='Diverse Cloud (Pre-trained)')
    
    sns.barplot(data = global_results_resunet, x ='exp_name', y = metric, hue = 'name', ax = ax[0], edgecolor='k', errorbar = None, legend=False)
    sns.barplot(data = global_results_swin, x ='exp_name', y = metric, hue = 'name', ax = ax[1], edgecolor='k', errorbar = None, legend=True)
    sns.lineplot(data = global_results_resunet, x ='exp_name', y = 'max', color= 'k', ax= ax[0], label = 'Best Result', legend=False)
    sns.lineplot(data = global_results_swin, x ='exp_name', y = 'max', color= 'k', ax = ax[1], label = 'Best Result', legend=True)
+   
+   ax[0].axhline(y=resunet_max, color = 'k')
+   ax[1].axhline(y=swin_max, color = 'k')
    
    sns.move_legend(ax[1], "upper left", bbox_to_anchor=(1, 1))
    #ax.yaxis.set_major_formatter(FormatStrFormatter('%.1f'))
@@ -57,7 +65,7 @@ def plot_simple_graphic(results, metric, metric_header):
    st.pyplot(fig)
    plt.close(fig)
    
-def plot_cloudcond_graphic(results, metric, metric_header):
+def plot_cloudcond_graphic(results, metric, metric_header, site_code):
    
    cloud_cond_results = results.copy()
    cloud_cond_results = cloud_cond_results.reset_index(drop=True)
@@ -81,6 +89,9 @@ def plot_cloudcond_graphic(results, metric, metric_header):
    cloud_cond_results['exp_name'] = cloud_cond_results['exp_name'].str.replace('_concat', '')
    cloud_cond_results['exp_name'] = cloud_cond_results['exp_name'].str.replace('_pretrained', '_pt')
    
+   cloud_cond_results['full_name'] = cloud_cond_results['full_name'].str.replace('ResUnet ', '')
+   cloud_cond_results['full_name'] = cloud_cond_results['full_name'].str.replace('SWIN ', '')
+   
    cloud_cond_results['cond'] = cloud_cond_results['cond'].str.replace('global', 'All Pixels')
    cloud_cond_results['cond'] = cloud_cond_results['cond'].str.replace('cloudy', 'Cloudy Pixels')
    cloud_cond_results['cond'] = cloud_cond_results['cond'].str.replace('cloud-free', 'Cloud-Free Pixels')
@@ -103,20 +114,22 @@ def plot_cloudcond_graphic(results, metric, metric_header):
    fig.tight_layout()
    alpha = 0.4
    
-   ax[0].axvspan(-0.5, 3.5, facecolor='g', alpha=alpha) #, label='Cloud-Free')
-   ax[0].axvspan(3.5, 4.5, facecolor='r', alpha=alpha) #, label='No Optical')
-   ax[0].axvspan(4.5, 8.5, facecolor='b', alpha=alpha) #, label='Diverse Cloud')
-   ax[0].axvspan(8.5, 10.5, facecolor='y', alpha=alpha) #, label='Diverse Cloud (Pre-trained)')
+   fig.suptitle(f'{metric_header} for Site {site_code[1]}', y=1.1)
    
-   ax[1].axvspan(-0.5, 3.5, facecolor='g', alpha=alpha, label='Cloud-Free')
-   ax[1].axvspan(3.5, 4.5, facecolor='r', alpha=alpha, label='No Optical')
-   ax[1].axvspan(4.5, 8.5, facecolor='b', alpha=alpha, label='Diverse Cloud')
-   ax[1].axvspan(8.5, 10.5, facecolor='y', alpha=alpha, label='Diverse Cloud (Pre-trained)')
+   ax[0].axvspan(-0.5, 4.5, facecolor='g', alpha=alpha) #, label='Cloud-Free')
+   ax[0].axvspan(4.5, 5.5, facecolor='r', alpha=alpha) #, label='No Optical')
+   ax[0].axvspan(5.5, 10.5, facecolor='b', alpha=alpha) #, label='Diverse Cloud')
+   ax[0].axvspan(10.5, 13.5, facecolor='y', alpha=alpha) #, label='Diverse Cloud (Pre-trained)')
+   
+   ax[1].axvspan(-0.5, 4.5, facecolor='g', alpha=alpha, label='Cloud-Free')
+   ax[1].axvspan(4.5, 5.5, facecolor='r', alpha=alpha, label='No Optical')
+   ax[1].axvspan(5.5, 10.5, facecolor='b', alpha=alpha, label='Diverse Cloud')
+   ax[1].axvspan(10.5, 13.5, facecolor='y', alpha=alpha, label='Diverse Cloud (Pre-trained)')
 
-   sns.barplot(data = global_results_resunet, x ='exp_name', y = metric, hue = 'cond', ax = ax[0], edgecolor='k', errorbar = None, legend=False)
-   sns.barplot(data = global_results_swin, x ='exp_name', y = metric, hue = 'cond', ax = ax[1], edgecolor='k', errorbar = None, legend=True)
-   sns.lineplot(data = global_results_resunet, x ='exp_name', y = 'max', color= 'k', ax= ax[0], label = 'Best Result', legend=False)
-   sns.lineplot(data = global_results_swin, x ='exp_name', y = 'max', color= 'k', ax = ax[1], label = 'Best Result', legend=True)
+   sns.barplot(data = global_results_resunet, x ='full_name', y = metric, hue = 'cond', ax = ax[0], edgecolor='k', errorbar = None, legend=False)
+   sns.barplot(data = global_results_swin, x ='full_name', y = metric, hue = 'cond', ax = ax[1], edgecolor='k', errorbar = None, legend=True)
+   sns.lineplot(data = global_results_resunet, x ='full_name', y = 'max', color= 'k', ax= ax[0], label = 'Best Result', legend=False)
+   sns.lineplot(data = global_results_swin, x ='full_name', y = 'max', color= 'k', ax = ax[1], label = 'Best Result', legend=True)
    
    ax[0].axhline(y=resunet_max, color = 'k')
    ax[1].axhline(y=swin_max, color = 'k')
@@ -130,6 +143,8 @@ def plot_cloudcond_graphic(results, metric, metric_header):
    plt.xticks(ha='left', rotation = 325)
    plt.sca(ax[1])
    plt.xticks(ha='left', rotation = 325)
+   ax[0].tick_params(axis='x', which='major', labelsize=11)
+   ax[1].tick_params(axis='x', which='major', labelsize=11)
    ax[0].set_xlabel('Model')
    ax[1].set_xlabel('Model')
    ax[0].set_ylabel(metric_header)
@@ -149,17 +164,17 @@ for site_code in st.session_state['sites']:
    st.header(site_name)
    
    #siamese comparison no cloud
-   exps = [101, 301, 302, 303, 103, 102, 311, 312, 313, 411, 412, 151, 351, 352, 353, 153, 152, 361, 362, 363, 461, 462]
+   exps = [101, 301, 302, 303, 306, 103, 102, 311, 312, 313, 316, 411, 412, 413, 151, 351, 352, 353, 356, 153, 152, 361, 362, 363, 366, 461, 462, 463]
    exp_codes = [f'exp_{code}' for code in exps]
    
    results = get_site_results(site_name, st.session_state['experiments'], exp_codes)
    
-   plot_simple_graphic(results, 'f1score', 'F1-Score')
-   plot_simple_graphic(results, 'precision', 'Precision')
-   plot_simple_graphic(results, 'recall', 'Recall')
+   plot_simple_graphic(results, 'f1score', 'F1-Score', site_code)
+   plot_simple_graphic(results, 'precision', 'Precision', site_code)
+   plot_simple_graphic(results, 'recall', 'Recall', site_code)
    
-   plot_cloudcond_graphic(results, 'f1score', 'F1-Score')
-   plot_cloudcond_graphic(results, 'precision', 'Precision')
-   plot_cloudcond_graphic(results, 'recall', 'Recall')
+   plot_cloudcond_graphic(results, 'f1score', 'F1-Score', site_code)
+   plot_cloudcond_graphic(results, 'precision', 'Precision', site_code)
+   plot_cloudcond_graphic(results, 'recall', 'Recall', site_code)
    
    
