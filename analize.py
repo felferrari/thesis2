@@ -1,97 +1,82 @@
 import hydra
-from src.dataset.data_module import PredDataset
-from src.models.model_module import AnalizeModelModule
-from src.callbacks import PredictionCallback
-from src.utils.ops import save_geotiff
+from src.dataset.data_module import DataModule, TrainDataset
+from src.models.model_module import ModelModule
+from src.utils.mlflow import update_pretrained_weights
 from lightning.pytorch.trainer.trainer import Trainer
 from tempfile import TemporaryDirectory
-from torch.utils.data import DataLoader
+from lightning.pytorch.callbacks import ModelCheckpoint, EarlyStopping, LearningRateMonitor
 import mlflow
+from mlflow.pytorch import autolog, log_model
 from time import time
-import numpy as np
-from pathlib import Path
-from skimage.transform import rescale
-import torch
-from multiprocessing import Process
-
-from torchvision import models
-from torchvision import transforms
-
-from captum.attr import visualization as viz
-from captum.attr import LayerGradCam, FeatureAblation, LayerActivation, LayerAttribution
-
-
-def agg_segmentation_wrapper(model):
-    def agg(inp, out_max):
-        model_out = model(inp)
-        # Creates binary matrix with 1 for original argmax class for each pixel
-        # and 0 otherwise. Note that this may change when the input is ablated
-        # so we use the original argmax predicted above, out_max.
-        selected_inds = torch.zeros_like(model_out[0:1]).scatter_(1, out_max, 1)
-        return (model_out * selected_inds).sum(dim=(2,3))
-    return agg
-
-@hydra.main(version_base=None, config_path='conf', config_name='config.yaml')
-def analize(cfg):
-    torch.set_float32_matmul_precision('high')
-    mlflow.set_experiment(experiment_name = cfg.site.name)
-    
-    runs = mlflow.search_runs(
-        filter_string = f'run_name = "{cfg.exp.name}"'
-        )
-    parent_run_id = runs['run_id'][0]
-
-    with mlflow.start_run(run_id=parent_run_id) as parent_run:
-        total_t0 = time()
-    
-        imgs_combinations = PredDataset.test_combinations(cfg)
-        for img_comb_i, img_combination in enumerate(imgs_combinations):
-            p = Process(target=predict_models, args=(cfg, img_comb_i, img_combination, parent_run.info.run_id))
-            p.start()
-            p.join()
-            
-        mlflow.log_metric('total_pred_time', (time() - total_t0) / 60.)
-
-
-
-def predict_models(cfg, img_comb_i, img_combination, parent_run_id):
-    print(f'Predicting Combination {img_comb_i}')
-    predict_dataset = PredDataset(cfg, img_combination)
-    
-    pred_sum = None
-    t0 = time()
-    with TemporaryDirectory() as tempdir:
-        for model_i in range (cfg.general.n_models):
-            run_model_id = mlflow.search_runs(
-                filter_string = f'run_name = "model_{model_i}" AND params.parent_run_id = "{parent_run_id}"'
-                )['run_id'][0]
-            
-            with mlflow.start_run(run_id=run_model_id, nested=True) as model_run:
-                model_id = f'runs:/{run_model_id}/model'
-                #model_module = mlflow.pytorch.load_model(model_id)
-                
-                analize_model_module = mlflow.pytorch.load_model(model_id).model
-                analize_model_module.eval()
-                analize_model_module.to('cuda:0')
-                
-                predict_dataloader = DataLoader(predict_dataset, 
-                                                batch_size=cfg.exp.pred_params.analize_batch_size, 
-                                                num_workers=1,
-                                                )
-                
-                for x, idx, label in predict_dataloader:
-                    for k in x.keys():
-                        x[k] = x[k].to('cuda:0')
-                    x = analize_model_module.prepare(x)
-                    
-                    out = analize_model_module(x)
-                    out_max = torch.argmax(out, dim=1, keepdim=True)
-                    
-                    fa = FeatureAblation(agg_segmentation_wrapper(analize_model_module))
-                    fa_attr = fa.attribute(x, feature_mask=out_max, perturbations_per_eval=2, target=1)
-                
-                
+import torch 
+from datetime import datetime
+from pydoc import locate
 
         
+@hydra.main(version_base=None, config_path='conf', config_name='config.yaml')
+def train(cfg):
+    torch.set_float32_matmul_precision('high')
+    
+    mlflow.set_experiment(experiment_name = cfg.site.name)
+    
+
+    parent_runs = mlflow.search_runs(
+        filter_string = f'run_name = "{cfg.exp.name}"'
+        )['run_id']
+    assert len(parent_runs) == 1, 'Must have 1 run to retrain.'
+    parent_run_id = parent_runs[0]
+    parent_run_name = None
+    run_models = mlflow.search_runs(
+        filter_string = f'run_name = "model_{cfg.retrain_model}" AND params.parent_run_id = "{parent_run_id}"'
+        )['run_id']
+        
+    
+    with mlflow.start_run(run_name=parent_run_name, run_id=parent_run_id) as parent_run:
+        # return()
+        print(f'Exp {cfg.exp.name}')
+        data_module = DataModule(cfg)
+        
+        model = ModelModule(cfg).model
+        
+        model = model.to('cuda:0')
+        
+        input, label = next(iter(data_module.train_dataloader()))
+        input_l = model.prepare(input)
+        label = label.to('cuda:0')
+        
+        input_l = [inp_i.to('cuda:0') for inp_i in input_l]
+        input_l = tuple(input_l)
+        
+        train_params = dict(cfg.exp.train_params)
+        criterion = locate(train_params['criterion']['target'])(**train_params['criterion']['params'])
+        criterion = criterion.to('cuda:0')
+        
+        optimizer_class = locate(train_params['optimizer']['target'])
+        optimizer_params = train_params ['optimizer']['params']
+        
+        optimizer = optimizer_class(model.parameters(), **optimizer_params)
+        
+        model.train()
+        for i in range(50):
+            t0 = time()
+            for j in range(10):
+                y_hat = model(input_l)
+                loss = criterion(y_hat, label)
+                optimizer.zero_grad()
+                loss.backward()
+                optimizer.step()
+            t = time()-t0
+            mlflow.log_metric('train_10epochs', t, i)
+            
+        print('------')
+            
+        model.eval()
+        for i in range(50):
+            t0 = time()
+            for j in range(10):
+                model(input_l)
+            t = time()-t0
+            mlflow.log_metric('eval_10epochs', t, i)
+        
 if __name__ == "__main__":
-    analize()
+    train()
