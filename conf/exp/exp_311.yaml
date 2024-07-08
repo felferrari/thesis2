@@ -6,7 +6,7 @@ defaults:
 model: 
   target: src.models.resunet.fusion.PixelLevel
 name: resunet_pixel_level_diverse_combined
-full_name: ResUnet Pix [CLOUD-DIVERSE]
+full_name: ResUnet Pixel [CLOUD-DIVERSE]
 code: 311
 base_architecture: resunet
 opt_condition: diverse_cloud

@@ -8,7 +8,7 @@ model:
   params:
     temp_fusion: src.models.swin.layers.TemporalConcat
 name: swin_siamese_sar_no_prevmap_avg2
-full_name: SWIN Siamese SAR [AVERAGE-2] [NO PREV MAP]
+full_name: SWIN SAR Siamese [AVERAGE-2] [NO PREV MAP]
 code: 252
 base_architecture: transformer
 opt_condition: no_opt

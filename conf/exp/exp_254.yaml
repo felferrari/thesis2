@@ -8,7 +8,7 @@ model:
   params:
     temp_fusion: src.models.swin.layers.TemporalConcatPrevMap
 name: swin_siamese_opt_no_cloud
-full_name: SWIN Siamese Optical [CLOUD-FREE]
+full_name: SWIN Optical Siamese [CLOUD-FREE]
 code: 254
 base_architecture: transformer
 opt_condition: no_cloud

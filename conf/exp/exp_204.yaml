@@ -8,7 +8,7 @@ model:
   params:
     temp_fusion: src.models.resunet.layers.TemporalConcatPrevMap
 name: resunet_siamese_opt_no_cloud
-full_name: ResUnet Siamese Optical [CLOUD-FREE]
+full_name: ResUnet Optical Siamese [CLOUD-FREE]
 code: 204
 base_architecture: resunet
 opt_condition: no_cloud

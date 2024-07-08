@@ -8,7 +8,7 @@ model:
   params:
     temp_fusion: src.models.resunet.layers.TemporalConcatPrevMap
 name: resunet_siamese_sar_avg2
-full_name: ResUnet Siamese SAR [AVERAGE-2]
+full_name: ResUnet SAR Siamese [AVERAGE-2]
 code: 205
 base_architecture: resunet
 opt_condition: no_opt
