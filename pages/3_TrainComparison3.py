@@ -8,7 +8,7 @@ import pandas as pd
 #st.set_page_config(layout="wide")
 
 def plot_training_comp(site_name, experiments, exp_codes, metric_l, title, save, font_scale):
-   if site_name == '' or exp_codes=='' or len(metric_l) == 0:
+   if site_name == '' or len(exp_codes)==0 or len(metric_l) == 0:
       return
    
    met_dict = {
@@ -23,10 +23,10 @@ def plot_training_comp(site_name, experiments, exp_codes, metric_l, title, save,
    metrics = None
    for metric_i in metric_l:
       if metrics is None:
-         metrics = get_exps_metric(site_name, [exp_codes], metric_i, experiments)
+         metrics = get_exps_metric(site_name, exp_codes, metric_i, experiments)
          metrics['metric'] = met_dict[metric_i]
       else:
-         mt = get_exps_metric(site_name, [exp_codes], metric_i, experiments)
+         mt = get_exps_metric(site_name, exp_codes, metric_i, experiments)
          mt['metric'] =  met_dict[metric_i]
          metrics = pd.concat([metrics,  mt])
          
@@ -46,7 +46,7 @@ def plot_training_comp(site_name, experiments, exp_codes, metric_l, title, save,
       'Para': 2
    }
    
-   title = f"{experiments[exp_codes]['full_name']} - Site {site_code[site_name]}" if title else ''
+   title = f"Site {site_code[site_name]}" if title else ''
    
    sns.set_theme(font_scale=font_scale)
    fig, ax = plt.subplots(figsize=(8,6))
@@ -54,10 +54,10 @@ def plot_training_comp(site_name, experiments, exp_codes, metric_l, title, save,
    plt.title(title)
    sns.move_legend(ax, "lower right")
    #ax.yaxis.set_major_formatter(FormatStrFormatter('%.1f'))
-   #plt.ylim([0,1])
+   plt.ylim([0,1])
    st.pyplot(fig)
    if save:
-      plt.savefig(f'figures/train-s{site_code[site_name]}-{exp_codes}-{metric_l}', dpi=300, bbox_inches='tight')
+      plt.savefig(f'figures/train-s{site_code[site_name]}-{exp_codes}-{metric_l}', dpi=300)
    plt.close(fig)
         
 
@@ -65,7 +65,7 @@ sites_names = [''] + [st.session_state['sites'][site]['name'] for site in st.ses
 
 site = st.selectbox('Site:', sites_names)
 
-options = st.selectbox('Experiments:', [''] + list(st.session_state['experiments'].keys()))
+options = st.multiselect('Experiments:', [''] + list(st.session_state['experiments'].keys()))
 
 font_scale = st.slider('Font Scale:', 0.5, 5.0, 1.0, step=0.1)
 

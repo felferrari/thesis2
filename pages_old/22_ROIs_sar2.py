@@ -11,7 +11,7 @@ import mlflow
 
 st.set_page_config(layout="wide")
 
-def plot_opt_rois(site_name, experiments, images):
+def plot_sar_rois(site_name, experiments, images):
    
    # font = ImageFont.truetype(<font-file>, <font-size>)
    font = ImageFont.truetype('/usr/share/fonts/truetype/freefont/FreeMonoBold.ttf', size = 70)  
@@ -69,7 +69,7 @@ for site_code in st.session_state['sites']:
    # for exp_code in exp_codes:
       
    images = get_rois_images(st.session_state['sites'][site_code], st.session_state['experiments'], exp_codes)
-   plot_opt_rois(site_name, st.session_state['experiments'], images)
+   plot_sar_rois(site_name, st.session_state['experiments'], images)
    
    
    

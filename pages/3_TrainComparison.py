@@ -6,7 +6,7 @@ from matplotlib.ticker import FormatStrFormatter
 
 #st.set_page_config(layout="wide")
 
-def plot_training_comp(site_name, experiments, exp_codes, metric, font_scale, if_title):
+def plot_training_comp(site_name, experiments, exp_codes, metric, font_scale, if_title, if_save):
    if site_name == '' or len(exp_codes)==0 or metric == '':
       return
    metrics = get_exps_metric(site_name, exp_codes, metric, experiments)
@@ -17,7 +17,7 @@ def plot_training_comp(site_name, experiments, exp_codes, metric, font_scale, if
       'step': 'Epoch',
       'value': 'F1-Score',
       'model': 'run',
-      'exp_full_name': 'Model',
+      'full_name': 'Model',
    })
    
    ms_data = metric.split('_')
@@ -29,7 +29,7 @@ def plot_training_comp(site_name, experiments, exp_codes, metric, font_scale, if
    cl_name = {
       '0': 'No Deforestation',
       '1': 'Deforestation',
-      '2': 'Discard'
+      '2': 'Previous Deforestation'
    }
    
    site_code = {
@@ -48,6 +48,8 @@ def plot_training_comp(site_name, experiments, exp_codes, metric, font_scale, if
    #ax.yaxis.set_major_formatter(FormatStrFormatter('%.1f'))
    plt.ylim([0,1])
    st.pyplot(fig)
+   if if_save:
+      plt.savefig(f'figures/train-{ds_name[ms_data[0]]}-class{ms_data[-1]}-s{site_code[site_name]}-{exp_codes}', dpi=300, bbox_inches='tight')
    plt.close(fig)
         
 
@@ -57,9 +59,11 @@ site = st.selectbox('Site:', sites_names)
 
 options = st.multiselect('Experiments:', list(st.session_state['experiments'].keys()))
 
-font_size = st.slider('Font Size:', 0.5, 5.0, 1.0, step=0.1)
+font_scale = st.slider('Font Scale:', 0.5, 5.0, 1.0, step=0.1)
 
 title = st.checkbox('Title', True)
+
+save = st.checkbox('Save', False)
 
 metric = st.selectbox('Metric:', [
    '',
@@ -71,7 +75,7 @@ metric = st.selectbox('Metric:', [
    'val_f1_score_2',
 ])
 
-plot_training_comp(site, st.session_state['experiments'], options, metric, font_size, title)
+plot_training_comp(site, st.session_state['experiments'], options, metric, font_scale, title, save)
    # plot_training_comp(st.session_state['sites'][site_code]['name'], st.session_state['experiments'], ['exp_101', 'exp_103'], 'train_f1_score_1')
    # plot_training_comp(st.session_state['sites'][site_code]['name'], st.session_state['experiments'], ['exp_101', 'exp_103'], 'train_f1_score_2')
    # plot_training_comp(st.session_state['sites'][site_code]['name'], st.session_state['experiments'], ['exp_151', 'exp_153'], 'train_f1_score_0')

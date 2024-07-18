@@ -20,7 +20,7 @@ from PIL import Image, ImageOps
 
 def resize_img(img):
     img_zoom = ImageOps.expand(img, (20, 20), fill = (255, 255, 255, 255))
-    img_zoom = img_zoom.resize((800 ,800), Image.LANCZOS)
+    img_zoom = img_zoom.resize((1200 ,1200), Image.LANCZOS)
     return img_zoom
 
 def save_def_pred_fig(fp, data):

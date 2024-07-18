@@ -111,6 +111,7 @@ class TrainDataset(Dataset):
         gen_data = h5py.File(gen_patch_file, 'r', rdcc_nbytes = 10*(1024**2))
     
         opt_patch = opt_data['opt'][()][opt_images_idx, :, :, :].astype(np.float32)
+        cloud_patch = opt_data['cloud'][()][opt_images_idx, :, :].astype(np.float32)
         sar_patch = sar_data['sar'][()][sar_images_idx, :, :, :].astype(np.float32)
         previous_patch = gen_data['previous'][()].astype(np.float32)
         label_patch = gen_data['label'][()].astype(np.int64)
@@ -121,6 +122,7 @@ class TrainDataset(Dataset):
         opt_patch = Image(opt_patch)
         sar_patch = Image(sar_patch)
         previous_patch = Image(previous_patch)
+        cloud_patch = Image(cloud_patch)
         label_patch = Mask(label_patch)
         
         if self.mode == 'train':
@@ -128,18 +130,21 @@ class TrainDataset(Dataset):
                 k = random.randint(0,3)
                 opt_patch = torch.rot90(opt_patch, k=k, dims=(2, 3))
                 sar_patch = torch.rot90(sar_patch, k=k, dims=(2, 3))
+                cloud_patch = torch.rot90(cloud_patch, k=k, dims=(1, 2))
                 previous_patch = torch.rot90(previous_patch, k=k, dims=(1, 2))
                 label_patch = torch.rot90(label_patch, k=k, dims=(0, 1))
                 
             elif bool(random.getrandbits(1)):
                 opt_patch = hflip(opt_patch)
                 sar_patch = hflip(sar_patch)
+                cloud_patch = hflip(cloud_patch)
                 previous_patch = hflip(previous_patch)
                 label_patch = hflip(label_patch)
                 
             elif bool(random.getrandbits(1)):
                 opt_patch = vflip(opt_patch)
                 sar_patch = vflip(sar_patch)
+                cloud_patch = vflip(cloud_patch)
                 previous_patch = vflip(previous_patch)
                 label_patch = vflip(label_patch)
                 
@@ -147,7 +152,7 @@ class TrainDataset(Dataset):
             'opt': opt_patch,
             'sar': sar_patch,
             'previous': previous_patch,
-            #'cloud': torch.from_numpy(cloud_patch),
+            'cloud': cloud_patch,
             }, label_patch
         
         
