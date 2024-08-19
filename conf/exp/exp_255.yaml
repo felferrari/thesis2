@@ -8,7 +8,7 @@ model:
   params:
     temp_fusion: src.models.swin.layers.TemporalConcatPrevMap
 name: swin_siamese_sar_avg2
-full_name: SWIN SAR Siamese [AVERAGE-2]
+full_name: SWIN SAR Multi-Stream [AVERAGE-2]
 code: 255
 base_architecture: transformer
 opt_condition: no_opt

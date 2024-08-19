@@ -8,7 +8,7 @@ model:
   params:
     temp_fusion: src.models.resunet.layers.TemporalConcat
 name: resunet_siamese_opt_no_prevmap_no_cloud
-full_name: ResUnet Optical Siamese [CLOUD-FREE] [NO PREV MAP]
+full_name: ResUnet Optical Multi-Stream [CLOUD-FREE] [NO PREV MAP]
 code: 201
 base_architecture: resunet
 opt_condition: no_cloud

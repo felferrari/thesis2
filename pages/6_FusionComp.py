@@ -30,12 +30,12 @@ def plot_simple_graphic(results, metric, metric_header, site_code):
    fig.suptitle(f'{metric_header} for Site {site_code[1]}', y=1.1)
    
    ax[0].axvspan(-0.5, 4.5, facecolor='g', alpha=alpha) #, label='Cloud-Free')
-   ax[0].axvspan(4.5, 5.5, facecolor='r', alpha=alpha) #, label='No Optical')
+   ax[0].axvspan(4.5, 5.5, facecolor='r', alpha=alpha) #, label='Non-Optical')
    ax[0].axvspan(5.5, 10.5, facecolor='b', alpha=alpha) #, label='Diverse Cloud')
    ax[0].axvspan(10.5, 13.5, facecolor='y', alpha=alpha) #, label='Diverse Cloud (Pre-trained)')
    
    ax[1].axvspan(-0.5, 4.5, facecolor='g', alpha=alpha, label='Cloud-Free')
-   ax[1].axvspan(4.5, 5.5, facecolor='r', alpha=alpha, label='No Optical')
+   ax[1].axvspan(4.5, 5.5, facecolor='r', alpha=alpha, label='Non-Optical')
    ax[1].axvspan(5.5, 10.5, facecolor='b', alpha=alpha, label='Diverse Cloud')
    ax[1].axvspan(10.5, 13.5, facecolor='y', alpha=alpha, label='Diverse Cloud (Pre-trained)')
    
@@ -71,6 +71,7 @@ def plot_simple_graphic(results, metric, metric_header, site_code):
    plt.savefig(f'figures/fusion-{site_code}-{metric}.png', dpi=300, bbox_inches='tight')
    plt.close(fig)
    
+   
 def plot_cloudcond_graphic(results, metric, metric_header, site_code):
    
    cloud_cond_results = results.copy()
@@ -97,6 +98,11 @@ def plot_cloudcond_graphic(results, metric, metric_header, site_code):
    
    cloud_cond_results['full_name'] = cloud_cond_results['full_name'].str.replace('ResUnet ', '')
    cloud_cond_results['full_name'] = cloud_cond_results['full_name'].str.replace('SWIN ', '')
+   cloud_cond_results['full_name'] = cloud_cond_results['full_name'].str.replace('[CLOUD-FREE]', ' ')
+   cloud_cond_results['full_name'] = cloud_cond_results['full_name'].str.replace('[CLOUD-DIVERSE]', '  ')
+   cloud_cond_results['full_name'] = cloud_cond_results['full_name'].str.replace('[PRE-TRAINED]', '   ')
+   cloud_cond_results['full_name'] = cloud_cond_results['full_name'].str.replace('[AVERAGE-12]', '    ')
+   
    
    cloud_cond_results['cond'] = cloud_cond_results['cond'].str.replace('global', 'All Pixels')
    cloud_cond_results['cond'] = cloud_cond_results['cond'].str.replace('cloudy', 'Cloudy Pixels')
@@ -113,59 +119,74 @@ def plot_cloudcond_graphic(results, metric, metric_header, site_code):
    global_results_resunet = global_results_resunet.reset_index(drop=True)
    global_results_swin = global_results_swin.reset_index(drop=True)
    
-   sns.set_theme(font_scale=1.4)
+   
+   sns.set_theme(font_scale=2)
    sns.set_palette('tab10')
    
-   fig, ax = plt.subplots(1,2,figsize=(16,14))
+   fig, ax = plt.subplots(1,1,figsize=(13,6))
    #fig.tight_layout()
    alpha = 0.4
    
-   fig.suptitle(f'{metric_header} for Site {site_code[1]}', y=0.95)
+   fig.suptitle(f'{metric_header} Base Architecture: ResUnet (Site {site_code[1]})', y= 1.1)
    
-   ax[0].axhspan(-0.5, 4.5, facecolor='g', alpha=alpha) #, label='Cloud-Free')
-   ax[0].axhspan(4.5, 5.5, facecolor='r', alpha=alpha) #, label='No Optical')
-   ax[0].axhspan(5.5, 10.5, facecolor='b', alpha=alpha) #, label='Diverse Cloud')
-   ax[0].axhspan(10.5, 13.5, facecolor='y', alpha=alpha) #, label='Diverse Cloud (Pre-trained)')
-   
-   ax[1].axhspan(-0.5, 4.5, facecolor='g', alpha=alpha, label='Cloud-Free')
-   ax[1].axhspan(4.5, 5.5, facecolor='r', alpha=alpha, label='No Optical')
-   ax[1].axhspan(5.5, 10.5, facecolor='b', alpha=alpha, label='Diverse Cloud')
-   ax[1].axhspan(10.5, 13.5, facecolor='y', alpha=alpha, label='Diverse Cloud (Pre-trained)')
+   plt.plot([], [], ' ', label="--Dataset--")
+   ax.axvspan(-0.5, 4.5, facecolor='g', alpha=alpha, label='Cloud-Free')
+   ax.axvspan(4.5, 5.5, facecolor='r', alpha=alpha, label='Non-Optical')
+   ax.axvspan(5.5, 10.5, facecolor='b', alpha=alpha, label='Diverse')
+   ax.axvspan(10.5, 13.5, facecolor='y', alpha=alpha, label='Diverse [Pre-trained]')
+   plt.plot([], [], ' ', label="--Cloud Condition--")
 
-   sns.barplot(data = global_results_resunet, y ='full_name', x = metric, hue = 'cond', orient = 'y',ax = ax[0], edgecolor='k', errorbar = None, legend=False, width = 0.9, estimator='sum')
-   sns.barplot(data = global_results_swin, y ='full_name', x = metric, hue = 'cond', orient = 'y', ax = ax[1], edgecolor='k', errorbar = None, legend=True, estimator='sum')
-   sns.lineplot(data = global_results_resunet, y ='full_name', x = 'max', color= 'b', ax= ax[0], label = 'Best Result', legend=False, linestyle = 'dotted')
-   sns.lineplot(data = global_results_swin, y ='full_name', x = 'max', color= 'b', ax = ax[1], label = 'Best Result', legend=True, linestyle = 'dotted')
+   sns.barplot(data = global_results_resunet, x ='full_name', y = metric, hue = 'cond', edgecolor='k', errorbar = None, legend=True, width = 0.9, estimator='sum')
+   sns.lineplot(data = global_results_resunet, x ='full_name', y = 'max', color= 'b', label = 'Best Result', legend=True, linestyle = 'dotted', linewidth = 3)
    
-   ax[0].axvline(x=resunet_max, color = 'b', linestyle = 'dotted')
-   ax[1].axvline(x=swin_max, color = 'b', linestyle = 'dotted')
+   ax.axhline(y=resunet_max, color = 'b', linestyle = 'dotted', linewidth = 3)
    
-   sns.move_legend(ax[1], "upper left", bbox_to_anchor=(-2.25, 1))
-   plt.setp(ax[1].get_legend().get_texts(), fontsize='12') 
-   #ax.yaxis.set_major_formatter(FormatStrFormatter('%.1f'))
-   ax[0].set_xlim([0,1.05])
-   ax[1].set_xlim([0,1.05])
-   ax[1].set_yticklabels([])
-   # plt.sca(ax[0])
-   #plt.xticks(ha='left', rotation = 325)
-   # plt.sca(ax[1])
-   # plt.xticks(ha='left', rotation = 325)
-   #ax[0].tick_params(axis='x', which='major', labelsize=11)
-   #ax[1].tick_params(axis='x', which='major', labelsize=11)
-   ax[0].set_ylabel('Model')
-   #ax[1].set_xlabel('Model')
-   ax[0].set_xlabel(metric_header)
-   ax[1].set_xlabel(metric_header)
-   ax[1].set_ylabel(None)
-   ax[0].set_title(f'Base Architecture: ResUnet')
-   ax[1].set_title(f'Base Architecture: Swin')
-   for bars in ax[0].containers:
-      ax[0].bar_label(bars, fontsize=12, fmt='%.2f', fontweight='bold', padding = 2, color = 'k')
-   for bars in ax[1].containers:
-      ax[1].bar_label(bars, fontsize=12, fmt='%.2f', fontweight='bold', padding = 2, color = 'k')
+   sns.move_legend(ax, "upper left", bbox_to_anchor=(1, 1))
+   plt.setp(ax.get_legend().get_texts(), fontsize=13) 
+   plt.xticks(ha='left', rotation = 325)
+   ax.set_ylim([0.3, 1.1])
+   ax.set_xlabel('Model')
+   ax.set_ylabel(metric_header)
+   for bars in ax.containers:
+      ax.bar_label(bars, fontsize=15, fmt='%.2f', fontweight='bold', padding = 5, color = 'k', rotation=90)
    st.pyplot(fig)
-   plt.savefig(f'figures/fusion-clouds-{site_code}-{metric}.png', dpi=300, bbox_inches='tight')
+   plt.savefig(f'figures/fusion-clouds-resunet-{site_code}-{metric}.png', dpi=300, bbox_inches='tight')
    plt.close(fig)
+   
+   
+   sns.set_theme(font_scale=2)
+   sns.set_palette('tab10')
+   
+   fig, ax = plt.subplots(1,1,figsize=(13,6))
+   #fig.tight_layout()
+   alpha = 0.4
+   
+   fig.suptitle(f'{metric_header} Base Architecture: Swin (Site {site_code[1]})', y= 1.1)
+   
+   plt.plot([], [], ' ', label="--Dataset--")
+   ax.axvspan(-0.5, 4.5, facecolor='g', alpha=alpha, label='Cloud-Free')
+   ax.axvspan(4.5, 5.5, facecolor='r', alpha=alpha, label='Non-Optical')
+   ax.axvspan(5.5, 10.5, facecolor='b', alpha=alpha, label='Diverse')
+   ax.axvspan(10.5, 13.5, facecolor='y', alpha=alpha, label='Diverse [Pre-trained]')
+   plt.plot([], [], ' ', label="--Cloud Condition--")
+
+   sns.barplot(data = global_results_swin, x ='full_name', y = metric, hue = 'cond', edgecolor='k', errorbar = None, legend=True, width = 0.9, estimator='sum')
+   sns.lineplot(data = global_results_swin, x ='full_name', y = 'max', color= 'b', label = 'Best Result', legend=True, linestyle = 'dotted', linewidth = 3)
+   
+   ax.axhline(y=swin_max, color = 'b', linestyle = 'dotted', linewidth = 3)
+   
+   sns.move_legend(ax, "upper left", bbox_to_anchor=(1, 1))
+   plt.setp(ax.get_legend().get_texts(), fontsize=15) 
+   plt.xticks(ha='left', rotation = 325)
+   ax.set_ylim([0.3, 1.1])
+   ax.set_xlabel('Model')
+   ax.set_ylabel(metric_header)
+   for bars in ax.containers:
+      ax.bar_label(bars, fontsize=15, fmt='%.2f', fontweight='bold', padding = 5, color = 'k', rotation=90)
+   st.pyplot(fig)
+   plt.savefig(f'figures/fusion-clouds-swin-{site_code}-{metric}.png', dpi=300, bbox_inches='tight')
+   plt.close(fig)
+
 
 for site_code in st.session_state['sites']:
    sns.set_theme(style="darkgrid")

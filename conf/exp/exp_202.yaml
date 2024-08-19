@@ -8,7 +8,7 @@ model:
   params:
     temp_fusion: src.models.resunet.layers.TemporalConcat
 name: resunet_siamese_sar_no_prevmap_avg2
-full_name: ResUnet SAR Siamese [AVERAGE-2] [NO PREV MAP]
+full_name: ResUnet SAR Multi-Stream [AVERAGE-2] [NO PREV MAP]
 code: 202
 base_architecture: resunet
 opt_condition: no_opt

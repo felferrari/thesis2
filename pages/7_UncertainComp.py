@@ -49,7 +49,7 @@ def plot_simple_graphic(results, metric, metric_header, site_code):
    
    plt.plot([], [], ' ', label="--Dataset--")
    ax.axvspan(-0.5, 4.5, facecolor='g', alpha=alpha, label='Cloud-Free')
-   ax.axvspan(4.5, 5.5, facecolor='r', alpha=alpha, label='No Optical')
+   ax.axvspan(4.5, 5.5, facecolor='r', alpha=alpha, label='Non-Optical')
    ax.axvspan(5.5, 10.5, facecolor='b', alpha=alpha, label='Diverse')
    ax.axvspan(10.5, 13.5, facecolor='y', alpha=alpha, label='Diverse [Pre-trained]')
    plt.plot([], [], ' ', label="--Audited--")
@@ -82,7 +82,7 @@ def plot_simple_graphic(results, metric, metric_header, site_code):
    
    plt.plot([], [], ' ', label="--Dataset--")
    ax.axvspan(-0.5, 4.5, facecolor='g', alpha=alpha, label='Cloud-Free')
-   ax.axvspan(4.5, 5.5, facecolor='r', alpha=alpha, label='No Optical')
+   ax.axvspan(4.5, 5.5, facecolor='r', alpha=alpha, label='Non-Optical')
    ax.axvspan(5.5, 10.5, facecolor='b', alpha=alpha, label='Diverse')
    ax.axvspan(10.5, 13.5, facecolor='y', alpha=alpha, label='Diverse [Pre-trained]')
    plt.plot([], [], ' ', label="--Audited--")
