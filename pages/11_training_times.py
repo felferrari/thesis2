@@ -221,7 +221,7 @@ def plot_fusion_size_com(results, times, site_code):
    
    new_results = pd.merge(new_results, new_times, on='full_name')
    
-   new_results['full_time'] = new_results['Epochs'] * new_results['time'] * 200 / 3600
+   new_results['full_time'] = new_results['Epochs'] * new_results['time'] * 5 * 20 / 3600 # each epoch have 200 batches and the time is referred to 10 batchs
    
    sns.set_theme(font_scale=1.5)
    sns.set_palette('tab10')

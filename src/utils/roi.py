@@ -18,9 +18,9 @@ from tqdm import tqdm
 from mpl_toolkits.axes_grid1 import make_axes_locatable
 from PIL import Image, ImageOps
 
-def resize_img(img):
+def resize_img(img, target_size = 1200):
     img_zoom = ImageOps.expand(img, (20, 20), fill = (255, 255, 255, 255))
-    img_zoom = img_zoom.resize((1200 ,1200), Image.LANCZOS)
+    img_zoom = img_zoom.resize((target_size, target_size), Image.LANCZOS)
     return img_zoom
 
 def save_def_pred_fig(fp, data):
