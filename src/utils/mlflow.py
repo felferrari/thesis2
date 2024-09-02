@@ -154,6 +154,46 @@ def get_site_time_results(site_name, experiments, exp_codes = None):
     return results
 
 
+def get_site_pred_time(site_name, experiments, exp_codes = None):
+    mlflow_client = mlflow.client.MlflowClient()
+    
+    mlflow_experiment_l = mlflow_client.search_experiments(filter_string=f"name='{site_name}'")
+    if len(mlflow_experiment_l) == 0:
+        return
+    mlflow_experiment = mlflow_experiment_l[0]
+    
+    results = []
+    my_bar = st.progress(0, text='Loading Data')
+    with TemporaryDirectory() as temp_dir:
+        if exp_codes is None:
+            exp_codes = list(experiments.keys)
+        n_exps = len(exp_codes)
+        for i, exp_code in enumerate(exp_codes):
+            my_bar.progress((i/n_exps))
+            
+            
+            exp_name = experiments[exp_code]['name']
+            mlflow_parent_run_l = mlflow_client.search_runs(experiment_ids=[mlflow_experiment.experiment_id], filter_string=f"run_name='{exp_name}'")
+            if len(mlflow_parent_run_l) == 0:
+                break
+            mlflow_parent_run = mlflow_parent_run_l[0]
+            exp_full_name = experiments[exp_code]['full_name'] 
+            
+            historic = mlflow_client.get_metric_history(mlflow_parent_run.info.run_id, f'comb_pred_time_0')
+            eval_time_data = []
+            for hist_i in historic[-1:]:
+                eval_time_data.append(['Prediction',hist_i.step, hist_i.value])
+            eval_time_df = pd.DataFrame(eval_time_data, columns=['stage', 'step', 'value'])
+            eval_time_df = include_names(eval_time_df, experiments, site_name, exp_name, exp_code)
+
+            results.append(eval_time_df)
+            
+    results = pd.concat(results)
+    results = results.reset_index(drop=True)
+    
+    my_bar.empty()
+    return results
+
 def get_site_size_results(site_name, experiments, exp_codes = None):
     mlflow_client = mlflow.client.MlflowClient()
     

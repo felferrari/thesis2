@@ -218,6 +218,7 @@ def plot_fusion_size_com(results):
       'name': 'Model',
    })
    
+   
    opt_results['Base Architecture'] = opt_results['Base Architecture'].replace('resunet', 'ResUnet')
    opt_results['Base Architecture'] = opt_results['Base Architecture'].replace('transformer', 'Swin')
    

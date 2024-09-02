@@ -7,6 +7,7 @@ import numpy as np
 
 #st.set_page_config(layout="wide")
 
+
 def plot_simple_graphic(results, metric, metric_header, site_code):
    
    global_results = results[results['cond'] == 'global']
@@ -19,56 +20,76 @@ def plot_simple_graphic(results, metric, metric_header, site_code):
    global_results_swin.loc[:, 'max'] = global_results_swin[metric].max()
    swin_max = global_results_swin[metric].max()
    
-   sns.set_theme(font_scale=1.5)
+   sns.set_theme(font_scale=2)
    sns.set_palette('tab10')
    
-   fig, ax = plt.subplots(1,2,figsize=(15,5))
+   fig, ax = plt.subplots(1,1,figsize=(13,7))
    fig.tight_layout()
-   #fig.tight_layout(pad=1.4, w_pad=0.5, h_pad=1.0)
    alpha = 0.4
    
-   fig.suptitle(f'{metric_header} for Site {site_code[1]}', y=1.1)
+   fig.suptitle(f'{metric_header} - Base Architecture: ResUnet (Site {site_code[1]})', y=1.1)
    
-   ax[0].axvspan(-0.5, 4.5, facecolor='g', alpha=alpha) #, label='Cloud-Free')
-   ax[0].axvspan(4.5, 5.5, facecolor='r', alpha=alpha) #, label='Non-Optical')
-   ax[0].axvspan(5.5, 10.5, facecolor='b', alpha=alpha) #, label='Diverse Cloud')
-   ax[0].axvspan(10.5, 13.5, facecolor='y', alpha=alpha) #, label='Diverse Cloud (Pre-trained)')
+   plt.plot([], [], ' ', label="--Dataset--")
+   ax.axvspan(-0.5, 4.5, facecolor='g', alpha=alpha, label='Cloud-Free')
+   ax.axvspan(4.5, 5.5, facecolor='r', alpha=alpha, label='Non-Optical')
+   ax.axvspan(5.5, 10.5, facecolor='b', alpha=alpha, label='Diverse')
+   ax.axvspan(10.5, 13.5, facecolor='y', alpha=alpha, label='Diverse [Pre-trained]')
+   plt.plot([], [], ' ', label="--Model--")
    
-   ax[1].axvspan(-0.5, 4.5, facecolor='g', alpha=alpha, label='Cloud-Free')
-   ax[1].axvspan(4.5, 5.5, facecolor='r', alpha=alpha, label='Non-Optical')
-   ax[1].axvspan(5.5, 10.5, facecolor='b', alpha=alpha, label='Diverse Cloud')
-   ax[1].axvspan(10.5, 13.5, facecolor='y', alpha=alpha, label='Diverse Cloud (Pre-trained)')
+   sns.barplot(data = global_results_resunet, x ='exp_name', y = metric, hue = 'name', ax = ax, edgecolor='k', errorbar = None, legend=True, estimator='sum')
+   sns.lineplot(data = global_results_resunet, x ='exp_name', y = 'max', color= 'b', ax= ax, label = 'Best Result', legend=True, linestyle = 'dotted', linewidth = 2)
    
-   sns.barplot(data = global_results_resunet, x ='exp_name', y = metric, hue = 'name', ax = ax[0], edgecolor='k', errorbar = None, legend=False, estimator='sum')
-   sns.barplot(data = global_results_swin, x ='exp_name', y = metric, hue = 'name', ax = ax[1], edgecolor='k', errorbar = None, legend=True, estimator='sum')
-   sns.lineplot(data = global_results_resunet, x ='exp_name', y = 'max', color= 'b', ax= ax[0], label = 'Best Result', legend=False, linestyle = 'dotted')
-   sns.lineplot(data = global_results_swin, x ='exp_name', y = 'max', color= 'b', ax = ax[1], label = 'Best Result', legend=True, linestyle = 'dotted')
+   ax.axhline(y=resunet_max, color = 'b', linestyle = 'dotted', linewidth = 2)
    
-   ax[0].axhline(y=resunet_max, color = 'b', linestyle = 'dotted')
-   ax[1].axhline(y=swin_max, color = 'b', linestyle = 'dotted')
+   sns.move_legend(ax, "upper left", bbox_to_anchor=(1, 1))
+   plt.setp(ax.get_legend().get_texts(), fontsize=14) 
+   ax.set_ylim([0.3, 1.05])
    
-   sns.move_legend(ax[1], "upper left", bbox_to_anchor=(1, 1))
-   #ax.yaxis.set_major_formatter(FormatStrFormatter('%.1f'))
-   ax[0].set_ylim([0.3, 1.05])
-   ax[1].set_ylim([0.3, 1.05])
-   
-   ax[0].set_xticklabels([])
-   ax[1].set_xticklabels([])
-   ax[1].set_yticklabels([])
+   ax.set_xticklabels([])
    plt.xticks(ha='left', rotation = 325)
-   ax[0].set_xlabel('Model')
-   ax[1].set_xlabel('Model')
-   ax[0].set_ylabel(metric_header)
-   ax[1].set_ylabel(None)
-   ax[0].set_title(f'Base Architecture: ResUnet')
-   ax[1].set_title(f'Base Architecture: Swin')
+   ax.set_xlabel('Model')
+   ax.set_ylabel(metric_header)
    
-   for bars in ax[0].containers:
-      ax[0].bar_label(bars, fontsize=11, fmt='%.2f', fontweight='bold', padding = 2, color = 'k')
-   for bars in ax[1].containers:
-      ax[1].bar_label(bars, fontsize=11, fmt='%.2f', fontweight='bold', padding = 2, color = 'k')
+   for bars in ax.containers:
+      ax.bar_label(bars, fontsize=18, fmt='%.2f', fontweight='bold', padding = 2, color = 'k')
    st.pyplot(fig)
-   plt.savefig(f'figures/fusion-{site_code}-{metric}.png', dpi=300, bbox_inches='tight')
+   plt.savefig(f'figures/fusion-resunet-{site_code}-{metric}.png', dpi=300, bbox_inches='tight')
+   plt.close(fig)
+   
+   sns.set_theme(font_scale=2)
+   sns.set_palette('tab10')
+   
+   fig, ax = plt.subplots(1,1,figsize=(13,7))
+   fig.tight_layout()
+   alpha = 0.4
+   
+   fig.suptitle(f'{metric_header} - Base Architecture: Swin (Site {site_code[1]})', y=1.1)
+   
+   plt.plot([], [], ' ', label="--Dataset--")
+   ax.axvspan(-0.5, 4.5, facecolor='g', alpha=alpha, label='Cloud-Free')
+   ax.axvspan(4.5, 5.5, facecolor='r', alpha=alpha, label='Non-Optical')
+   ax.axvspan(5.5, 10.5, facecolor='b', alpha=alpha, label='Diverse')
+   ax.axvspan(10.5, 13.5, facecolor='y', alpha=alpha, label='Diverse [Pre-trained]')
+   plt.plot([], [], ' ', label="--Model--")
+   
+   sns.barplot(data = global_results_swin, x ='exp_name', y = metric, hue = 'name', ax = ax, edgecolor='k', errorbar = None, legend=True, estimator='sum')
+   sns.lineplot(data = global_results_swin, x ='exp_name', y = 'max', color= 'b', ax= ax, label = 'Best Result', legend=True, linestyle = 'dotted', linewidth = 2)
+   
+   ax.axhline(y=swin_max, color = 'b', linestyle = 'dotted', linewidth = 2)
+   
+   sns.move_legend(ax, "upper left", bbox_to_anchor=(1, 1))
+   plt.setp(ax.get_legend().get_texts(), fontsize=13) 
+   ax.set_ylim([0.3, 1.05])
+   
+   ax.set_xticklabels([])
+   plt.xticks(ha='left', rotation = 325)
+   ax.set_xlabel('Model')
+   ax.set_ylabel(metric_header)
+   
+   for bars in ax.containers:
+      ax.bar_label(bars, fontsize=18, fmt='%.2f', fontweight='bold', padding = 2, color = 'k')
+   st.pyplot(fig)
+   plt.savefig(f'figures/fusion-swin-{site_code}-{metric}.png', dpi=300, bbox_inches='tight')
    plt.close(fig)
    
    
