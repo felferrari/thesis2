@@ -9,7 +9,7 @@ def export_opt(img, roi, name):
         #'crsTransform': crs['transform'],
         'fileFormat': 'GeoTIFF',
         'region': roi,
-        'maxPixels' : 1e12
+        'maxPixels' : 1e13
         
     }
     #print(f'Start download of {name} RGB OPT image')

@@ -22,7 +22,7 @@ segmentation-models-pytorch
 h5py
 einops
 scipy
-numpy
+numpy==1.26.4
 opencv-python
 mlflow
 psutil
